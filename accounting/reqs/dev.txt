@@ -1,0 +1,8 @@
+-r common.txt
+
+## Debug
+ipdb==0.8
+django-debug-toolbar==0.9.4
+
+## Test & Lint
+flake8==2.2.4

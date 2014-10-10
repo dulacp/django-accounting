@@ -1,0 +1,7 @@
+-r common.txt
+
+## Server
+gunicorn==19.1.1
+
+## Database
+psycopg2==2.5.4

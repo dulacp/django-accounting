@@ -1,0 +1,9 @@
+## Byte-compiled
+__pycache__/
+*.py[cod]
+
+## Database
+*.sqlite3
+
+## Translations
+*.mo
