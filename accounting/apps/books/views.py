@@ -1,7 +1,7 @@
 from django.views import generic
 from django.core.urlresolvers import reverse
 
-from .models import User, Organization
+from .models import User, Organization, Invoice
 
 
 class DashboardView(generic.TemplateView):
@@ -30,3 +30,14 @@ class OrganizationDetailView(generic.DetailView):
     template_name = "books/organization_detail.html"
     model = Organization
     context_object_name = "organization"
+
+
+class InvoiceListView(generic.ListView):
+    template_name = "books/invoice_list.html"
+    model = Invoice
+    context_object_name = "invoices"
+
+
+class InvoiceCreateView(generic.CreateView):
+    template_name = "books/invoice_create.html"
+    model = Invoice

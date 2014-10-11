@@ -18,4 +18,12 @@ urlpatterns = patterns('',
     url(r'^organizations/(?P<pk>\d)/detail/$',
         views.OrganizationDetailView.as_view(),
         name="organization-create"),
+
+    # Invoices
+    url(r'^invoice/$',
+        views.InvoiceListView.as_view(),
+        name="invoice-list"),
+    url(r'^invoice/create/$',
+        views.InvoiceCreateView.as_view(),
+        name="invoice-create"),
 )

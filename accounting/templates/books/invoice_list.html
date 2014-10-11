@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1 class="page-header">Invoices <small>which you belong to you</small></h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Label</th>
+                <th>Description</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inv in invoices %}
+            <tr>
+                <td>{{ inv.number }}</td>
+                <td>{{ inv.label }}</td>
+                <td>{{ inv.description }}</td>
+                <td>{{ inv.total }}</td>
+                <td>
+                    <a href="{% url 'books:invoice-detail' %}" class="btn btn-default btn-sm" role="button">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'books:invoice-create' %}" class="btn btn-primary btn-lg" role="button">
+        Add an invoice
+    </a>
+{% endblock content %}

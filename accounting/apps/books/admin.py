@@ -11,3 +11,8 @@ class UserAdmin(admin.ModelAdmin):
 @admin.register(models.Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.Invoice)
+class InvoiceAdmin(admin.ModelAdmin):
+    pass
