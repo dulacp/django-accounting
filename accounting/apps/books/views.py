@@ -21,7 +21,12 @@ class OrganizationCreateView(generic.CreateView):
         'display_name',
         'legal_name',
     )
-    context_object_name = "organization"
 
     def get_success_url(self):
         return reverse("books:organization-list")
+
+
+class OrganizationDetailView(generic.DetailView):
+    template_name = "books/organization_detail.html"
+    model = Organization
+    context_object_name = "organization"

@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'djangobower',
     'bootstrap3',
 
+    'libs',
     'apps.clients',
     'apps.books',
 )
