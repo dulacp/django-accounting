@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'djangobower',
+    'bootstrap3',
 
     'apps.clients',
     'apps.books',

@@ -1,3 +1,4 @@
 Django>=1.7.0,<1.8.0
 django-bower==5.0.1
+django-bootstrap3==4.11.0
 dj-static==0.0.6

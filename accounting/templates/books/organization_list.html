@@ -1,48 +1,29 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1 class="page-header">Dashboard</h1>
+    <h1 class="page-header">Organizations <small>which you belong to</small></h1>
 
-    <div class="row placeholders">
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>3</h4>
-            <span class="text-muted">Number of organizations</span>
-        </div>
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>$ 1234</h4>
-            <span class="text-muted">Turnover cumulated</span>
-        </div>
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>0</h4>
-            <span class="text-muted">...</span>
-        </div>
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>0</h4>
-            <span class="text-muted">...</span>
-        </div>
-    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Project</th>
+                <th>Client</th>
+                <th>Amount</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for orga in organizations %}
+            <tr>
+                <td>{{ orga.name }}</td>
+                <td><a class="btn">Accéder</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-    <h2 class="sub-header">Last invoices <small>across organizations</small></h2>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Project</th>
-                    <th>Client</th>
-                    <th>Amount</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Lorem</td>
-                    <td>ipsum</td>
-                    <td>dolor</td>
-                    <td>sit</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <a href="{% url 'books:organization-create' %}" class="btn btn-primary btn-lg" role="button">
+        Add an organization
+    </a>
 {% endblock content %}
