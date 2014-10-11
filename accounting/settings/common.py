@@ -8,10 +8,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import sys
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+# Add the BASE_DIR to the path in order to reuse the apps easily
+sys.path.append(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
@@ -36,6 +40,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'djangobower',
+
+    'apps.clients',
+    'apps.books',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,3 +93,25 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_FINDERS = (
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+
+    "djangobower.finders.BowerFinder",
+)
+
+
+# Bower config
+
+BOWER_COMPONENTS_ROOT = os.path.abspath(os.path.join(BASE_DIR, 'components'))
+
+BOWER_INSTALLED_APPS = (
+    'jquery',
+)
+
+
+# User
+
+AUTH_USER_MODEL = 'books.User'
