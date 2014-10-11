@@ -14,4 +14,5 @@ class Organization(models.Model):
         help_text="Official name to appear on your reports, sales "
                   "invoices and bills")
 
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     blank=True, null=True)
