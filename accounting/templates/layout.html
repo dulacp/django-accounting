@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load nav %}
 
 {% block maincontent %}
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -29,9 +30,12 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li class="active"><a href="{% url 'books:dashboard' %}">Overview</a></li>
-                    <li><a href="{% url 'books:organization-list' %}">Organizations</a></li>
-                    <li><a href="{% url 'books:invoice-list' %}">Invoices</a></li>
+                    {% url 'books:dashboard' as books_dashboard_url %}
+                    {% url 'books:organization-list' as books_organization_list_url %}
+                    {% url 'books:invoice-list' as books_invoice_list_url %}
+                    <li class="{% active request books_dashboard_url exact_match=True %}"><a href="{{ books_dashboard_url }}">Overview</a></li>
+                    <li class="{% active request books_organization_list_url exact_match=True %}"><a href="{{ books_organization_list_url }}">Organizations</a></li>
+                    <li class="{% active request books_invoice_list_url exact_match=True %}"><a href="{{ books_invoice_list_url }}">Invoices</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
                     <li><a href="">Exports</a></li>
