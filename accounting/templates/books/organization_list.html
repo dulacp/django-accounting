@@ -7,17 +7,20 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Project</th>
-                <th>Client</th>
-                <th>Amount</th>
+                <th>Display name</th>
+                <th>Legal name</th>
+                <th>Turnover</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for orga in organizations %}
             <tr>
-                <td>{{ orga.name }}</td>
-                <td><a class="btn">Accéder</a></td>
+                <td>{{ orga.id }}</td>
+                <td>{{ orga.display_name }}</td>
+                <td>{{ orga.legal_name }}</td>
+                <td>{{ orga.turnover }}</td>
+                <td><a class="btn btn-default btn-sm" role="button">View</a></td>
             </tr>
             {% endfor %}
         </tbody>

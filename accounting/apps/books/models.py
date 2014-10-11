@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 
 
 class User(AbstractUser):
-    pass
+    objects = UserManager()
 
 
 class Organization(models.Model):
@@ -16,3 +16,9 @@ class Organization(models.Model):
 
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                      blank=True, null=True)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return self.legal_name

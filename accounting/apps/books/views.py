@@ -1,4 +1,5 @@
 from django.views import generic
+from django.core.urlresolvers import reverse
 
 from .models import User, Organization
 
@@ -16,4 +17,11 @@ class OrganizationListView(generic.ListView):
 class OrganizationCreateView(generic.CreateView):
     template_name = "books/organization_create.html"
     model = Organization
+    fields = (
+        'display_name',
+        'legal_name',
+    )
     context_object_name = "organization"
+
+    def get_success_url(self):
+        return reverse("books:organization-list")
