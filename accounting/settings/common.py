@@ -13,6 +13,7 @@ import sys
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+PROJECT_DIR = os.path.basename(BASE_DIR)
 
 # Add the BASE_DIR to the path in order to reuse the apps easily
 sys.path.append(BASE_DIR)
@@ -62,6 +63,31 @@ ROOT_URLCONF = 'accounting.urls'
 WSGI_APPLICATION = 'accounting.wsgi.application'
 
 
+# Templates
+# https://docs.djangoproject.com/en/1.7/ref/settings/#template-context-processors
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request',
+)
+
+# See: https://docs.djangoproject.com/en/1.7/ref/settings/#template-loaders
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+)
+
+# See: https://docs.djangoproject.com/en/1.7/ref/settings/#template-dirs
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
+
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
@@ -95,6 +121,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+# See: https://docs.djangoproject.com/en/1.7/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'assets'),
+)
+
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
@@ -103,12 +134,20 @@ STATICFILES_FINDERS = (
 )
 
 
+# Media files
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+
 # Bower config
 
 BOWER_COMPONENTS_ROOT = os.path.abspath(os.path.join(BASE_DIR, 'components'))
 
 BOWER_INSTALLED_APPS = (
+    'modernizr',
     'jquery',
+    'bootstrap',
 )
 
 

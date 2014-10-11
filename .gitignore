@@ -7,3 +7,10 @@ __pycache__/
 
 ## Translations
 *.mo
+
+## Media files & Collected static files
+static/
+media/
+
+# Components
+components/
