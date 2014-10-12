@@ -31,6 +31,13 @@ And enjoy !
 - ~~**Dashboard / Tax Provisionning** to know how much you need to keep for taxes declarations~~
 - **Dashboard / Payroll Provisionning** to know how much you need to keep for social wages
 
+### Clients
+
+- ~~**Creation/Update**~~
+- **Deletion** inform the user of the cascade deletion of invoices and bills
+- ~~**Professional address** specify the address on the client model~~
+- **Linked to organization** to implicitly create the bill when cross-invoicing between organizations
+
 ### Reports
 - **Balance sheet**
 - **Cash summary**
