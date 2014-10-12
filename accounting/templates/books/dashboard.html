@@ -1,24 +1,25 @@
 {% extends "layout.html" %}
+{% load currency_filters %}
 
 {% block content %}
     <h1 class="page-header">Dashboard</h1>
 
     <div class="row placeholders">
         <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>3</h4>
+            <h4>{{ organizations_count|default:0 }}</h4>
             <span class="text-muted">Number of organizations</span>
         </div>
         <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>$ 1234</h4>
-            <span class="text-muted">Turnover cumulated</span>
+            <h4>{{ organizations_cumulated_turnovers|currency|default:"-" }}</h4>
+            <span class="text-muted">Turnovers cumulated</span>
         </div>
         <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>0</h4>
-            <span class="text-muted">...</span>
+            <h4>{{ organizations_cumulated_profits|currency|default:"-" }}</h4>
+            <span class="text-muted">Profits cumulated</span>
         </div>
         <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>0</h4>
-            <span class="text-muted">...</span>
+            <h4>{{ organizations_cumulated_active_days|default:0 }}</h4>
+            <span class="text-muted">Active days cumulated</span>
         </div>
     </div>
 
@@ -28,20 +29,24 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Project</th>
                     <th>Client</th>
+                    <th>Description</th>
                     <th>Amount</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
+                {% for inv in last_invoices %}
                 <tr>
-                    <td>1</td>
-                    <td>Lorem</td>
-                    <td>ipsum</td>
-                    <td>dolor</td>
-                    <td>sit</td>
+                    <td>{{ inv.number }}</td>
+                    <td>{{ inv.client }}</td>
+                    <td>{{ inv.description }}</td>
+                    <td>{{ inv.total_incl_tax|currency }}</td>
+                    <td class="text-right">
+                        <a href="{% url 'books:invoice-edit' inv.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
+                    </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

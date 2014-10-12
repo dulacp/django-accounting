@@ -1,5 +1,6 @@
 from django.views import generic
 from django.core.urlresolvers import reverse
+from django.db.models import Count, Sum
 
 from .models import User, Organization, Invoice, Bill
 from .forms import (
@@ -12,6 +13,23 @@ from .forms import (
 
 class DashboardView(generic.TemplateView):
     template_name = "books/dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        orgas = Organization.objects.all()
+        cumulated_turnovers = orgas.aggregate(sum=Sum('invoices__total_excl_tax'))["sum"]
+        cumulated_debts = orgas.aggregate(sum=Sum('bills__total_excl_tax'))["sum"]
+        cumulated_profits = cumulated_turnovers - cumulated_debts
+
+        context["organizations_count"] = orgas.count()
+        context["organizations_cumulated_turnovers"] = cumulated_turnovers
+        context["organizations_cumulated_profits"] = cumulated_profits
+        context["organizations_cumulated_active_days"] = 0
+
+        context["last_invoices"] = Invoice.objects.all()[:10]
+
+        return context
 
 
 class OrganizationListView(generic.ListView):

@@ -3,6 +3,7 @@ from datetime import date
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Sum
 from django.contrib.auth.models import AbstractUser, UserManager
 
 from libs.utils import banker_round
@@ -31,6 +32,18 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.legal_name
+
+    @property
+    def turnover(self):
+        return self.invoices.aggregate(sum=Sum('total_excl_tax'))["sum"]
+
+    @property
+    def debts(self):
+        return self.bills.aggregate(sum=Sum('total_excl_tax'))["sum"]
+
+    @property
+    def profit(self):
+        return self.turnover - self.debts
 
 
 class AbstractInvoice(models.Model):
@@ -122,6 +135,7 @@ class AbstractInvoiceLine(models.Model):
 
 class Invoice(AbstractInvoice):
     organization = models.ForeignKey('books.Organization',
+                                     related_name="invoices",
                                      verbose_name="From Organization")
     client = models.ForeignKey('clients.Client',
                                verbose_name="To Client")
@@ -140,6 +154,7 @@ class InvoiceLine(AbstractInvoiceLine):
 
 class Bill(AbstractInvoice):
     organization = models.ForeignKey('books.Organization',
+                                     related_name="bills",
                                      verbose_name="To Organization")
     client = models.ForeignKey('clients.Client',
                                verbose_name="From Client")
