@@ -37,6 +37,8 @@ class Invoice(models.Model):
                               unique=True,
                               default=next_invoice_number)
     organization = models.ForeignKey('books.Organization')
+    client = models.ForeignKey('clients.Client',
+                               verbose_name="To Client")
 
     # tracking
     draft = models.BooleanField(default=False)

@@ -30,6 +30,8 @@ class InvoiceForm(ModelForm):
         fields = (
             "number",
             "organization",
+            "client",
+
             "draft",
             "sent",
             "paid",

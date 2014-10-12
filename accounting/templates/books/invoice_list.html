@@ -7,7 +7,7 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Label</th>
+                <th>Client</th>
                 <th>Description</th>
                 <th>Total</th>
                 <th>Actions</th>
@@ -17,7 +17,7 @@
             {% for inv in invoices %}
             <tr>
                 <td>{{ inv.number }}</td>
-                <td>{{ inv.label }}</td>
+                <td>{{ inv.client }}</td>
                 <td>{{ inv.description }}</td>
                 <td>{{ inv.total }}</td>
                 <td>
