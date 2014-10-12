@@ -10,7 +10,7 @@
                 <th>Client</th>
                 <th>Description</th>
                 <th>Total</th>
-                <th>Actions</th>
+                <th class="text-right">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -20,7 +20,7 @@
                 <td>{{ inv.client }}</td>
                 <td>{{ inv.description }}</td>
                 <td>{{ inv.total }}</td>
-                <td>
+                <td class="text-right">
                     <a href="{% url 'books:invoice-edit' inv.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
                 </td>
             </tr>

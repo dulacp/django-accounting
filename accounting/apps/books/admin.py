@@ -23,3 +23,15 @@ class InvoiceAdmin(admin.ModelAdmin):
     inlines = (
         InvoiceLineInline,
     )
+
+
+class BillLineInline(admin.TabularInline):
+    model = models.BillLine
+    extra = 1
+
+
+@admin.register(models.Bill)
+class BillAdmin(admin.ModelAdmin):
+    inlines = (
+        BillLineInline,
+    )

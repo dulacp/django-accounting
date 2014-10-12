@@ -10,7 +10,7 @@
                 <th>Display name</th>
                 <th>Legal name</th>
                 <th>Turnover</th>
-                <th>Actions</th>
+                <th class="text-right">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -20,7 +20,7 @@
                 <td>{{ orga.display_name }}</td>
                 <td>{{ orga.legal_name }}</td>
                 <td>{{ orga.turnover }}</td>
-                <td>
+                <td class="text-right">
                     <a href="{% url 'books:organization-edit' orga.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
                 </td>
             </tr>

@@ -1,18 +1,25 @@
 from django.forms import ModelForm, BaseInlineFormSet
 from django.forms.models import inlineformset_factory
 
-from .models import Organization, Invoice, InvoiceLine
+from .models import (
+    Organization,
+    Invoice,
+    InvoiceLine,
+    Bill,
+    BillLine)
 
 
 class RequiredInlineFormSet(BaseInlineFormSet):
     """
     Used to make empty formset forms required
-    See http://stackoverflow.com/questions/2406537/django-formsets-make-first-required/4951032#4951032
+    See http://stackoverflow.com/questions/2406537/django-formsets-\
+        make-first-required/4951032#4951032
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for form in self.forms:
-            form.empty_permitted = False
+        if len(self.forms) > 0:
+            first_form = self.forms[0]
+            first_form.empty_permitted = False
 
 
 class OrganizationForm(ModelForm):
