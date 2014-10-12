@@ -2,7 +2,7 @@ from django.views import generic
 from django.core.urlresolvers import reverse
 
 from .models import User, Organization, Invoice
-from .forms import InvoiceForm, InvoiceLineFormSet
+from .forms import OrganizationForm, InvoiceForm, InvoiceLineFormSet
 
 
 class DashboardView(generic.TemplateView):
@@ -16,12 +16,9 @@ class OrganizationListView(generic.ListView):
 
 
 class OrganizationCreateView(generic.CreateView):
-    template_name = "books/organization_create.html"
+    template_name = "books/organization_create_or_update.html"
     model = Organization
-    fields = (
-        'display_name',
-        'legal_name',
-    )
+    form_class = OrganizationForm
 
     def get_success_url(self):
         return reverse("books:organization-list")
@@ -30,10 +27,7 @@ class OrganizationCreateView(generic.CreateView):
 class OrganizationUpdateView(generic.UpdateView):
     template_name = "books/organization_create_or_update.html"
     model = Organization
-    fields = (
-        'display_name',
-        'legal_name',
-    )
+    form_class = OrganizationForm
 
     def get_success_url(self):
         return reverse("books:organization-list")

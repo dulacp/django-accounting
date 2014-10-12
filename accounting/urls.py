@@ -6,6 +6,7 @@ from django.contrib import admin
 
 urlpatterns = patterns('',
     url(r'^books/', include('apps.books.urls', namespace="books")),
+    url(r'^clients/', include('apps.clients.urls', namespace="clients")),
     url(r'^admin/', include(admin.site.urls)),
 )
 

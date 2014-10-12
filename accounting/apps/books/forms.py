@@ -1,7 +1,7 @@
 from django.forms import ModelForm, BaseInlineFormSet
 from django.forms.models import inlineformset_factory
 
-from .models import Invoice, InvoiceLine
+from .models import Organization, Invoice, InvoiceLine
 
 
 class RequiredInlineFormSet(BaseInlineFormSet):
@@ -13,6 +13,15 @@ class RequiredInlineFormSet(BaseInlineFormSet):
         super().__init__(*args, **kwargs)
         for form in self.forms:
             form.empty_permitted = False
+
+
+class OrganizationForm(ModelForm):
+    class Meta:
+        model = Organization
+        fields = (
+            "display_name",
+            "legal_name",
+        )
 
 
 class InvoiceForm(ModelForm):
