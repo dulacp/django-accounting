@@ -70,8 +70,8 @@ class BillForm(ModelForm):
         model = Bill
         fields = (
             "number",
-            "organization",
             "client",
+            "organization",
 
             "draft",
             "sent",

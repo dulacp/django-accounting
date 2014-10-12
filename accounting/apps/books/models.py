@@ -36,9 +36,6 @@ class AbstractInvoice(models.Model):
     number = models.CharField(max_length=6,
                               unique=True,
                               default=next_invoice_number)
-    organization = models.ForeignKey('books.Organization')
-    client = models.ForeignKey('clients.Client',
-                               verbose_name="To Client")
 
     # tracking
     draft = models.BooleanField(default=False)
@@ -83,6 +80,11 @@ class AbstractInvoiceLine(models.Model):
 
 
 class Invoice(AbstractInvoice):
+    organization = models.ForeignKey('books.Organization',
+                                     verbose_name="From Organization")
+    client = models.ForeignKey('clients.Client',
+                               verbose_name="To Client")
+
     class Meta:
         ordering = ('-date_issued', 'id')
 
@@ -96,6 +98,11 @@ class InvoiceLine(AbstractInvoiceLine):
 
 
 class Bill(AbstractInvoice):
+    organization = models.ForeignKey('books.Organization',
+                                     verbose_name="To Organization")
+    client = models.ForeignKey('clients.Client',
+                               verbose_name="From Client")
+
     class Meta:
         ordering = ('-date_issued', 'id')
 
