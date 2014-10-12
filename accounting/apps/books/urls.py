@@ -15,9 +15,12 @@ urlpatterns = patterns('',
     url(r'^organizations/create/$',
         views.OrganizationCreateView.as_view(),
         name="organization-create"),
+    url(r'^organizations/(?P<pk>\d)/edit/$',
+        views.OrganizationUpdateView.as_view(),
+        name="organization-edit"),
     url(r'^organizations/(?P<pk>\d)/detail/$',
         views.OrganizationDetailView.as_view(),
-        name="organization-create"),
+        name="organization-detail"),
 
     # Invoices
     url(r'^invoice/$',

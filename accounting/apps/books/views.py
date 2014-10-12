@@ -27,6 +27,18 @@ class OrganizationCreateView(generic.CreateView):
         return reverse("books:organization-list")
 
 
+class OrganizationUpdateView(generic.UpdateView):
+    template_name = "books/organization_create_or_update.html"
+    model = Organization
+    fields = (
+        'display_name',
+        'legal_name',
+    )
+
+    def get_success_url(self):
+        return reverse("books:organization-list")
+
+
 class OrganizationDetailView(generic.DetailView):
     template_name = "books/organization_detail.html"
     model = Organization
@@ -40,7 +52,7 @@ class InvoiceListView(generic.ListView):
 
 
 class InvoiceCreateView(generic.CreateView):
-    template_name = "books/invoice_create.html"
+    template_name = "books/invoice_create_or_update.html"
     model = Invoice
     form_class = InvoiceForm
 
@@ -68,7 +80,7 @@ class InvoiceCreateView(generic.CreateView):
 
 
 class InvoiceUpdateView(generic.UpdateView):
-    template_name = "books/invoice_create.html"
+    template_name = "books/invoice_create_or_update.html"
     model = Invoice
     form_class = InvoiceForm
 
