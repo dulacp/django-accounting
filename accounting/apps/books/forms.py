@@ -19,7 +19,7 @@ class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
         fields = (
-            # "number",
+            "number",
             "organization",
             "draft",
             "sent",

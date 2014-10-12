@@ -34,7 +34,6 @@ class Organization(models.Model):
 class Invoice(models.Model):
     number = models.CharField(max_length=6,
                               unique=True,
-                              editable=False,
                               default=next_invoice_number)
     organization = models.ForeignKey('books.Organization')
 
