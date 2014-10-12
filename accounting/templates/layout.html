@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load nav %}
+{% load nav bootstrap3 %}
 
 {% block maincontent %}
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -45,6 +45,7 @@
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                {% bootstrap_messages %}
                 {% block content %}{% endblock %}
             </div>
         </div>

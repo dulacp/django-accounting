@@ -1,1 +1,25 @@
-{% extends "_generics/form.html" %}
+{% extends "layout.html" %}
+{% load bootstrap3 form_filters %}
+
+{% block content %}
+    <h1 class="page-header">Create an {{ form|get_form_model_verbose_name }}</h1>
+
+    <form action="." method="post" class="form">
+        {% csrf_token %}
+
+        {% bootstrap_form form %}
+
+        {{ invoiceline_formset.management_form }}
+        {{ invoiceline_formset.non_field_errors }}
+        {% for invoiceline_form in invoiceline_formset %}
+            <h2 class="sub-header">{{ invoiceline_formset|get_form_model_verbose_name }} #{{ forloop.counter }}</h2>
+            {% bootstrap_formset invoiceline_formset layout='vertical' %}
+        {% endfor %}
+
+        {% buttons layout='vertical' %}
+            <button type="submit" class="btn btn-primary">
+                {% bootstrap_icon "star" %} Create
+            </button>
+        {% endbuttons %}
+    </form>
+{% endblock content %}

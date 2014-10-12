@@ -1,5 +1,5 @@
 from django import template
-from django.forms import ModelForm
+from django.forms import ModelForm, BaseFormSet
 from django.forms.forms import BoundField
 from django.template import Context
 from django.template.loader import get_template
@@ -31,7 +31,9 @@ def is_readonly(field):
 
 
 @register.filter
-def get_form_model_verbose_name(form):
-    if not isinstance(form, ModelForm):
-        return '<unknown>'
-    return form._meta.model._meta.verbose_name.capitalize()
+def get_form_model_verbose_name(instance):
+    if isinstance(instance, ModelForm):
+        return instance._meta.model._meta.verbose_name.title()
+    if isinstance(instance, BaseFormSet):
+        return instance.model._meta.verbose_name_plural.title()
+    return '<unknown>'
