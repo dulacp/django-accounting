@@ -4,30 +4,7 @@
 {% block content %}
     <h1 class="page-header">Invoices <small>which belong to you</small></h1>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Client</th>
-                <th>Description</th>
-                <th>Total (inc. tax)</th>
-                <th class="text-right">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for inv in invoices %}
-            <tr>
-                <td>{{ inv.number }}</td>
-                <td>{{ inv.client }}</td>
-                <td>{{ inv.description }}</td>
-                <td>{{ inv.total_incl_tax|currency }}</td>
-                <td class="text-right">
-                    <a href="{% url 'books:invoice-edit' inv.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% include "books/_partials/invoice_list.html" with invoices=invoices detailed=True %}
 
     <a href="{% url 'books:invoice-create' %}" class="btn btn-primary btn-lg" role="button">
         Add an invoice

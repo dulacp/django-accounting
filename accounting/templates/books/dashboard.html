@@ -29,7 +29,8 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Client</th>
+                    <th>From Organization</th>
+                    <th>To Client</th>
                     <th>Description</th>
                     <th>Amount</th>
                     <th>Actions</th>
@@ -39,6 +40,7 @@
                 {% for inv in last_invoices %}
                 <tr>
                     <td>{{ inv.number }}</td>
+                    <td>{{ inv.organization }}</td>
                     <td>{{ inv.client }}</td>
                     <td>{{ inv.description }}</td>
                     <td>{{ inv.total_incl_tax|currency }}</td>

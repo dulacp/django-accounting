@@ -22,15 +22,16 @@ And enjoy !
 *with inspiration from already existing services (like Xero)*
 
 ### Books
-- **Invoicing** speeks for itself
-- **Billing** share the maximum of logic with the invoicing system
+- ~~**Invoicing** speeks for itself~~
+- ~~**Billing** share the maximum of logic with the invoicing system~~
 - **Payments** to track partial/complete payments of invoices and bills
 - **ExpenseClaim** for employees of organizations that used their personnal accounts
-- **Dashboard / Current balance** displayed the current balance,
+- ~~**Dashboard / Current balance** displayed the current balance,~~
 - **Dashboard / Overdued invoices & bills** to track what's late
-- **Dashboard / Provisionning** to know how much you need to keep for taxes declarations
+- ~~**Dashboard / Tax Provisionning** to know how much you need to keep for taxes declarations~~
+- **Dashboard / Payroll Provisionning** to know how much you need to keep for social wages
 
-## Reports
+### Reports
 - **Balance sheet**
 - **Cash summary**
 - **Profit and Loss**

@@ -22,6 +22,7 @@
                 <td>{{ orga.legal_name }}</td>
                 <td>{{ orga.turnover|currency|default:"-" }}</td>
                 <td class="text-right">
+                    <a href="{% url 'books:organization-detail' orga.pk %}" class="btn btn-success btn-sm" role="button">View</a>
                     <a href="{% url 'books:organization-edit' orga.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
                 </td>
             </tr>

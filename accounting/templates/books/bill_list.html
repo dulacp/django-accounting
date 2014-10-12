@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% load currency_filters %}
+
+{% block content %}
+    <h1 class="page-header">Bills <small>which belong to you</small></h1>
+
+    {% include "books/_partials/bill_list.html" with bills=bills detailed=True %}
+
+    <a href="{% url 'books:bill-create' %}" class="btn btn-primary btn-lg" role="button">
+        Add a bill
+    </a>
+{% endblock content %}

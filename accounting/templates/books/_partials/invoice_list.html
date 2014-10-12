@@ -1,0 +1,30 @@
+{% load currency_filters %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Client</th>
+            {% if detailed %}
+            <th>Description</th>
+            {% endif %}
+            <th>Total (excl. tax)</th>
+            <th class="text-right">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for inv in invoices %}
+        <tr>
+            <td>{{ inv.number }}</td>
+            <td>{{ inv.client }}</td>
+            {% if detailed %}
+            <td>{{ inv.description }}</td>
+            {% endif %}
+            <td>{{ inv.total_excl_tax|currency }}</td>
+            <td class="text-right">
+                <a href="{% url 'books:invoice-edit' inv.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% load currency_filters %}
+
+{% block content %}
+    <h1 class="page-header">{{ organization.display_name }} <small>/ organization detail</small></h1>
+
+    <div class="row placeholders">
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <h4>{{ organization.turnover_excl_tax|currency|default:"-" }}</h4>
+            <span class="text-muted">Turnover</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <h4>{{ organization.profits|currency|default:"-" }}</h4>
+            <span class="text-muted">Profits</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <h4>{{ organization.tax_provisionning|default:0 }}</h4>
+            <span class="text-muted">Tax Provisionning</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <h4>{{ organization.active_days|default:0 }}</h4>
+            <span class="text-muted">Active days</span>
+        </div>
+    </div>
+
+    <div class="row-fluid">
+        <div class="col-xs-12 col-sm-6">
+            {% include "books/_partials/invoice_list.html" with invoices=organization.invoices.all %}
+            <a href="{% url 'books:invoice-create' %}" class="btn btn-success btn-lg" role="button">
+                Add an invoice
+            </a>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+            {% include "books/_partials/bill_list.html" with bills=organization.bills.all %}
+            <a href="{% url 'books:bill-create' %}" class="btn btn-primary btn-lg" role="button">
+                Add an bill
+            </a>
+        </div>
+    </div>
+{% endblock content %}

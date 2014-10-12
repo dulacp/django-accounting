@@ -1,4 +1,4 @@
-from decimal import Decimal, ROUND_HALF_EVEN
+from decimal import Decimal
 from datetime import date
 
 from django.conf import settings
@@ -34,16 +34,36 @@ class Organization(models.Model):
         return self.legal_name
 
     @property
-    def turnover(self):
-        return self.invoices.turnover()
+    def turnover_excl_tax(self):
+        return self.invoices.turnover_excl_tax() or Decimal('0.00')
 
     @property
-    def debts(self):
-        return self.bills.debts()
+    def turnover_incl_tax(self):
+        return self.invoices.turnover_incl_tax() or Decimal('0.00')
 
     @property
-    def profit(self):
-        return self.turnover - self.debts
+    def debts_excl_tax(self):
+        return self.bills.debts_excl_tax() or Decimal('0.00')
+
+    @property
+    def debts_incl_tax(self):
+        return self.bills.debts_incl_tax() or Decimal('0.00')
+
+    @property
+    def profits(self):
+        return self.turnover_excl_tax - self.debts_excl_tax
+
+    @property
+    def collected_tax(self):
+        return self.turnover_incl_tax - self.turnover_excl_tax
+
+    @property
+    def deductible_tax(self):
+        return self.debts_incl_tax - self.debts_excl_tax
+
+    @property
+    def tax_provisionning(self):
+        return self.collected_tax - self.deductible_tax
 
 
 class AbstractInvoice(models.Model):
@@ -71,7 +91,7 @@ class AbstractInvoice(models.Model):
         abstract = True
 
     def __str__(self):
-        return "#{} ({})".format(self.number, self.total())
+        return "#{} ({})".format(self.number, self.total_incl_tax)
 
     def save(self, *args, **kwargs):
         # recompute total_incl_tax and total_excl_tax

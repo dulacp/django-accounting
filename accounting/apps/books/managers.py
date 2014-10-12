@@ -13,16 +13,23 @@ class InvoiceQuerySetMixin(object):
                            draft=False,
                            paid=False)
 
+    def _get_total(self, prop):
+        return self.aggregate(sum=Sum(prop))["sum"]
+
 
 class InvoiceQuerySet(InvoiceQuerySetMixin, models.QuerySet):
 
-    @property
-    def turnover(self):
-        return self.aggregate(sum=Sum('total_excl_tax'))["sum"]
+    def turnover_excl_tax(self):
+        return self._get_total('total_excl_tax')
+
+    def turnover_incl_tax(self):
+        return self._get_total('total_incl_tax')
 
 
 class BillQuerySet(InvoiceQuerySetMixin, models.QuerySet):
 
-    @property
-    def debts(self):
-        return self.aggregate(sum=Sum('total_excl_tax'))["sum"]
+    def debts_excl_tax(self):
+        return self._get_total('total_excl_tax')
+
+    def debts_incl_tax(self):
+        return self._get_total('total_incl_tax')

@@ -1,0 +1,30 @@
+{% load currency_filters %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Client</th>
+            {% if detailed %}
+            <th>Description</th>
+            {% endif %}
+            <th>Total (excl. tax)</th>
+            <th class="text-right">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for bill in bills %}
+        <tr>
+            <td>{{ bill.number }}</td>
+            <td>{{ bill.client }}</td>
+            {% if detailed %}
+            <td>{{ bill.description }}</td>
+            {% endif %}
+            <td>{{ bill.total_excl_tax|currency }}</td>
+            <td class="text-right">
+                <a href="{% url 'books:bill-edit' bill.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
