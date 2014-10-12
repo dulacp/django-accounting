@@ -32,7 +32,7 @@ class Organization(models.Model):
         return self.legal_name
 
 
-class Invoice(models.Model):
+class AbstractInvoice(models.Model):
     number = models.CharField(max_length=6,
                               unique=True,
                               default=next_invoice_number)
@@ -47,13 +47,10 @@ class Invoice(models.Model):
     date_issued = models.DateField(default=date.today)
     date_paid = models.DateField(blank=True, null=True)
 
-    # client informations
-    # TODO
-
     objects = InvoiceQuerySet.as_manager()
 
     class Meta:
-        ordering = ('-date_issued', 'id')
+        abstract = True
 
     def __str__(self):
         return "#{} ({})".format(self.number, self.total())
@@ -65,9 +62,7 @@ class Invoice(models.Model):
         return total
 
 
-class InvoiceLine(models.Model):
-    invoice = models.ForeignKey('books.Invoice',
-                                related_name="lines")
+class AbstractInvoiceLine(models.Model):
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     unit_price = models.DecimalField(max_digits=8,
@@ -77,7 +72,7 @@ class InvoiceLine(models.Model):
                                    default=1)
 
     class Meta:
-        pass
+        abstract = True
 
     def __str__(self):
         return self.label
@@ -85,3 +80,29 @@ class InvoiceLine(models.Model):
     def total(self):
         total = self.unit_price * self.quantity
         return banker_round(total)
+
+
+class Invoice(AbstractInvoice):
+    class Meta:
+        ordering = ('-date_issued', 'id')
+
+
+class InvoiceLine(AbstractInvoiceLine):
+    invoice = models.ForeignKey('books.Invoice',
+                                related_name="lines")
+
+    class Meta:
+        pass
+
+
+class Bill(AbstractInvoice):
+    class Meta:
+        ordering = ('-date_issued', 'id')
+
+
+class BillLine(AbstractInvoiceLine):
+    bill = models.ForeignKey('books.Bill',
+                             related_name="lines")
+
+    class Meta:
+        pass
