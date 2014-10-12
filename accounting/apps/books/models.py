@@ -53,7 +53,7 @@ class Invoice(models.Model):
         ordering = ('-date_issued', 'id')
 
     def __str__(self):
-        return "{} ({})".format(self.invoice_id, self.total_amount())
+        return "#{} ({})".format(self.number, self.total())
 
     def total(self):
         total = Decimal('0.00')

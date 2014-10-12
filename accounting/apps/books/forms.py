@@ -1,10 +1,10 @@
-from django.forms import ModelForm, BaseFormSet
+from django.forms import ModelForm, BaseInlineFormSet
 from django.forms.models import inlineformset_factory
 
 from .models import Invoice, InvoiceLine
 
 
-class RequiredFormSet(BaseFormSet):
+class RequiredInlineFormSet(BaseInlineFormSet):
     """
     Used to make empty formset forms required
     See http://stackoverflow.com/questions/2406537/django-formsets-make-first-required/4951032#4951032
@@ -43,5 +43,5 @@ class InvoiceLineForm(ModelForm):
 InvoiceLineFormSet = inlineformset_factory(Invoice,
                                            InvoiceLine,
                                            form=InvoiceLineForm,
-                                           formset=RequiredFormSet,
+                                           formset=RequiredInlineFormSet,
                                            extra=1)

@@ -26,4 +26,7 @@ urlpatterns = patterns('',
     url(r'^invoice/create/$',
         views.InvoiceCreateView.as_view(),
         name="invoice-create"),
+    url(r'^invoice/(?P<pk>\d)/edit/$',
+        views.InvoiceUpdateView.as_view(),
+        name="invoice-edit"),
 )

@@ -44,12 +44,44 @@ class InvoiceCreateView(generic.CreateView):
     model = Invoice
     form_class = InvoiceForm
 
+    def get_success_url(self):
+        return reverse("books:invoice-list")
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['invoiceline_formset'] = InvoiceLineFormSet(self.request.POST)
         else:
             context['invoiceline_formset'] = InvoiceLineFormSet()
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        invoiceline_formset = context['invoiceline_formset']
+        if not invoiceline_formset.is_valid():
+            return super().form_invalid(form)
+
+        self.object = form.save()
+        invoiceline_formset.instance = self.object
+        invoiceline_formset.save()
+        return super().form_valid(form)
+
+
+class InvoiceUpdateView(generic.UpdateView):
+    template_name = "books/invoice_create.html"
+    model = Invoice
+    form_class = InvoiceForm
+
+    def get_success_url(self):
+        return reverse("books:invoice-list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['invoiceline_formset'] = InvoiceLineFormSet(self.request.POST,
+                                                                instance=self.object)
+        else:
+            context['invoiceline_formset'] = InvoiceLineFormSet(instance=self.object)
         return context
 
     def form_valid(self, form):

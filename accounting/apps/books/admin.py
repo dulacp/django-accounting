@@ -13,6 +13,13 @@ class OrganizationAdmin(admin.ModelAdmin):
     pass
 
 
+class InvoiceLineInline(admin.TabularInline):
+    model = models.InvoiceLine
+    extra = 1
+
+
 @admin.register(models.Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
-    pass
+    inlines = (
+        InvoiceLineInline,
+    )
