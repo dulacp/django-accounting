@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% load bootstrap3 form_filters %}
+{% load static bootstrap3 form_filters %}
 
 {% block content %}
     <h1 class="page-header">Create an {{ form|get_form_model_verbose_name }}</h1>
@@ -12,14 +12,22 @@
         {{ invoiceline_formset.management_form }}
         {{ invoiceline_formset.non_field_errors }}
         {% for invoiceline_form in invoiceline_formset %}
-            <h2 class="sub-header">{{ invoiceline_formset|get_form_model_verbose_name }} #{{ forloop.counter }}</h2>
-            {% bootstrap_formset invoiceline_formset layout='vertical' %}
+            <div class="formset-form">
+                <h2 class="sub-header">{{ invoiceline_form|get_form_model_verbose_name }} #{{ forloop.counter }}</h2>
+                {% bootstrap_form invoiceline_form layout='vertical' %}
+            </div>
         {% endfor %}
 
         {% buttons layout='vertical' %}
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-success">
                 {% bootstrap_icon "star" %} Create
             </button>
         {% endbuttons %}
     </form>
 {% endblock content %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'js/jquery.formset.js' %}"></script>
+    <script src="{% static 'js/books/invoice_create.js' %}"></script>
+{% endblock %}

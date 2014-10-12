@@ -37,3 +37,4 @@ def get_form_model_verbose_name(instance):
     if isinstance(instance, BaseFormSet):
         return instance.model._meta.verbose_name_plural.title()
     return '<unknown>'
+
