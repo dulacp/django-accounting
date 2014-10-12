@@ -12,5 +12,13 @@ __pycache__/
 static/
 media/
 
-# Components
+## Components
 components/
+
+## Testing
+.coverage
+.noseids
+coverage.xml
+violations.txt
+nosetests.xml
+/htmlcov/*

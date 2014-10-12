@@ -4,17 +4,10 @@ from django import template
 from django.http import QueryDict
 from django.template import Library, Node, resolve_variable
 
-from libs.generic_utils import canonical_url
-
 from classytags.core import Tag, Options
 from classytags.arguments import MultiKeywordArgument, MultiValueArgument
 
 register = template.Library()
-
-
-@register.filter
-def absolute_url(url):
-    return canonical_url(url)
 
 
 class QueryParameters(Tag):

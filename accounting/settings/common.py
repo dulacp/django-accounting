@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 import os
 import sys
 
+import accounting
+
+
+VERSION = accounting.VERSION
+DISPLAY_VERSION = accounting.get_version()
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 PROJECT_DIR = os.path.basename(BASE_DIR)
@@ -106,7 +112,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-fr'
 
 TIME_ZONE = 'UTC'
 
@@ -156,3 +162,8 @@ BOWER_INSTALLED_APPS = (
 # User
 
 AUTH_USER_MODEL = 'books.User'
+
+
+# Accounting
+
+DEFAULT_CURRENCY = "EUR"

@@ -22,6 +22,7 @@ class Organization(models.Model):
                   "invoices and bills")
 
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
+                                     related_name="organizations",
                                      blank=True, null=True)
 
     class Meta:
