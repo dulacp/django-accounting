@@ -16,6 +16,7 @@ import accounting
 
 VERSION = accounting.VERSION
 DISPLAY_VERSION = accounting.get_version()
+DISPLAY_SHORT_VERSION = accounting.get_short_version()
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -82,6 +83,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
+
+    'apps.context_processors.metadata',
 )
 
 # See: https://docs.djangoproject.com/en/1.7/ref/settings/#template-loaders
