@@ -23,7 +23,7 @@ class TestGetParameterTemplateTag(TestCase):
             "{% load url_tags %}"
             "{% get_parameters %}"
         ).render(RequestContext(self.request, {}))
-        self.assertEqual(out, "page=3&sort=asc")
+        self.assertTrue(out == "page=3&sort=asc" or out == "sort=asc&page=3")
 
     def test_except_fields(self):
         out = Template(
