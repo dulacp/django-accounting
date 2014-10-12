@@ -13,4 +13,5 @@ class ClientForm(ModelForm):
             "city",
             "postal_code",
             "country",
+            "organization",
         )
