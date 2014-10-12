@@ -10,6 +10,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 import os
 import sys
+from decimal import Decimal
 
 import accounting
 
@@ -170,3 +171,4 @@ AUTH_USER_MODEL = 'books.User'
 # Accounting
 
 DEFAULT_CURRENCY = "EUR"
+DEFAULT_TAX_PERCENTAGE = Decimal("0.20")

@@ -8,7 +8,7 @@
             <tr>
                 <th>#</th>
                 <th>Name</th>
-                <th>Actions</th>
+                <th class="text-right">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -16,7 +16,7 @@
             <tr>
                 <td>{{ cli.id }}</td>
                 <td>{{ cli.name }}</td>
-                <td>
+                <td class="text-right">
                     <a href="{% url 'clients:client-edit' cli.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
                 </td>
             </tr>

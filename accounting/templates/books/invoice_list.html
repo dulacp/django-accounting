@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% load currency_filters %}
 
 {% block content %}
     <h1 class="page-header">Invoices <small>which belong to you</small></h1>
@@ -9,7 +10,7 @@
                 <th>#</th>
                 <th>Client</th>
                 <th>Description</th>
-                <th>Total</th>
+                <th>Total (inc. tax)</th>
                 <th class="text-right">Actions</th>
             </tr>
         </thead>
@@ -19,7 +20,7 @@
                 <td>{{ inv.number }}</td>
                 <td>{{ inv.client }}</td>
                 <td>{{ inv.description }}</td>
-                <td>{{ inv.total }}</td>
+                <td>{{ inv.total_incl_tax|currency }}</td>
                 <td class="text-right">
                     <a href="{% url 'books:invoice-edit' inv.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
                 </td>

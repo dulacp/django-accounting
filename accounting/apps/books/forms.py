@@ -53,7 +53,7 @@ class InvoiceLineForm(ModelForm):
         fields = (
             "label",
             "description",
-            "unit_price",
+            "unit_price_excl_tax",
             "quantity",
         )
 
@@ -87,7 +87,7 @@ class BillLineForm(ModelForm):
         fields = (
             "label",
             "description",
-            "unit_price",
+            "unit_price_excl_tax",
             "quantity",
         )
 

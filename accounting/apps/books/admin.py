@@ -23,6 +23,9 @@ class InvoiceAdmin(admin.ModelAdmin):
     inlines = (
         InvoiceLineInline,
     )
+    readonly = (
+        'total_incl_tax', 'total_excl_tax',
+    )
 
 
 class BillLineInline(admin.TabularInline):
@@ -34,4 +37,7 @@ class BillLineInline(admin.TabularInline):
 class BillAdmin(admin.ModelAdmin):
     inlines = (
         BillLineInline,
+    )
+    readonly = (
+        'total_incl_tax', 'total_excl_tax',
     )

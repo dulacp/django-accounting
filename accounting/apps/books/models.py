@@ -6,6 +6,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
 
 from libs.utils import banker_round
+from libs import prices
 from .managers import InvoiceQuerySet
 from .utils import next_invoice_number
 
@@ -37,6 +38,15 @@ class AbstractInvoice(models.Model):
                               unique=True,
                               default=next_invoice_number)
 
+    # Total price needs to be stored with and wihtout taxes
+    # because the tax percentage can vary depending on the associated lines
+    total_incl_tax = models.DecimalField("Total (inc. tax)",
+                                         decimal_places=2,
+                                         max_digits=12)
+    total_excl_tax = models.DecimalField("Total (excl. tax)",
+                                         decimal_places=2,
+                                         max_digits=12)
+
     # tracking
     draft = models.BooleanField(default=False)
     sent = models.BooleanField(default=False)
@@ -52,18 +62,38 @@ class AbstractInvoice(models.Model):
     def __str__(self):
         return "#{} ({})".format(self.number, self.total())
 
-    def total(self):
+    def save(self, *args, **kwargs):
+        # recompute total_incl_tax and total_excl_tax
+        self.total_excl_tax = self.get_total_excl_tax()
+        self.total_incl_tax = self.get_total_incl_tax()
+        super().save(*args, **kwargs)
+
+    def _get_total(self, prop):
+        """
+        For executing a named method on each line of the basket
+        and returning the total.
+        """
         total = Decimal('0.00')
-        for item in self.lines.all():
-            total = total + item.total()
+        for line in self.lines.all():
+            total = total + getattr(line, prop)
         return total
+
+    @property
+    def total_tax(self):
+        return self.total_incl_tax - self.total_excl_tax
+
+    def get_total_excl_tax(self):
+        return self._get_total('line_price_excl_tax')
+
+    def get_total_incl_tax(self):
+        return self._get_total('line_price_incl_tax')
 
 
 class AbstractInvoiceLine(models.Model):
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    unit_price = models.DecimalField(max_digits=8,
-                                     decimal_places=2)
+    unit_price_excl_tax = models.DecimalField(max_digits=8,
+                                              decimal_places=2)
     quantity = models.DecimalField(max_digits=8,
                                    decimal_places=2,
                                    default=1)
@@ -74,9 +104,20 @@ class AbstractInvoiceLine(models.Model):
     def __str__(self):
         return self.label
 
-    def total(self):
-        total = self.unit_price * self.quantity
-        return banker_round(total)
+    @property
+    def unit_price(self):
+        """Returns the `Price` instance representing the instance"""
+        unit = self.unit_price_excl_tax
+        tax = unit * settings.DEFAULT_TAX_PERCENTAGE
+        return prices.Price(settings.DEFAULT_CURRENCY, unit, tax=tax)
+
+    @property
+    def line_price_excl_tax(self):
+        return self.quantity * self.unit_price.excl_tax
+
+    @property
+    def line_price_incl_tax(self):
+        return self.quantity * self.unit_price.incl_tax
 
 
 class Invoice(AbstractInvoice):
