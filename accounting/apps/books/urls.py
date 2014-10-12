@@ -32,4 +32,15 @@ urlpatterns = patterns('',
     url(r'^invoice/(?P<pk>\d)/edit/$',
         views.InvoiceUpdateView.as_view(),
         name="invoice-edit"),
+
+    # Invoices
+    url(r'^bill/$',
+        views.BillListView.as_view(),
+        name="bill-list"),
+    url(r'^bill/create/$',
+        views.BillCreateView.as_view(),
+        name="bill-create"),
+    url(r'^bill/(?P<pk>\d)/edit/$',
+        views.BillUpdateView.as_view(),
+        name="bill-edit"),
 )

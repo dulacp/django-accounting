@@ -9,7 +9,7 @@ from .models import (
     BillLine)
 
 
-class RequiredInlineFormSet(BaseInlineFormSet):
+class RequiredFirstInlineFormSet(BaseInlineFormSet):
     """
     Used to make empty formset forms required
     See http://stackoverflow.com/questions/2406537/django-formsets-\
@@ -61,5 +61,39 @@ class InvoiceLineForm(ModelForm):
 InvoiceLineFormSet = inlineformset_factory(Invoice,
                                            InvoiceLine,
                                            form=InvoiceLineForm,
-                                           formset=RequiredInlineFormSet,
+                                           formset=RequiredFirstInlineFormSet,
+                                           extra=1)
+
+
+class BillForm(ModelForm):
+    class Meta:
+        model = Bill
+        fields = (
+            "number",
+            "organization",
+            "client",
+
+            "draft",
+            "sent",
+            "paid",
+            "date_issued",
+            "date_paid",
+        )
+
+
+class BillLineForm(ModelForm):
+    class Meta:
+        model = BillLine
+        fields = (
+            "label",
+            "description",
+            "unit_price",
+            "quantity",
+        )
+
+
+BillLineFormSet = inlineformset_factory(Bill,
+                                           BillLine,
+                                           form=BillLineForm,
+                                           formset=RequiredFirstInlineFormSet,
                                            extra=1)

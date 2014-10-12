@@ -34,10 +34,12 @@
                     {% url 'books:organization-list' as books_organization_list_url %}
                     {% url 'clients:client-list' as clients_client_list_url %}
                     {% url 'books:invoice-list' as books_invoice_list_url %}
+                    {% url 'books:bill-list' as books_bill_list_url %}
                     <li class="{% active request books_dashboard_url exact_match=True %}"><a href="{{ books_dashboard_url }}">Overview</a></li>
                     <li class="{% active request books_organization_list_url exact_match=True %}"><a href="{{ books_organization_list_url }}">Organizations</a></li>
                     <li class="{% active request clients_client_list_url exact_match=True %}"><a href="{{ clients_client_list_url }}">Clients</a></li>
                     <li class="{% active request books_invoice_list_url exact_match=True %}"><a href="{{ books_invoice_list_url }}">Invoices</a></li>
+                    <li class="{% active request books_bill_list_url exact_match=True %}"><a href="{{ books_bill_list_url }}">Bills</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
                     <li><a href="">Exports</a></li>
