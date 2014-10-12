@@ -8,7 +8,7 @@ from django.contrib.auth.models import AbstractUser, UserManager
 
 from libs.utils import banker_round
 from libs import prices
-from .managers import InvoiceQuerySet
+from .managers import InvoiceQuerySet, BillQuerySet
 from .utils import next_invoice_number
 
 
@@ -35,11 +35,11 @@ class Organization(models.Model):
 
     @property
     def turnover(self):
-        return self.invoices.aggregate(sum=Sum('total_excl_tax'))["sum"]
+        return self.invoices.turnover()
 
     @property
     def debts(self):
-        return self.bills.aggregate(sum=Sum('total_excl_tax'))["sum"]
+        return self.bills.debts()
 
     @property
     def profit(self):
@@ -66,8 +66,6 @@ class AbstractInvoice(models.Model):
     paid = models.BooleanField(default=False)
     date_issued = models.DateField(default=date.today)
     date_paid = models.DateField(blank=True, null=True)
-
-    objects = InvoiceQuerySet.as_manager()
 
     class Meta:
         abstract = True
@@ -140,6 +138,8 @@ class Invoice(AbstractInvoice):
     client = models.ForeignKey('clients.Client',
                                verbose_name="To Client")
 
+    objects = InvoiceQuerySet.as_manager()
+
     class Meta:
         ordering = ('-date_issued', 'id')
 
@@ -158,6 +158,8 @@ class Bill(AbstractInvoice):
                                      verbose_name="To Organization")
     client = models.ForeignKey('clients.Client',
                                verbose_name="From Client")
+
+    objects = BillQuerySet.as_manager()
 
     class Meta:
         ordering = ('-date_issued', 'id')
