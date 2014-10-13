@@ -10,7 +10,7 @@
         <span class="text-muted">Total (excl. tax)</span>
     </div>
     <div class="col-xs-6 col-sm-3 placeholder">
-        <h4>{{ object.tax|currency|default:0 }}</h4>
+        <h4>{{ object.total_tax|currency }}</h4>
         <span class="text-muted">Tax</span>
     </div>
     <div class="col-xs-6 col-sm-3 placeholder">
