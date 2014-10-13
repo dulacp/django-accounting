@@ -3,18 +3,11 @@
 > In the beginning God created man, and the costs followed afterwards.
 
 
-## Under the hood
+## Requirements
 
-- Django 1.7
+- Python 3.x
+- Django 1.7+
 - [dj-static](https://github.com/kennethreitz/dj-static)
-
-
-## Usage
-
-Create your organization
-Add invoices
-Add bills
-And enjoy !
 
 
 ## Features
