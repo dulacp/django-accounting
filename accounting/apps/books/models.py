@@ -121,6 +121,13 @@ class AbstractInvoice(models.Model):
     def get_total_incl_tax(self):
         return self._get_total('line_price_incl_tax')
 
+    @property
+    def total_due_incl_tax(self):
+        due = self.total_incl_tax
+        for paym in self.payments.all():
+            due -= paym.amount
+        return due
+
 
 class AbstractInvoiceLine(models.Model):
     label = models.CharField(max_length=255)

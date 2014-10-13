@@ -2,6 +2,10 @@
 
 <div class="row placeholders">
     <div class="col-xs-6 col-sm-3 placeholder">
+        <h4>{{ object.total_incl_tax|currency|default:"-" }}</h4>
+        <span class="text-muted">Total (incl. tax)</span>
+    </div>
+    <div class="col-xs-6 col-sm-3 placeholder">
         <h4>{{ object.total_excl_tax|currency|default:"-" }}</h4>
         <span class="text-muted">Total (excl. tax)</span>
     </div>
@@ -13,9 +17,16 @@
         <h4>{{ object.date_issued|default:"-" }}</h4>
         <span class="text-muted">Date issued</span>
     </div>
+</div>
+
+<div class="row placeholders">
+    <div class="col-xs-6 col-sm-3 placeholder">
+        <h4>{{ object.total_due_incl_tax|currency|default:"-" }}</h4>
+        <span class="text-muted">Total still due (incl. tax)</span>
+    </div>
     <div class="col-xs-6 col-sm-3 placeholder">
         <h4>{{ object.date_dued|default:"-" }}</h4>
-        <span class="text-muted">Due date</span>
+        <span class="text-muted">Date issued</span>
     </div>
 </div>
 

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <h1 class="page-header">#{{ invoice.number }} <small>/ invoice detail</small></h1>
+    <h1 class="page-header">Invoice #{{ invoice.number }} <small>/ detail</small></h1>
 
     {% include "books/_partials/invoice_or_bill_detail.html" with object=invoice form=form %}
 
