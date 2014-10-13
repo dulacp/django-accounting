@@ -1,6 +1,9 @@
 ## Byte-compiled
 __pycache__/
 *.py[cod]
+*.egg-info
+/dist/
+/build/
 
 ## Database
 *.sqlite3

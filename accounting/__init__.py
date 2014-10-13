@@ -18,3 +18,18 @@ def get_version():
         if len(VERSION) == 5:
             version = '%s %s' % (version, VERSION[4])
     return version
+
+
+ACCOUNTING_APPS = (
+    'accounting.libs',
+    'accounting.apps.clients',
+    'accounting.apps.books',
+
+    # Third party apps that accounting depends on
+    'djangobower',
+    'bootstrap3',
+)
+
+
+def get_apps():
+    return ACCOUNTING_APPS
