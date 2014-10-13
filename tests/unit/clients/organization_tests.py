@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from django_dynamic_fixture import G
 
-from apps.books.models import Organization, Invoice, Bill
+from accounting.apps.books.models import Organization, Invoice, Bill
 
 
 class TestOrganizationCalcultation(TestCase):

@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.conf import settings
 
-from libs.fields import UUIDField
+from accounting.libs.fields import UUIDField
 
 
 class MockModelWitNoFields(models.Model):

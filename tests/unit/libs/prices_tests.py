@@ -2,7 +2,7 @@ from decimal import Decimal as D
 from itertools import product
 from django.test import TestCase
 
-from libs.prices import Price
+from accounting.libs.prices import Price
 
 
 class TestPriceObject(TestCase):

@@ -10,8 +10,8 @@ from django.contrib.contenttypes.fields import (
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import AbstractUser, UserManager
 
-from libs import prices
-from libs.templatetags.currency_filters import currency_formatter
+from accounting.libs import prices
+from accounting.libs.templatetags.currency_filters import currency_formatter
 from .managers import InvoiceQuerySet, BillQuerySet
 from .utils import next_invoice_number
 

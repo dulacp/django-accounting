@@ -6,7 +6,7 @@ from django.template import Template, Context, RequestContext
 from django.contrib.auth.models import AnonymousUser
 from django import forms
 
-from libs.templatetags.form_filters import is_disabled, is_readonly
+from accounting.libs.templatetags.form_filters import is_disabled, is_readonly
 
 
 class TestGetParameterTemplateTag(TestCase):

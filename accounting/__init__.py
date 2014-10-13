@@ -21,6 +21,7 @@ def get_version():
 
 
 ACCOUNTING_APPS = (
+    'accounting',
     'accounting.libs',
     'accounting.apps.clients',
     'accounting.apps.books',

@@ -5,7 +5,7 @@ from django.test import TestCase
 from django_dynamic_fixture import G
 import mock
 
-from apps.books.models import Bill
+from accounting.apps.books.models import Bill
 
 
 class TestBillQuerySetMethods(TestCase):

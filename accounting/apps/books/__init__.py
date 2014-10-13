@@ -1,1 +1,1 @@
-default_app_config = 'apps.books.apps.FrenchBooksConfig'
+default_app_config = 'accounting.apps.books.apps.FrenchBooksConfig'

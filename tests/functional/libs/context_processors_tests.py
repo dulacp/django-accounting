@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.test.client import RequestFactory
 
-from apps.context_processors import metadata
+from accounting.apps.context_processors import metadata
 
 
 class TestLibsMetadata(TestCase):

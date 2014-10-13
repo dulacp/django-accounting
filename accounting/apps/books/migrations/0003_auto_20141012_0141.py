@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import apps.books.utils
+import accounting.apps.books.utils
 
 
 class Migration(migrations.Migration):
@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='invoice',
             name='number',
-            field=models.CharField(default=apps.books.utils.next_invoice_number, max_length=6, unique=True),
+            field=models.CharField(default=accounting.apps.books.utils.next_invoice_number, max_length=6, unique=True),
         ),
     ]

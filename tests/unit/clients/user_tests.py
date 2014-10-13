@@ -5,7 +5,7 @@ from django.test import TestCase
 
 from django_dynamic_fixture import G
 
-from apps.books.models import Organization
+from accounting.apps.books.models import Organization
 
 
 class TestUserBelongsToOrganization(TestCase):

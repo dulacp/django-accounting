@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import apps.books.utils
+import accounting.apps.books.utils
 import datetime
 from django.conf import settings
 
@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             name='Invoice',
             fields=[
                 ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
-                ('number', models.CharField(editable=False, max_length=6, unique=True, default=apps.books.utils.next_invoice_number)),
+                ('number', models.CharField(editable=False, max_length=6, unique=True, default=accounting.apps.books.utils.next_invoice_number)),
                 ('draft', models.BooleanField(default=False)),
                 ('sent', models.BooleanField(default=False)),
                 ('paid', models.BooleanField(default=False)),
