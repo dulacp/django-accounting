@@ -12,7 +12,7 @@ register = template.Library()
 
 
 @register.filter(name='currency')
-def currency(value, currency=None):
+def currency_formatter(value, currency=None):
     """
     Format decimal value as currency
     """

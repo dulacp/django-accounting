@@ -1,0 +1,37 @@
+{% load currency_filters bootstrap3 form_filters %}
+
+<div class="row placeholders">
+    <div class="col-xs-6 col-sm-3 placeholder">
+        <h4>{{ object.total_excl_tax|currency|default:"-" }}</h4>
+        <span class="text-muted">Total (excl. tax)</span>
+    </div>
+    <div class="col-xs-6 col-sm-3 placeholder">
+        <h4>{{ object.tax|currency|default:0 }}</h4>
+        <span class="text-muted">Tax</span>
+    </div>
+    <div class="col-xs-6 col-sm-3 placeholder">
+        <h4>{{ object.date_issued|default:"-" }}</h4>
+        <span class="text-muted">Date issued</span>
+    </div>
+    <div class="col-xs-6 col-sm-3 placeholder">
+        <h4>{{ object.date_dued|default:"-" }}</h4>
+        <span class="text-muted">Due date</span>
+    </div>
+</div>
+
+<h3 class="page-header">Payments</h3>
+{% include "books/_partials/payment_list.html" with payments=object.payments.all %}
+
+<h4 class="page-header">Add Payment</h3>
+<form action="." method="post" class="form">
+    {% csrf_token %}
+
+    {{ form.non_field_errors }}
+    {% bootstrap_form form layout='vertical' %}
+
+    {% buttons layout='vertical' %}
+        <button type="submit" class="btn btn-success">
+            {% bootstrap_icon "star" %} Add a payment
+        </button>
+    {% endbuttons %}
+</form>

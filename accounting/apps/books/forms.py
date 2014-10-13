@@ -1,12 +1,14 @@
 from django.forms import ModelForm, BaseInlineFormSet
 from django.forms.models import inlineformset_factory
+from django.contrib.contenttypes.forms import generic_inlineformset_factory
 
 from .models import (
     Organization,
     Invoice,
     InvoiceLine,
     Bill,
-    BillLine)
+    BillLine,
+    Payment)
 
 
 class RequiredFirstInlineFormSet(BaseInlineFormSet):
@@ -97,3 +99,14 @@ BillLineFormSet = inlineformset_factory(Bill,
                                         form=BillLineForm,
                                         formset=RequiredFirstInlineFormSet,
                                         extra=1)
+
+
+class PaymentForm(ModelForm):
+    class Meta:
+        model = Payment
+        fields = (
+            "amount",
+            "reference",
+            "detail",
+            "date_paid",
+        )

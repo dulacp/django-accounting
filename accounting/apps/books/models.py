@@ -3,9 +3,14 @@ from datetime import date
 
 from django.conf import settings
 from django.db import models
+from django.contrib.contenttypes.fields import (
+    GenericForeignKey,
+    GenericRelation)
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import AbstractUser, UserManager
 
 from libs import prices
+from libs.templatetags.currency_filters import currency_formatter
 from .managers import InvoiceQuerySet, BillQuerySet
 from .utils import next_invoice_number
 
@@ -83,6 +88,7 @@ class AbstractInvoice(models.Model):
     sent = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
     date_issued = models.DateField(default=date.today)
+    date_dued = models.DateField()
     date_paid = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -153,6 +159,7 @@ class Invoice(AbstractInvoice):
                                      verbose_name="From Organization")
     client = models.ForeignKey('clients.Client',
                                verbose_name="To Client")
+    payments = GenericRelation('books.Payment')
 
     objects = InvoiceQuerySet.as_manager()
 
@@ -174,6 +181,7 @@ class Bill(AbstractInvoice):
                                      verbose_name="To Organization")
     client = models.ForeignKey('clients.Client',
                                verbose_name="From Client")
+    payments = GenericRelation('books.Payment')
 
     objects = BillQuerySet.as_manager()
 
@@ -187,3 +195,27 @@ class BillLine(AbstractInvoiceLine):
 
     class Meta:
         pass
+
+
+class Payment(models.Model):
+    amount = models.DecimalField("Amount",
+                                 decimal_places=2,
+                                 max_digits=12)
+    detail = models.CharField(max_length=255)
+    date_paid = models.DateField(default=date.today)
+    reference = models.CharField(max_length=255,
+                                 blank=True,
+                                 null=True)
+
+    # relationship to an object
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
+
+    class Meta:
+        ordering = ('-date_paid',)
+
+    def __str__(self):
+        if self.detail:
+            return self.detail
+        return "Payment of {}".format(currency_formatter(self.amount))

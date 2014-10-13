@@ -49,4 +49,9 @@ urlpatterns = patterns('',
     url(r'^bill/(?P<pk>\d+)/detail/$',
         views.BillDetailView.as_view(),
         name="bill-detail"),
+
+    # Payments
+    url(r'^payment/(?P<pk>\d+)/edit/$',
+        views.PaymentUpdateView.as_view(),
+        name="payment-edit"),
 )

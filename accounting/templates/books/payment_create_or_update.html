@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% load static bootstrap3 form_filters %}
+
+{% block content %}
+    <h1 class="page-header">Create a {{ form|get_form_model_verbose_name }}</h1>
+
+    <form action="." method="post" class="form">
+        {% csrf_token %}
+
+        {% bootstrap_form form %}
+
+        {{ payment_formset.management_form }}
+        {{ payment_formset.non_field_errors }}
+        {% for subform in payment_formset.forms %}
+            <div class="formset-form">
+                {% bootstrap_form subform layout='vertical' %}
+            </div>
+        {% endfor %}
+
+        {% buttons layout='vertical' %}
+            <button type="submit" class="btn btn-success">
+                {% bootstrap_icon "star" %} Create
+            </button>
+        {% endbuttons %}
+    </form>
+{% endblock content %}

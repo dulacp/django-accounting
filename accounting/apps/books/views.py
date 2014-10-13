@@ -1,14 +1,20 @@
+import logging
+
 from django.views import generic
 from django.core.urlresolvers import reverse
 from django.db.models import Sum
+from django.http import HttpResponseRedirect
 
-from .models import Organization, Invoice, Bill
+from .models import Organization, Invoice, Bill, Payment
 from .forms import (
     OrganizationForm,
     InvoiceForm,
     InvoiceLineFormSet,
     BillForm,
-    BillLineFormSet)
+    BillLineFormSet,
+    PaymentForm)
+
+logger = logging.getLogger(__name__)
 
 
 class DashboardView(generic.TemplateView):
@@ -64,6 +70,56 @@ class OrganizationDetailView(generic.DetailView):
     context_object_name = "organization"
 
 
+class PaymentFormMixin(generic.edit.FormMixin):
+    form_class = PaymentForm
+
+    def get_context_data(self, **kwargs):
+        self.object = self.get_object()
+        context = super().get_context_data(**kwargs)
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        context['form'] = form
+        return context
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance with the passed
+        POST variables and then checked for validity.
+        """
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+
+        # save payment
+        payment = form.save(commit=False)
+        payment.content_object = self.object
+        payment.save()
+        return super().form_valid(form)
+
+
+class PaymentUpdateView(generic.UpdateView):
+    template_name = "books/payment_create_or_update.html"
+    model = Payment
+    form_class = PaymentForm
+
+    def get_success_url(self):
+        related_obj = self.object.content_object
+        if isinstance(related_obj, Invoice):
+            return reverse("books:invoice-detail", args=[related_obj.pk])
+        elif isinstance(related_obj, Bill):
+            return reverse("books:bill-detail", args=[related_obj.pk])
+
+        logger.warning("Unsupported related object '{}' for "
+                       "payment '{}'".format(self.object, related_obj))
+        return reverse("books:dashboard")
+
+
 class InvoiceListView(generic.ListView):
     template_name = "books/invoice_list.html"
     model = Invoice
@@ -71,15 +127,16 @@ class InvoiceListView(generic.ListView):
 
 
 class InvoiceCreateUpdateMixin(object):
+    formset_class = InvoiceLineFormSet
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['invoiceline_formset'] = (
-                InvoiceLineFormSet(self.request.POST, instance=self.object))
+                self.formset_class(self.request.POST, instance=self.object))
         else:
             context['invoiceline_formset'] = (
-                InvoiceLineFormSet(instance=self.object))
+                self.formset_class(instance=self.object))
         return context
 
     def form_valid(self, form):
@@ -116,6 +173,16 @@ class InvoiceUpdateView(InvoiceCreateUpdateMixin, generic.UpdateView):
         return reverse("books:invoice-list")
 
 
+class InvoiceDetailView(PaymentFormMixin,
+                        generic.DetailView):
+    template_name = "books/invoice_detail.html"
+    model = Invoice
+    context_object_name = "invoice"
+
+    def get_success_url(self):
+        return reverse('books:invoice-detail', args=[self.object.pk])
+
+
 class BillListView(generic.ListView):
     template_name = "books/bill_list.html"
     model = Bill
@@ -123,15 +190,16 @@ class BillListView(generic.ListView):
 
 
 class BillCreateUpdateMixin(object):
+    formset_class = BillLineFormSet
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['billline_formset'] = (
-                BillLineFormSet(self.request.POST, instance=self.object))
+                self.formset_class(self.request.POST, instance=self.object))
         else:
             context['billline_formset'] = (
-                BillLineFormSet(instance=self.object))
+                self.formset_class(instance=self.object))
         return context
 
     def form_valid(self, form):
@@ -166,3 +234,13 @@ class BillUpdateView(BillCreateUpdateMixin, generic.UpdateView):
 
     def get_success_url(self):
         return reverse("books:bill-list")
+
+
+class BillDetailView(PaymentFormMixin,
+                     generic.DetailView):
+    template_name = "books/bill_detail.html"
+    model = Bill
+    context_object_name = "bill"
+
+    def get_success_url(self):
+        return reverse('books:bill-detail', args=[self.object.pk])
