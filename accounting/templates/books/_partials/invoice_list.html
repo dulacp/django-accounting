@@ -2,26 +2,27 @@
 
 <table class="table table-striped">
     <thead>
-        <tr>
+        <tr class="row">
             <th>#</th>
             <th>Client</th>
             {% if detailed %}
             <th>Description</th>
             {% endif %}
-            <th>Total (excl. tax)</th>
-            <th class="text-right">Actions</th>
+            <th class="col-sm-2">Total</th>
+            <th class="text-right col-sm-4">Actions</th>
         </tr>
     </thead>
     <tbody>
         {% for inv in invoices %}
-        <tr>
+        <tr class="row">
             <td>{{ inv.number }}</td>
             <td>{{ inv.client }}</td>
             {% if detailed %}
             <td>{{ inv.description }}</td>
             {% endif %}
-            <td>{{ inv.total_excl_tax|currency }}</td>
-            <td class="text-right">
+            <td class="col-sm-2">{{ inv.total_excl_tax|currency }}</td>
+            <td class="text-right col-sm-4">
+                <a href="{% url 'books:invoice-detail' inv.pk %}" class="btn btn-success btn-sm" role="button">View</a>
                 <a href="{% url 'books:invoice-edit' inv.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
             </td>
         </tr>
