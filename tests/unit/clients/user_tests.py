@@ -8,7 +8,7 @@ from django_dynamic_fixture import G
 from apps.books.models import Organization
 
 
-class UserBelongsToOrganizationTests(TestCase):
+class TestUserBelongsToOrganization(TestCase):
 
     def setUp(self):
         User = get_user_model()

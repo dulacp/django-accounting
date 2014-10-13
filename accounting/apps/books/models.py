@@ -93,11 +93,9 @@ class AbstractInvoice(models.Model):
     def __str__(self):
         return "#{} ({})".format(self.number, self.total_incl_tax)
 
-    def save(self, *args, **kwargs):
-        # recompute total_incl_tax and total_excl_tax
+    def compute_totals(self):
         self.total_excl_tax = self.get_total_excl_tax()
         self.total_incl_tax = self.get_total_incl_tax()
-        super().save(*args, **kwargs)
 
     def _get_total(self, prop):
         """

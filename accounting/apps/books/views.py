@@ -88,6 +88,10 @@ class InvoiceCreateUpdateMixin(object):
         self.object = form.save()
         invoiceline_formset.instance = self.object
         invoiceline_formset.save()
+
+        # update totals
+        self.object.compute_totals()
+
         return super().form_valid(form)
 
 
@@ -135,6 +139,10 @@ class BillCreateUpdateMixin(object):
         self.object = form.save()
         billline_formset.instance = self.object
         billline_formset.save()
+
+        # update totals
+        self.object.compute_totals()
+
         return super().form_valid(form)
 
 

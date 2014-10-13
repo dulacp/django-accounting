@@ -14,7 +14,7 @@
             <span class="text-muted">Profits</span>
         </div>
         <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>{{ organization.tax_provisionning|default:0 }}</h4>
+            <h4>{{ organization.tax_provisionning|currency|default:0 }}</h4>
             <span class="text-muted">Tax Provisionning</span>
         </div>
         <div class="col-xs-6 col-sm-3 placeholder">
