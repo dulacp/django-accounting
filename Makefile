@@ -1,5 +1,5 @@
 # These targets are not files
-.PHONY: contribute ci test lint
+.PHONY: contribute travis test lint coverage
 
 install:
 	pip install --upgrade -r reqs/dev.txt
@@ -17,10 +17,10 @@ coverage:
 	coverage run ./runtests.py --with-xunit
 	coverage html -i
 
-ci: install lint
-	# Run continous tests and generate lint reports
-	./runtests.py --with-coverage --with-xunit
-	coverage xml -i
+# This target is run on Travis.ci. We lint, test and build the sandbox/demo sites as well
+# as testing migrations apply correctly. We don't call 'install' first as that is run
+# as a separate part of the Travis build process.
+travis: lint coverage
 
 clean:
 	# Remove files not in source control
