@@ -33,12 +33,24 @@
 <h3 class="page-header">Payments</h3>
 {% include "books/_partials/payment_list.html" with payments=object.payments.all %}
 
-<h4 class="page-header">Add Payment</h3>
 <form action="." method="post" class="form">
     {% csrf_token %}
 
     {{ form.non_field_errors }}
-    {% bootstrap_form form layout='vertical' %}
+    <div class="row">
+        <div class="col-md-3">
+            {% bootstrap_field form.amount show_label=False %}
+        </div>
+        <div class="col-md-2">
+            {% bootstrap_field form.reference show_label=False %}
+        </div>
+        <div class="col-md-5">
+            {% bootstrap_field form.detail show_label=False %}
+        </div>
+        <div class="col-md-2">
+            {% bootstrap_field form.date_paid show_label=False %}
+        </div>
+    </div>
 
     {% buttons layout='vertical' %}
         <button type="submit" class="btn btn-success">
