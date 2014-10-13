@@ -14,12 +14,13 @@ IGNORE="W292,E202,E128,E124"
 # Run flake8 and convert the output into a format that the "violations" plugin
 # for Jenkins/Hudson can understand.  Ignore warnings from migrations we we don't
 # really care about those.
-ERRORFILE="violations.txt"
-flake8 --ignore=$IGNORE accounting | perl -ple "s/: /: [E] /" > $ERRORFILE
+ERROR_FILE="violations.txt"
+flake8 --ignore=$IGNORE accounting --exclude migrations | perl -ple "s/: /: [E] /" > $ERROR_FILE
 cat $ERROR_FILE
 
+
 # Check that the number of violations is acceptable
-NUMERRORS=`cat $ERRORFILE | wc -l`
+NUMERRORS=`cat $ERROR_FILE | wc -l`
 if [ $NUMERRORS -gt $THRESHOLD ]
 then
     echo "Too many flake8 errors - maximum allowed is $THRESHOLD, found $NUMERRORS"
