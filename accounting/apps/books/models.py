@@ -3,6 +3,7 @@ from datetime import date
 
 from django.conf import settings
 from django.db import models
+from django.db.models import Sum
 from django.contrib.contenttypes.fields import (
     GenericForeignKey,
     GenericRelation)
@@ -68,6 +69,13 @@ class Organization(models.Model):
     def tax_provisionning(self):
         return self.collected_tax - self.deductible_tax
 
+    @property
+    def overdue_total(self):
+        due_invoices = self.invoices.dued()
+        due_turnonver = due_invoices.turnover_incl_tax()
+        total_paid = due_invoices.total_paid()
+        return due_turnonver - total_paid
+
 
 class AbstractInvoice(models.Model):
     number = models.CharField(max_length=6,
@@ -122,10 +130,13 @@ class AbstractInvoice(models.Model):
         return self._get_total('line_price_incl_tax')
 
     @property
+    def total_paid(self):
+        return self.payments.all().aggregate(sum=Sum('amount'))["sum"]
+
+    @property
     def total_due_incl_tax(self):
         due = self.total_incl_tax
-        for paym in self.payments.all():
-            due -= paym.amount
+        due -= self.total_paid
         return due
 
 

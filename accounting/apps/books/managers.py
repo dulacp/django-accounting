@@ -16,6 +16,9 @@ class InvoiceQuerySetMixin(object):
     def _get_total(self, prop):
         return self.aggregate(sum=Sum(prop))["sum"]
 
+    def total_paid(self):
+        return self._get_total('payments__amount')
+
 
 class InvoiceQuerySet(InvoiceQuerySetMixin, models.QuerySet):
 
