@@ -93,7 +93,7 @@ class BillLineForm(ModelForm):
 
 
 BillLineFormSet = inlineformset_factory(Bill,
-                                           BillLine,
-                                           form=BillLineForm,
-                                           formset=RequiredFirstInlineFormSet,
-                                           extra=1)
+                                        BillLine,
+                                        form=BillLineForm,
+                                        formset=RequiredFirstInlineFormSet,
+                                        extra=1)

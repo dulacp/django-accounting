@@ -2,7 +2,6 @@
 
 from django import template
 from django.http import QueryDict
-from django.template import Library, Node, resolve_variable
 
 from classytags.core import Tag, Options
 from classytags.arguments import MultiKeywordArgument, MultiValueArgument

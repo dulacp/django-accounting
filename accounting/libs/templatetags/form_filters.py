@@ -1,8 +1,6 @@
 from django import template
 from django.forms import ModelForm, BaseFormSet
 from django.forms.forms import BoundField
-from django.template import Context
-from django.template.loader import get_template
 
 
 register = template.Library()
@@ -37,4 +35,3 @@ def get_form_model_verbose_name(instance):
     if isinstance(instance, BaseFormSet):
         return instance.model._meta.verbose_name_plural.title()
     return '<unknown>'
-

@@ -1,5 +1,3 @@
-import os
-
 # Use 'final' as the 4th element to indicate
 # a full release
 

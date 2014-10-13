@@ -7,7 +7,7 @@ from collections import Mapping
 
 def update(d, u, depth=-1):
     """
-    Recursively merge or update dict-like objects. 
+    Recursively merge or update dict-like objects.
     >>> update({'k1': {'k2': 2}}, {'k1': {'k2': {'k3': 3}}, 'k4': 4})
     {'k1': {'k2': {'k3': 3}}, 'k4': 4}
     """

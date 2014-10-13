@@ -1,4 +1,4 @@
-from os.path import join, normpath
+import os
 
 from .common import *
 

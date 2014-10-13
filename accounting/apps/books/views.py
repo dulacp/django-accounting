@@ -1,8 +1,8 @@
 from django.views import generic
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Sum
+from django.db.models import Sum
 
-from .models import User, Organization, Invoice, Bill
+from .models import Organization, Invoice, Bill
 from .forms import (
     OrganizationForm,
     InvoiceForm,
@@ -18,8 +18,10 @@ class DashboardView(generic.TemplateView):
         context = super().get_context_data(**kwargs)
 
         orgas = Organization.objects.all()
-        cumulated_turnovers = orgas.aggregate(sum=Sum('invoices__total_excl_tax'))["sum"]
-        cumulated_debts = orgas.aggregate(sum=Sum('bills__total_excl_tax'))["sum"]
+        cumulated_turnovers = (orgas
+            .aggregate(sum=Sum('invoices__total_excl_tax'))["sum"])
+        cumulated_debts = (orgas
+            .aggregate(sum=Sum('bills__total_excl_tax'))["sum"])
         cumulated_profits = cumulated_turnovers - cumulated_debts
 
         context["organizations_count"] = orgas.count()
@@ -73,10 +75,11 @@ class InvoiceCreateUpdateMixin(object):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['invoiceline_formset'] = InvoiceLineFormSet(self.request.POST,
-                                                                instance=self.object)
+            context['invoiceline_formset'] = (
+                InvoiceLineFormSet(self.request.POST, instance=self.object))
         else:
-            context['invoiceline_formset'] = InvoiceLineFormSet(instance=self.object)
+            context['invoiceline_formset'] = (
+                InvoiceLineFormSet(instance=self.object))
         return context
 
     def form_valid(self, form):
@@ -124,10 +127,11 @@ class BillCreateUpdateMixin(object):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['billline_formset'] = BillLineFormSet(self.request.POST,
-                                                             instance=self.object)
+            context['billline_formset'] = (
+                BillLineFormSet(self.request.POST, instance=self.object))
         else:
-            context['billline_formset'] = BillLineFormSet(instance=self.object)
+            context['billline_formset'] = (
+                BillLineFormSet(instance=self.object))
         return context
 
     def form_valid(self, form):
