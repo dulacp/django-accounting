@@ -2,7 +2,8 @@
 .PHONY: contribute travis test lint coverage
 
 install:
-	pip install --upgrade -r reqs/dev.txt
+	pip install -r requirements.txt
+	python setup.py develop
 
 sync:
 	python manage.py migrate
