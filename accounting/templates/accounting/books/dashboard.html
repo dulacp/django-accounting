@@ -23,33 +23,22 @@
         </div>
     </div>
 
-    <h2 class="sub-header">Last invoices <small>across organizations</small></h2>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>From Organization</th>
-                    <th>To Client</th>
-                    <th>Description</th>
-                    <th>Amount</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for inv in last_invoices %}
-                <tr>
-                    <td>{{ inv.number }}</td>
-                    <td>{{ inv.organization }}</td>
-                    <td>{{ inv.client }}</td>
-                    <td>{{ inv.description }}</td>
-                    <td>{{ inv.total_incl_tax|currency }}</td>
-                    <td class="text-right">
-                        <a href="{% url 'books:invoice-edit' inv.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <h2 class="sub-header">Organizations <small>shortcuts</small></h2>
+    <div class="row">
+        {% for orga in organizations %}
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ orga.display_name }}</h3>
+                </div>
+                <div class="panel-body">
+                    <a href="{% url 'books:organization-detail' orga.pk %}" class="btn btn-success btn-block" role="button">View</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
+
+    <h2 class="sub-header">Last invoices <small>across organizations</small></h2>
+    {% include "books/_partials/invoice_list.html" with invoices=last_invoices detailed=True %}
 {% endblock content %}

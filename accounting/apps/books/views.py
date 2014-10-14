@@ -35,6 +35,7 @@ class DashboardView(generic.TemplateView):
         context["organizations_cumulated_profits"] = cumulated_profits
         context["organizations_cumulated_active_days"] = 0
 
+        context["organizations"] = orgas
         context["last_invoices"] = Invoice.objects.all()[:10]
 
         return context
