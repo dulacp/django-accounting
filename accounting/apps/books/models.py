@@ -17,10 +17,6 @@ from .managers import InvoiceQuerySet, BillQuerySet
 from .utils import next_invoice_number
 
 
-class User(AbstractUser):
-    objects = UserManager()
-
-
 class Organization(models.Model):
     display_name = models.CharField(max_length=150,
         help_text="Name that you communicate")
