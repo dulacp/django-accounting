@@ -66,7 +66,10 @@ if __name__ == '__main__':
             num_cores = multiprocessing.cpu_count()
         except NotImplementedError:
             num_cores = 4  # Guess
-        args = ['--nocapture', '--stop', '--processes=%s' % num_cores]
+        args = ['--ipdb',
+                '--nocapture',
+                '--stop',
+                '--processes=%s' % num_cores]
     else:
         # Some args/options specified.  Check to see if any nose options have
         # been specified.  If they have, then don't set any
@@ -75,7 +78,10 @@ if __name__ == '__main__':
             # Default options:
             # --stop Abort on first error/failure
             # --nocapture Don't capture STDOUT
-            args.extend(['--nocapture', '--stop'])
+            args.extend(['--ipdb',
+                         '--nocapture',
+                         '--stop',
+                         '--with-specplugin'])
         else:
             # Remove options as nose will pick these up from sys.argv
             for arg in args:
