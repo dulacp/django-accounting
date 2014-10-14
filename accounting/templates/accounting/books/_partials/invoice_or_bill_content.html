@@ -5,7 +5,7 @@
         <div class="panel panel-default">
             {% with client=object.from_client %}
             <div class="panel-heading">
-                <h4>From: <a href="#">{{ client }}</a></h4>
+                <h4>From: <a href="{{ client.get_absolute_url }}">{{ client }}</a></h4>
             </div>
             <div class="panel-body">
                 <p>
@@ -19,7 +19,7 @@
         <div class="panel panel-default">
             {% with client=object.to_client %}
             <div class="panel-heading">
-                <h4>To: <a href="#">{{ client }}</a></h4>
+                <h4>To: <a href="{{ client.get_absolute_url }}">{{ client }}</a></h4>
             </div>
             <div class="panel-body">
                 <p>

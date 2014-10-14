@@ -25,13 +25,13 @@
 
     <div class="row-fluid">
         <div class="col-xs-12 col-sm-6">
-            {% include "books/_partials/invoice_list.html" with invoices=organization.invoices.all %}
-            <a href="{% url 'books:invoice-create' %}" class="btn btn-success btn-lg" role="button">
+            {% include "books/_partials/invoice_list.html" with invoices=organization.invoices.all hide_edit=True %}
+            <a href="{% url 'books:invoice-create' %}" class="btn btn-primary btn-lg" role="button">
                 Add an invoice
             </a>
         </div>
         <div class="col-xs-12 col-sm-6">
-            {% include "books/_partials/bill_list.html" with bills=organization.bills.all %}
+            {% include "books/_partials/bill_list.html" with bills=organization.bills.all hide_edit=True %}
             <a href="{% url 'books:bill-create' %}" class="btn btn-primary btn-lg" role="button">
                 Add an bill
             </a>

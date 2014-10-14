@@ -23,7 +23,9 @@
             <td class="col-sm-2">{{ bill.total_excl_tax|currency }}</td>
             <td class="text-right col-sm-4">
                 <a href="{% url 'books:bill-detail' bill.pk %}" class="btn btn-success btn-sm" role="button">View</a>
+                {% if not hide_edit %}
                 <a href="{% url 'books:bill-edit' bill.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}

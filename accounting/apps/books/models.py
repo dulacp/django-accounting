@@ -4,6 +4,7 @@ from datetime import date
 from django.conf import settings
 from django.db import models
 from django.db.models import Sum
+from django.core.urlresolvers import reverse
 from django.contrib.contenttypes.fields import (
     GenericForeignKey,
     GenericRelation)
@@ -36,6 +37,9 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.legal_name
+
+    def get_absolute_url(self):
+        return reverse('books:organization-detail', args=[self.pk])
 
     @property
     def turnover_excl_tax(self):

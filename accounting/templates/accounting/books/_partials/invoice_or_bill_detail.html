@@ -30,8 +30,14 @@
 <h3 class="page-header">Content</h3>
 {% include "books/_partials/invoice_or_bill_content.html" with object=object %}
 
-<h3 class="page-header">Payments</h3>
-{% include "books/_partials/payment_list.html" with payments=object.payments.all %}
+<hr>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>Payments</h4>
+    </div>
+    {% include "books/_partials/payment_list.html" with payments=object.payments.all %}
+</div>
 
 <form action="." method="post" class="form">
     {% csrf_token %}
