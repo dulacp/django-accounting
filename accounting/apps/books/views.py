@@ -1,7 +1,7 @@
 import logging
 
 from django.views import generic
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Sum
 from django.http import HttpResponseRedirect
 
@@ -174,6 +174,12 @@ class InvoiceUpdateView(InvoiceCreateUpdateMixin, generic.UpdateView):
         return reverse("books:invoice-list")
 
 
+class InvoiceDeleteView(generic.DeleteView):
+    template_name = "_generics/delete_entity.html"
+    model = Invoice
+    success_url = reverse_lazy('books:invoice-list')
+
+
 class InvoiceDetailView(PaymentFormMixin,
                         generic.DetailView):
     template_name = "books/invoice_detail.html"
@@ -235,6 +241,12 @@ class BillUpdateView(BillCreateUpdateMixin, generic.UpdateView):
 
     def get_success_url(self):
         return reverse("books:bill-list")
+
+
+class BillDeleteView(generic.DeleteView):
+    template_name = "_generics/delete_entity.html"
+    model = Bill
+    success_url = reverse_lazy('books:bill-list')
 
 
 class BillDetailView(PaymentFormMixin,

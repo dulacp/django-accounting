@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% load bootstrap3 introspection_filters %}
+
+{% block sidebar %}{% endblock %}
+
+{% block container %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 main">
+
+            <h1 class="page-header">You are about to delete...</h1>
+
+            <div class="panel panel-danger">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ object|get_model_verbose_name }}</h3>
+                </div>
+                <div class="panel-body">
+                    {{ object }}
+                </div>
+            </div>
+
+            <form action="." method="post" class="form">
+                {% csrf_token %}
+                {% buttons %}
+                    <button type="submit" class="btn btn-danger">
+                        {% bootstrap_icon "trash" %} Delete
+                    </button>
+                    <a href="#" onclick="window.history.back(); return false;" class="btn btn-warning pull-right">
+                        Cancel
+                    </a>
+                {% endbuttons %}
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock container %}

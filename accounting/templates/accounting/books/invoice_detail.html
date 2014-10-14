@@ -3,7 +3,10 @@
 {% block content %}
     <h1 class="page-header">
         Invoice #{{ invoice.number }} <small>/ detail</small>
-        <a href="{% url 'books:invoice-edit' invoice.pk %}" class="btn pull-right btn-default" role="button">Edit</a>
+        <div class="btn-group pull-right">
+            <a href="{% url 'books:invoice-edit' invoice.pk %}" class="btn btn-default" role="button">Edit</a>
+            <a href="{% url 'books:invoice-delete' invoice.pk %}" class="btn btn-danger" role="button">Supprimer</a>
+        </div>
     </h1>
 
     {% include "books/_partials/invoice_or_bill_detail.html" with object=invoice form=form %}

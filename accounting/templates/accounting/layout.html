@@ -26,8 +26,10 @@
         </div>
     </div>
 
+    {% block container %}
     <div class="container-fluid">
         <div class="row">
+            {% block sidebar %}
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     {% url 'books:dashboard' as books_dashboard_url %}
@@ -48,10 +50,12 @@
                     <li><a href="">Reconciliation</a></li>
                 </ul>
             </div>
+            {% endblock sidebar %}
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 {% bootstrap_messages %}
                 {% block content %}{% endblock %}
             </div>
         </div>
     </div>
+    {% endblock container %}
 {% endblock maincontent %}
