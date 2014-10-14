@@ -5,9 +5,6 @@ install:
 	pip install -r requirements.txt
 	python setup.py develop
 
-sync:
-	python manage.py migrate
-
 lint:
 	./lint.sh
 
