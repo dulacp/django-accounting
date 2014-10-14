@@ -9,14 +9,39 @@
 
         {% bootstrap_form form %}
 
+        <h2 class="page-header">Content</h2>
         {{ billline_formset.management_form }}
         {{ billline_formset.non_field_errors }}
-        {% for billline_form in billline_formset %}
-            <div class="formset-form">
-                <h2 class="sub-header">{{ billline_form|get_form_model_verbose_name }} #{{ forloop.counter }}</h2>
-                {% bootstrap_form billline_form layout='vertical' %}
-            </div>
-        {% endfor %}
+        <table class="table table-striped table-bordered">
+            <thead>
+                <th>#</th>
+                <th>Label</th>
+                <th>Description</th>
+                <th>Unit (excl. tax)</th>
+                <th>Qt.</th>
+                <th>Total</th>
+            </thead>
+            <tbody>
+            {% for billline_form in billline_formset %}
+                <tr class="formset-form">
+                    <td class="col-md-0 counter">{{ forloop.counter }}</td>
+                    <td class="col-md-2">
+                        {% bootstrap_field billline_form.label show_label=False %}
+                    </td>
+                    <td class="col-md-4">
+                        {% bootstrap_field billline_form.description show_label=False %}
+                    </td>
+                    <td class="col-md-2">
+                        {% bootstrap_field billline_form.unit_price_excl_tax show_label=False %}
+                    </td>
+                    <td class="col-md-1">
+                        {% bootstrap_field billline_form.quantity show_label=False %}
+                    </td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
         {% buttons layout='vertical' %}
             <button type="submit" class="btn btn-success">
@@ -29,5 +54,5 @@
 {% block scripts %}
     {{ block.super }}
     <script src="{% static 'accounting/js/jquery.formset.js' %}"></script>
-    <script src="{% static 'accounting/js/books/bill_create.js' %}"></script>
+    <script src="{% static 'accounting/js/books/invoice_or_bill_create.js' %}"></script>
 {% endblock %}

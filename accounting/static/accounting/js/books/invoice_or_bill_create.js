@@ -7,7 +7,7 @@ $(function() {
         added: function($row) {
             // update line title
             var index = $row.index('.formset-form') + 1;
-            $row.find('.sub-header').text('Bill Line #' + index);
+            $row.find('.counter').text(index);
         }
     });
 })
