@@ -1,0 +1,75 @@
+{% load currency_filters %}
+
+<div class="row">
+    <div class="col-xs-5">
+        <div class="panel panel-default">
+            {% with client=object.from_client %}
+            <div class="panel-heading">
+                <h4>From: <a href="#">{{ client }}</a></h4>
+            </div>
+            <div class="panel-body">
+                <p>
+                    {{ client.full_address|linebreaksbr }} <br>
+                </p>
+            </div>
+            {% endwith %}
+        </div>
+    </div>
+    <div class="col-xs-5 col-xs-offset-2 text-right">
+        <div class="panel panel-default">
+            {% with client=object.to_client %}
+            <div class="panel-heading">
+                <h4>To: <a href="#">{{ client }}</a></h4>
+            </div>
+            <div class="panel-body">
+                <p>
+                    {{ client.full_address|linebreaksbr }}<br>
+                </p>
+            </div>
+            {% endwith %}
+        </div>
+    </div>
+</div>
+<!-- / end client details section -->
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr class="row">
+            <th>#</th>
+            <th>Label</th>
+            <th class="col-sm-4">Description</th>
+            <th class="col-sm-2">Unit (excl. tax)</th>
+            <th class="col-sm-1">Qt.</th>
+            <th class="col-sm-2">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for line in object.lines.all %}
+        <tr class="row">
+            <td>{{ forloop.counter }}</td>
+            <td>{{ line.label }}</td>
+            <td class="col-sm-4">{{ line.description }}</td>
+            <td class="col-sm-2">{{ line.unit_price_excl_tax|currency }}</td>
+            <td class="col-sm-1">{{ line.quantity }}</td>
+            <td class="col-sm-2">{{ line.line_price_excl_tax|currency }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="row text-right">
+    <div class="col-xs-2 col-xs-offset-8">
+        <p>
+            <strong>
+                Sub Total : <br>
+                Tax : <br>
+                Total : <br>
+            </strong>
+        </p>
+    </div>
+    <div class="col-xs-2">
+        <strong>
+            {{ object.total_excl_tax|currency }} <br>
+            {{ object.total_tax|currency }} <br>
+            {{ object.total_incl_tax|currency }} <br>
+        </strong>
+    </div>
+</div>

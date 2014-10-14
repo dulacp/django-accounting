@@ -1,34 +1,34 @@
 {% load currency_filters bootstrap3 form_filters %}
 
 <div class="row placeholders">
-    <div class="col-xs-6 col-sm-3 placeholder">
+    <div class="col-xs-6 col-sm-4 placeholder">
         <h4>{{ object.total_incl_tax|currency|default:"-" }}</h4>
         <span class="text-muted">Total (incl. tax)</span>
     </div>
-    <div class="col-xs-6 col-sm-3 placeholder">
+    <div class="col-xs-6 col-sm-4 placeholder">
         <h4>{{ object.total_excl_tax|currency|default:"-" }}</h4>
         <span class="text-muted">Total (excl. tax)</span>
     </div>
-    <div class="col-xs-6 col-sm-3 placeholder">
+    <div class="col-xs-6 col-sm-4 placeholder">
         <h4>{{ object.total_tax|currency }}</h4>
         <span class="text-muted">Tax</span>
     </div>
-    <div class="col-xs-6 col-sm-3 placeholder">
+    <div class="col-xs-6 col-sm-4 placeholder">
         <h4>{{ object.date_issued|default:"-" }}</h4>
         <span class="text-muted">Date issued</span>
     </div>
-</div>
-
-<div class="row placeholders">
-    <div class="col-xs-6 col-sm-3 placeholder">
+    <div class="col-xs-6 col-sm-4 placeholder">
         <h4>{{ object.total_due_incl_tax|currency|default:"-" }}</h4>
         <span class="text-muted">Total still due (incl. tax)</span>
     </div>
-    <div class="col-xs-6 col-sm-3 placeholder">
+    <div class="col-xs-6 col-sm-4 placeholder">
         <h4>{{ object.date_dued|default:"-" }}</h4>
-        <span class="text-muted">Date issued</span>
+        <span class="text-muted">Date dued</span>
     </div>
 </div>
+
+<h3 class="page-header">Content</h3>
+{% include "books/_partials/invoice_or_bill_content.html" with object=object %}
 
 <h3 class="page-header">Payments</h3>
 {% include "books/_partials/payment_list.html" with payments=object.payments.all %}

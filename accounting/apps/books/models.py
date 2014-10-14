@@ -170,6 +170,12 @@ class AbstractInvoiceLine(models.Model):
     def line_price_incl_tax(self):
         return self.quantity * self.unit_price.incl_tax
 
+    def from_client(self):
+        raise NotImplementedError
+
+    def to_client(self):
+        raise NotImplementedError
+
 
 class Invoice(AbstractInvoice):
     organization = models.ForeignKey('books.Organization',
@@ -183,6 +189,12 @@ class Invoice(AbstractInvoice):
 
     class Meta:
         ordering = ('-date_issued', 'id')
+
+    def from_client(self):
+        return self.organization
+
+    def to_client(self):
+        return self.client
 
 
 class InvoiceLine(AbstractInvoiceLine):
@@ -205,6 +217,12 @@ class Bill(AbstractInvoice):
 
     class Meta:
         ordering = ('-date_issued', 'id')
+
+    def from_client(self):
+        return self.client
+
+    def to_client(self):
+        return self.organization
 
 
 class BillLine(AbstractInvoiceLine):
