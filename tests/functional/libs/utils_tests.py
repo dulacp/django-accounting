@@ -8,7 +8,7 @@ from django.core.urlresolvers import ResolverMatch
 
 from accounting.libs.utils import queryset_iterator
 
-from tests.models import MockModelWitNoFields
+from tests._site.model_tests_app.models import MockModelWitNoFields
 
 import mock
 

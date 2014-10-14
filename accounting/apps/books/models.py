@@ -159,8 +159,8 @@ class AbstractInvoiceLine(models.Model):
     def unit_price(self):
         """Returns the `Price` instance representing the instance"""
         unit = self.unit_price_excl_tax
-        tax = unit * settings.DEFAULT_TAX_PERCENTAGE
-        return prices.Price(settings.DEFAULT_CURRENCY, unit, tax=tax)
+        tax = unit * settings.ACCOUNTING_DEFAULT_TAX_PERCENTAGE
+        return prices.Price(settings.ACCOUNTING_DEFAULT_CURRENCY, unit, tax=tax)
 
     @property
     def line_price_excl_tax(self):

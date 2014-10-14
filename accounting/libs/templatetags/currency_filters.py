@@ -22,8 +22,9 @@ def currency_formatter(value, currency=None):
         return ""
     # Using Babel's currency formatting
     # http://babel.pocoo.org/docs/api/numbers/#babel.numbers.format_currency
+    currency = currency or settings.ACCOUNTING_DEFAULT_CURRENCY
     kwargs = {
-        'currency': currency if currency else settings.DEFAULT_CURRENCY,
+        'currency': currency,
         'format': getattr(settings, 'CURRENCY_FORMAT', None),
         'locale': to_locale(get_language()),
     }

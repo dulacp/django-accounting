@@ -4,6 +4,10 @@ from django import template
 from django.template.defaultfilters import floatformat
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now as django_now
+from django.utils.translation import to_locale, get_language
+
+from babel import Locale
+from babel.numbers import format_percent
 
 register = template.Library()
 
@@ -11,7 +15,11 @@ register = template.Library()
 @register.filter
 def percentage(value):
     if value or value == 0:
-        return "%s %%" % floatformat(value * 100.0, 2)
+        kwargs = {
+            'locale': to_locale(get_language()),
+            'format': "#,##0.00 %",
+        }
+        return format_percent(value, **kwargs)
 
 
 @register.filter

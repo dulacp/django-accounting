@@ -1,8 +1,15 @@
-from accounting.settings.dev import *
-from os.path import  normpath
-
+import os
 import logging
 
+import accounting
+from accounting.defaults import *
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+SECRET_KEY = "abcdef"
+
+LANGUAGE_CODE = 'fr-fr'
 
 DATABASES = {
     'default': {
@@ -12,6 +19,18 @@ DATABASES = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+
+INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.admin',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
+    'django.contrib.staticfiles',
+
+    'tests._site.model_tests_app',  # contains models we need for testing
+) + accounting.get_apps()
 
 # convert INSTALL_APPS to `list`
 INSTALLED_APPS = list(INSTALLED_APPS)
@@ -24,6 +43,27 @@ except ValueError:
 
 # Add the 'tests' app, to load test models
 INSTALLED_APPS.append('tests')
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request',
+
+    'accounting.apps.context_processors.metadata',
+)
+
+MIDDLEWARE_CLASSES = (
+    'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+)
 
 ADMINS = ('admin@example.com',)
 DEBUG = False
@@ -43,5 +83,5 @@ PASSWORD_HASHERS = (
 
 # Override default fixtures folder
 FIXTURE_DIRS = (
-    normpath(join(BASE_DIR, '../tests/fixtures')),
+    os.path.normpath(os.path.join(BASE_DIR, '../tests/fixtures')),
 )
