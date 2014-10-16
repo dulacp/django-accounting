@@ -33,8 +33,6 @@ setup(name='django-accounting',
           'django-bower==5.0.1',
           # Used to render the forms
           'django-bootstrap3==4.11.0',
-          # A better static files server
-          'dj-static==0.0.6',
           # Define beautiful tags
           'django-classy-tags==0.5.1',
           # Internationalization
