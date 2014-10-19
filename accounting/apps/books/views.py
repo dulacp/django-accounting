@@ -5,8 +5,14 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Sum
 from django.http import HttpResponseRedirect
 
-from .mixins import SelectedOrganizationMixin
-from .models import Organization, Invoice, Bill, Payment
+from .mixins import (
+    SelectedOrganizationMixin,
+    RestrictToSelectedOrganizationQuerySetMixin)
+from .models import (
+    Organization,
+    Invoice,
+    Bill,
+    Payment)
 from .forms import (
     OrganizationForm,
     InvoiceForm,
@@ -159,7 +165,9 @@ class PaymentDeleteView(generic.DeleteView):
     success_url = reverse_lazy('books:invoice-list')
 
 
-class InvoiceListView(generic.ListView):
+class InvoiceListView(SelectedOrganizationMixin,
+                      RestrictToSelectedOrganizationQuerySetMixin,
+                      generic.ListView):
     template_name = "books/invoice_list.html"
     model = Invoice
     context_object_name = "invoices"
@@ -228,7 +236,9 @@ class InvoiceDetailView(PaymentFormMixin,
         return reverse('books:invoice-detail', args=[self.object.pk])
 
 
-class BillListView(generic.ListView):
+class BillListView(SelectedOrganizationMixin,
+                   RestrictToSelectedOrganizationQuerySetMixin,
+                   generic.ListView):
     template_name = "books/bill_list.html"
     model = Bill
     context_object_name = "bills"
