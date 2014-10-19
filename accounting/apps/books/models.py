@@ -79,7 +79,6 @@ class Organization(models.Model):
 
 class AbstractInvoice(models.Model):
     number = models.CharField(max_length=6,
-                              unique=True,
                               default=next_invoice_number)
 
     # Total price needs to be stored with and wihtout taxes
@@ -190,6 +189,7 @@ class Invoice(AbstractInvoice):
     objects = InvoiceQuerySet.as_manager()
 
     class Meta:
+        unique_together = (("number", "organization"),)
         ordering = ('-date_issued', 'id')
 
     def from_client(self):
@@ -218,6 +218,7 @@ class Bill(AbstractInvoice):
     objects = BillQuerySet.as_manager()
 
     class Meta:
+        unique_together = (("number", "organization"),)
         ordering = ('-date_issued', 'id')
 
     def from_client(self):
