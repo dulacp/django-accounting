@@ -32,13 +32,19 @@
                     <h3 class="panel-title">{{ orga.display_name }}</h3>
                 </div>
                 <div class="panel-body">
-                    <a href="{% url 'books:organization-detail' orga.pk %}" class="btn btn-success btn-block" role="button">View</a>
+                    <dl class="dl-horizontal">
+
+                        <dt>Turn over (excl. tax)</dt>
+                        <dd>{{ orga.turnover_excl_tax|currency|default:"-" }}</dd>
+
+                        <dt>Due payments</dt>
+                        <dd>{{ orga.overdue_total|currency|default:0 }}</dd>
+
+                    </dl>
+                    <a href="{% url 'books:organization-detail' orga.pk %}" class="btn btn-success btn-block" role="button">Select</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-
-    <h2 class="sub-header">Last invoices <small>across organizations</small></h2>
-    {% include "books/_partials/invoice_list.html" with invoices=last_invoices detailed=True %}
 {% endblock content %}
