@@ -39,9 +39,11 @@
                     {% url 'books:dashboard' as books_dashboard_url %}
                     {% url 'books:invoice-list' as books_invoice_list_url %}
                     {% url 'books:bill-list' as books_bill_list_url %}
+                    {% url 'books:tax_rate-list' as books_tax_rate_list_url %}
                     <li class="{% active request books_dashboard_url exact_match=True %}"><a href="{{ books_dashboard_url }}">Overview</a></li>
                     <li class="{% active request books_invoice_list_url exact_match=True %}"><a href="{{ books_invoice_list_url }}">Invoices</a></li>
                     <li class="{% active request books_bill_list_url exact_match=True %}"><a href="{{ books_bill_list_url }}">Bills</a></li>
+                    <li class="{% active request books_tax_rate_list_url exact_match=True %}"><a href="{{ books_tax_rate_list_url }}">Tax Rates</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
                     {% url 'clients:client-list' as clients_client_list_url %}

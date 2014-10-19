@@ -10,11 +10,15 @@ from .mixins import (
     RestrictToSelectedOrganizationQuerySetMixin)
 from .models import (
     Organization,
+    TaxRate,
+    TaxComponent,
     Invoice,
     Bill,
     Payment)
 from .forms import (
     OrganizationForm,
+    TaxRateForm,
+    TaxComponentFormSet,
     InvoiceForm,
     InvoiceLineFormSet,
     BillForm,
@@ -107,6 +111,64 @@ class OrganizationSelectionView(SelectedOrganizationMixin,
         orga = self.get_object()
         self.set_selected_organization(orga)
         return HttpResponseRedirect(reverse('books:dashboard'))
+
+
+class TaxRateListView(SelectedOrganizationMixin,
+                      RestrictToSelectedOrganizationQuerySetMixin,
+                      generic.ListView):
+    template_name = "books/tax_rate_list.html"
+    model = TaxRate
+    context_object_name = "tax_rates"
+
+
+class TaxRateCreateUpdateMixin(object):
+    formset_class = TaxComponentFormSet
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.POST:
+            context['tax_component_formset'] = (
+                self.formset_class(self.request.POST, instance=self.object))
+        else:
+            context['tax_component_formset'] = (
+                self.formset_class(instance=self.object))
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        tax_component_formset = context['tax_component_formset']
+        if not tax_component_formset.is_valid():
+            return super().form_invalid(form)
+
+        self.object = form.save()
+        tax_component_formset.instance = self.object
+        tax_component_formset.save()
+
+        return super().form_valid(form)
+
+
+class TaxRateCreateView(TaxRateCreateUpdateMixin, generic.CreateView):
+    template_name = "books/tax_rate_create_or_update.html"
+    model = TaxRate
+    form_class = TaxRateForm
+
+    def get_success_url(self):
+        return reverse("books:tax_rate-list")
+
+
+class TaxRateUpdateView(TaxRateCreateUpdateMixin, generic.UpdateView):
+    template_name = "books/tax_rate_create_or_update.html"
+    model = TaxRate
+    form_class = TaxRateForm
+
+    def get_success_url(self):
+        return reverse("books:tax_rate-list")
+
+
+class TaxRateDeleteView(generic.DeleteView):
+    template_name = "_generics/delete_entity.html"
+    model = TaxRate
+    success_url = reverse_lazy('books:tax_rate-list')
 
 
 class PaymentFormMixin(generic.edit.FormMixin):

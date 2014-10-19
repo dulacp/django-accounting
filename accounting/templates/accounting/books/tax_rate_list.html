@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% load currency_filters %}
+
+{% block content %}
+    <h1 class="page-header">Tax Rates <small>which belong to you</small></h1>
+
+    {% include "books/_partials/tax_rate_list.html" with tax_rates=tax_rates %}
+
+    <a href="{% url 'books:tax_rate-create' %}" class="btn btn-primary btn-lg" role="button">
+        Add a Tax rate
+    </a>
+{% endblock content %}

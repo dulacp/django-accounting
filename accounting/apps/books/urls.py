@@ -28,6 +28,20 @@ urlpatterns = patterns('',
         views.OrganizationSelectionView.as_view(),
         name="organization-select"),
 
+    # Tax Rates
+    url(r'^tax_rates/$',
+        views.TaxRateListView.as_view(),
+        name="tax_rate-list"),
+    url(r'^tax_rates/create/$',
+        views.TaxRateCreateView.as_view(),
+        name="tax_rate-create"),
+    url(r'^tax_rates/(?P<pk>\d+)/edit/$',
+        views.TaxRateUpdateView.as_view(),
+        name="tax_rate-edit"),
+    url(r'^tax_rates/(?P<pk>\d+)/delete/$',
+        views.TaxRateDeleteView.as_view(),
+        name="tax_rate-delete"),
+
     # Invoices
     url(r'^invoice/$',
         views.InvoiceListView.as_view(),

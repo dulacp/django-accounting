@@ -1,0 +1,27 @@
+{% load currency_filters format_filters %}
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr class="row">
+                <th>#</th>
+                <th>Name</th>
+                <th>Rate (%)</th>
+                <th class="text-right col-sm-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tax_rate in tax_rates %}
+            <tr class="row">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ tax_rate.name }}</td>
+                <td>{{ tax_rate.rate|percentage }}</td>
+                <td class="text-right col-sm-4">
+                    <a href="{% url 'books:tax_rate-edit' tax_rate.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
+                    <a href="{% url 'books:tax_rate-delete' tax_rate.pk %}" class="btn btn-danger btn-sm" role="button">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -3,6 +3,8 @@ from django.forms.models import inlineformset_factory
 
 from .models import (
     Organization,
+    TaxRate,
+    TaxComponent,
     Invoice,
     InvoiceLine,
     Bill,
@@ -30,6 +32,32 @@ class OrganizationForm(ModelForm):
             "display_name",
             "legal_name",
         )
+
+
+class TaxRateForm(ModelForm):
+    class Meta:
+        model = TaxRate
+        fields = (
+            "name",
+            "organization",
+        )
+
+
+class TaxComponentForm(ModelForm):
+    class Meta:
+        model = TaxComponent
+        fields = (
+            "name",
+            "percentage",
+        )
+
+
+TaxComponentFormSet = inlineformset_factory(TaxRate,
+                                            TaxComponent,
+                                            form=TaxComponentForm,
+                                            formset=RequiredFirstInlineFormSet,
+                                            min_num=1,
+                                            extra=0)
 
 
 class InvoiceForm(ModelForm):
