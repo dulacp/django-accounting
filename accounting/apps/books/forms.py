@@ -60,6 +60,18 @@ TaxComponentFormSet = inlineformset_factory(TaxRate,
                                             extra=0)
 
 
+class RestrictLineFormToOrganization(object):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get('instance', None)
+        if instance:
+            self.fields['tax_rate'].queryset = (instance
+                .invoice
+                .organization
+                .tax_rates.all())
+
+
 class InvoiceForm(ModelForm):
     class Meta:
         model = Invoice
@@ -76,7 +88,7 @@ class InvoiceForm(ModelForm):
         )
 
 
-class InvoiceLineForm(ModelForm):
+class InvoiceLineForm(RestrictLineFormToOrganization, ModelForm):
     class Meta:
         model = InvoiceLine
         fields = (
@@ -84,6 +96,7 @@ class InvoiceLineForm(ModelForm):
             "description",
             "unit_price_excl_tax",
             "quantity",
+            "tax_rate",
         )
 
 
@@ -110,7 +123,7 @@ class BillForm(ModelForm):
         )
 
 
-class BillLineForm(ModelForm):
+class BillLineForm(RestrictLineFormToOrganization, ModelForm):
     class Meta:
         model = BillLine
         fields = (
@@ -118,6 +131,7 @@ class BillLineForm(ModelForm):
             "description",
             "unit_price_excl_tax",
             "quantity",
+            "tax_rate",
         )
 
 

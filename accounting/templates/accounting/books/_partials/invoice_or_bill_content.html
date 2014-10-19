@@ -1,4 +1,4 @@
-{% load currency_filters %}
+{% load currency_filters format_filters %}
 
 <div class="row">
     <div class="col-xs-5">
@@ -41,6 +41,7 @@
             <th class="col-sm-4">Description</th>
             <th class="col-sm-2">Unit (excl. tax)</th>
             <th class="col-sm-1">Qt.</th>
+            <th class="col-sm-1">Tax rate</th>
             <th class="col-sm-2">Amount</th>
         </tr>
     </thead>
@@ -52,6 +53,7 @@
             <td class="col-sm-4">{{ line.description }}</td>
             <td class="col-sm-2">{{ line.unit_price_excl_tax|currency }}</td>
             <td class="col-sm-1">{{ line.quantity }}</td>
+            <td class="col-sm-1">{{ line.tax_rate.rate|percentage }}</td>
             <td class="col-sm-2">{{ line.line_price_excl_tax|currency }}</td>
         </tr>
         {% endfor %}

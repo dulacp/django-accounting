@@ -2,4 +2,3 @@ from decimal import Decimal
 
 
 ACCOUNTING_DEFAULT_CURRENCY = "EUR"
-ACCOUNTING_DEFAULT_TAX_PERCENTAGE = Decimal("0.20")

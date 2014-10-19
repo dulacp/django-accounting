@@ -19,6 +19,7 @@
                 <th>Description</th>
                 <th>Unit (excl. tax)</th>
                 <th>Qt.</th>
+                <th>Tax rate</th>
                 <th>Total</th>
             </thead>
             <tbody>
@@ -39,6 +40,9 @@
                     </td>
                     <td class="col-md-1">
                         {% bootstrap_field invoiceline_form.quantity show_label=False %}
+                    </td>
+                    <td class="col-md-1">
+                        {% bootstrap_field invoiceline_form.tax_rate show_label=False %}
                     </td>
                     <td>{{ invoiceline_form.DELETE }}</td>
                 </tr>
