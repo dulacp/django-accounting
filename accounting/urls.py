@@ -9,7 +9,6 @@ urlpatterns = patterns('',
         namespace="books")),
     url(r'^clients/', include('accounting.apps.clients.urls',
         namespace="clients")),
-    url(r'^admin/', include(admin.site.urls)),
 )
 
 if settings.DEBUG:
