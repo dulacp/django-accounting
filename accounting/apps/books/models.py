@@ -251,6 +251,7 @@ class Invoice(AbstractInvoice):
 class InvoiceLine(AbstractInvoiceLine):
     invoice = models.ForeignKey('books.Invoice',
                                 related_name="lines")
+    tax_rate = models.ForeignKey('books.TaxRate')
 
     class Meta:
         pass
@@ -280,6 +281,7 @@ class Bill(AbstractInvoice):
 class BillLine(AbstractInvoiceLine):
     bill = models.ForeignKey('books.Bill',
                              related_name="lines")
+    tax_rate = models.ForeignKey('books.TaxRate')
 
     class Meta:
         pass
