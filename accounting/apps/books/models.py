@@ -1,10 +1,11 @@
-from decimal import Decimal
+from decimal import Decimal as D
 from datetime import date
 
 from django.conf import settings
 from django.db import models
 from django.db.models import Sum
 from django.core.urlresolvers import reverse
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.contenttypes.fields import (
     GenericForeignKey,
     GenericRelation)
@@ -38,19 +39,19 @@ class Organization(models.Model):
 
     @property
     def turnover_excl_tax(self):
-        return self.invoices.turnover_excl_tax() or Decimal('0.00')
+        return self.invoices.turnover_excl_tax() or D('0.00')
 
     @property
     def turnover_incl_tax(self):
-        return self.invoices.turnover_incl_tax() or Decimal('0.00')
+        return self.invoices.turnover_incl_tax() or D('0.00')
 
     @property
     def debts_excl_tax(self):
-        return self.bills.debts_excl_tax() or Decimal('0.00')
+        return self.bills.debts_excl_tax() or D('0.00')
 
     @property
     def debts_incl_tax(self):
-        return self.bills.debts_incl_tax() or Decimal('0.00')
+        return self.bills.debts_incl_tax() or D('0.00')
 
     @property
     def profits(self):
@@ -76,6 +77,52 @@ class Organization(models.Model):
         return due_turnonver - total_paid
 
 
+class TaxRate(models.Model):
+    """
+    Every transaction line item needs a Tax Rate.
+    Tax Rates can have multiple Tax Components.
+
+    For instance, you can have an item that is charged a Tax Rate
+    called "City Import Tax (8%)" that has two components:
+        - a city tax of 5%
+        - an import tax of 3%.
+
+    *inspired by Xero*
+    """
+    organization = models.ForeignKey('books.Organization',
+                                     related_name="tax_rates",
+                                     verbose_name="Attached to Organization")
+
+    name = models.CharField(max_length=50)
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def rate(self):
+        r = D('0.000')
+        for c in self.components.all():
+            r += c.percentage
+        return r
+
+
+class TaxComponent(models.Model):
+    """
+    See the `TaxRate` class for an explanation
+    """
+    tax_rate = models.ForeignKey('books.TaxRate',
+                                 related_name="components")
+
+    name = models.CharField(max_length=50)
+    percentage = models.DecimalField(max_digits=6,
+                                     decimal_places=5,
+                                     validators=[MinValueValidator(D('0')),
+                                                 MaxValueValidator(D('1'))])
+
+
 class AbstractInvoice(models.Model):
     number = models.CharField(max_length=6,
                               default=next_invoice_number)
@@ -85,11 +132,11 @@ class AbstractInvoice(models.Model):
     total_incl_tax = models.DecimalField("Total (inc. tax)",
                                          decimal_places=2,
                                          max_digits=12,
-                                         default=Decimal('0'))
+                                         default=D('0'))
     total_excl_tax = models.DecimalField("Total (excl. tax)",
                                          decimal_places=2,
                                          max_digits=12,
-                                         default=Decimal('0'))
+                                         default=D('0'))
 
     # tracking
     draft = models.BooleanField(default=False)
@@ -114,7 +161,7 @@ class AbstractInvoice(models.Model):
         For executing a named method on each line of the basket
         and returning the total.
         """
-        total = Decimal('0.00')
+        total = D('0.00')
         for line in self.lines.all():
             total = total + getattr(line, prop)
         return total

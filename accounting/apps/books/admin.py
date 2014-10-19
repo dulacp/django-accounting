@@ -9,6 +9,18 @@ class OrganizationAdmin(admin.ModelAdmin):
     pass
 
 
+class TaxComponentInline(admin.TabularInline):
+    model = models.TaxComponent
+    extra = 1
+
+
+@admin.register(models.TaxRate)
+class TaxRateAdmin(admin.ModelAdmin):
+    inlines = (
+        TaxComponentInline,
+    )
+
+
 class PaymentInline(GenericTabularInline):
     model = models.Payment
     extra = 1
