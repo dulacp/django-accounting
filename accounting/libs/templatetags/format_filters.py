@@ -1,12 +1,10 @@
 import datetime
 
 from django import template
-from django.template.defaultfilters import floatformat
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now as django_now
 from django.utils.translation import to_locale, get_language
 
-from babel import Locale
 from babel.numbers import format_percent
 
 register = template.Library()

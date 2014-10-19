@@ -9,7 +9,6 @@ from django.contrib.contenttypes.fields import (
     GenericForeignKey,
     GenericRelation)
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import AbstractUser, UserManager
 
 from accounting.libs import prices
 from accounting.libs.templatetags.currency_filters import currency_formatter
@@ -161,7 +160,8 @@ class AbstractInvoiceLine(models.Model):
         """Returns the `Price` instance representing the instance"""
         unit = self.unit_price_excl_tax
         tax = unit * settings.ACCOUNTING_DEFAULT_TAX_PERCENTAGE
-        return prices.Price(settings.ACCOUNTING_DEFAULT_CURRENCY, unit, tax=tax)
+        p = prices.Price(settings.ACCOUNTING_DEFAULT_CURRENCY, unit, tax=tax)
+        return p
 
     @property
     def line_price_excl_tax(self):

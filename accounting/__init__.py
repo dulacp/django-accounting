@@ -23,9 +23,9 @@ def get_version():
 
 
 # Cheeky setting that allows each template to be accessible by two paths.
-# Eg: the template 'accounting/templates/accounting/base.html' can be accessed via both
-# 'base.html' and 'accounting/base.html'.  This allows Accounting's templates to be
-# extended by templates with the same filename
+# Eg: the template 'accounting/templates/accounting/base.html' can be accessed
+# via both 'base.html' and 'accounting/base.html'.  This allows Accounting's
+# templates to be extended by templates with the same filename
 ACCOUNTING_MAIN_TEMPLATE_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), 'templates/accounting')
 

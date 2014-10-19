@@ -3,7 +3,6 @@ import logging
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Sum
-from django.http import HttpResponseRedirect
 
 from .models import Organization, Invoice, Bill, Payment
 from .forms import (

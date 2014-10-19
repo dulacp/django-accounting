@@ -1,6 +1,5 @@
 from django.forms import ModelForm, BaseInlineFormSet
 from django.forms.models import inlineformset_factory
-from django.contrib.contenttypes.forms import generic_inlineformset_factory
 
 from .models import (
     Organization,
