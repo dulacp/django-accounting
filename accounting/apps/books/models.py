@@ -24,6 +24,8 @@ class Organization(models.Model):
         help_text="Official name to appear on your reports, sales "
                   "invoices and bills")
 
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              related_name="owned_organizations")
     members = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                      related_name="organizations",
                                      blank=True, null=True)

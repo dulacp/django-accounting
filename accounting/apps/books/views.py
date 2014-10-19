@@ -51,6 +51,11 @@ class OrganizationCreateView(generic.CreateView):
     model = Organization
     form_class = OrganizationForm
 
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.owner = self.request.user
+        return super().form_valid(form)
+
     def get_success_url(self):
         return reverse("books:organization-list")
 
