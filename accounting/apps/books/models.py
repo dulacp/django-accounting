@@ -237,7 +237,9 @@ class Payment(models.Model):
     amount = models.DecimalField("Amount",
                                  decimal_places=2,
                                  max_digits=12)
-    detail = models.CharField(max_length=255)
+    detail = models.CharField(max_length=255,
+                              blank=True,
+                              null=True)
     date_paid = models.DateField(default=date.today)
     reference = models.CharField(max_length=255,
                                  blank=True,
