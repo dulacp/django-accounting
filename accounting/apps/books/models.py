@@ -86,10 +86,12 @@ class AbstractInvoice(models.Model):
     # because the tax percentage can vary depending on the associated lines
     total_incl_tax = models.DecimalField("Total (inc. tax)",
                                          decimal_places=2,
-                                         max_digits=12)
+                                         max_digits=12,
+                                         default=Decimal('0'))
     total_excl_tax = models.DecimalField("Total (excl. tax)",
                                          decimal_places=2,
-                                         max_digits=12)
+                                         max_digits=12,
+                                         default=Decimal('0'))
 
     # tracking
     draft = models.BooleanField(default=False)
