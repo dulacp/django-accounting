@@ -9,9 +9,7 @@
                 <th>From Organization</th>
                 {% endif %}
                 <th>To Client</th>
-                {% if detailed %}
-                <th class="col-sm-3">Description</th>
-                {% endif %}
+                <th class="col-sm-3">Date Issued</th>
                 <th class="text-right col-sm-2">Total</th>
                 <th class="text-right col-sm-2">Actions</th>
             </tr>
@@ -24,9 +22,7 @@
                 <td>{{ inv.organization }}</td>
                 {% endif %}
                 <td>{{ inv.client }}</td>
-                {% if detailed %}
-                <td class="col-sm-3">{{ inv.description }}</td>
-                {% endif %}
+                <td class="col-sm-3">{{ inv.date_issued }}</td>
                 <td class="text-right col-sm-2">{{ inv.total_excl_tax|currency }}</td>
                 <td class="text-right col-sm-2">
                     <a href="{% url 'books:invoice-detail' inv.pk %}" class="btn btn-success btn-sm" role="button">View</a>

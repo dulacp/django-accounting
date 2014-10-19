@@ -60,4 +60,7 @@ urlpatterns = patterns('',
     url(r'^payment/(?P<pk>\d+)/edit/$',
         views.PaymentUpdateView.as_view(),
         name="payment-edit"),
+    url(r'^payment/(?P<pk>\d+)/delete/$',
+        views.PaymentDeleteView.as_view(),
+        name="payment-delete"),
 )

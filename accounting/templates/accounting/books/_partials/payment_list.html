@@ -15,10 +15,11 @@
         <tr class="row">
             <td>{{ paym.reference|default:"-" }}</td>
             <td>{{ paym.date_paid }}</td>
-            <td>{{ inv.detail }}</td>
+            <td>{{ paym.detail }}</td>
             <td class="col-sm-2">{{ paym.amount|currency }}</td>
             <td class="text-right col-sm-4">
                 <a href="{% url 'books:payment-edit' paym.pk %}" class="btn btn-default btn-xs" role="button">Edit</a>
+                <a href="{% url 'books:payment-delete' paym.pk %}" class="btn btn-danger btn-xs" role="button">Delete</a>
             </td>
         </tr>
         {% endfor %}

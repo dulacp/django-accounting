@@ -121,6 +121,12 @@ class PaymentUpdateView(generic.UpdateView):
         return reverse("books:dashboard")
 
 
+class PaymentDeleteView(generic.DeleteView):
+    template_name = "_generics/delete_entity.html"
+    model = Payment
+    success_url = reverse_lazy('books:invoice-list')
+
+
 class InvoiceListView(generic.ListView):
     template_name = "books/invoice_list.html"
     model = Invoice

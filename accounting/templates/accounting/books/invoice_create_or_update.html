@@ -24,7 +24,10 @@
             <tbody>
             {% for invoiceline_form in invoiceline_formset %}
                 <tr class="formset-form">
-                    <td class="col-md-0 counter">{{ forloop.counter }}</td>
+                    <td class="col-md-0 counter">
+                        {{ forloop.counter }}
+                        {{ invoiceline_form.id }}
+                    </td>
                     <td class="col-md-2">
                         {% bootstrap_field invoiceline_form.label show_label=False %}
                     </td>
@@ -37,7 +40,7 @@
                     <td class="col-md-1">
                         {% bootstrap_field invoiceline_form.quantity show_label=False %}
                     </td>
-                    <td></td>
+                    <td>{{ invoiceline_form.DELETE }}</td>
                 </tr>
             {% endfor %}
             </tbody>
