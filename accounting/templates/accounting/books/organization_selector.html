@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% load currency_filters %}
+
+{% block content %}
+    <h1 class="page-header">Dashboard</h1>
+
+    <div class="row placeholders">
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <h4>{{ organizations_count|default:0 }}</h4>
+            <span class="text-muted">Number of organizations</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <h4>{{ organizations_cumulated_turnovers|currency|default:"-" }}</h4>
+            <span class="text-muted">Turnovers cumulated</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <h4>{{ organizations_cumulated_profits|currency|default:"-" }}</h4>
+            <span class="text-muted">Profits cumulated</span>
+        </div>
+        <div class="col-xs-6 col-sm-3 placeholder">
+            <h4>{{ organizations_cumulated_active_days|default:0 }}</h4>
+            <span class="text-muted">Active days cumulated</span>
+        </div>
+    </div>
+
+    <h2 class="sub-header">Organizations <small>shortcuts</small></h2>
+    <div class="row">
+        {% for orga in organizations %}
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ orga.display_name }}</h3>
+                </div>
+                <div class="panel-body">
+                    <dl class="dl-horizontal">
+
+                        <dt>Turn over (excl. tax)</dt>
+                        <dd>{{ orga.turnover_excl_tax|currency|default:"-" }}</dd>
+
+                        <dt>Due payments</dt>
+                        <dd>{{ orga.overdue_total|currency|default:0 }}</dd>
+
+                    </dl>
+                    <form action="{% url 'books:organization-select' orga.pk %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success btn-block" role="button">Select</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

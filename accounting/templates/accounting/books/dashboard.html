@@ -2,49 +2,44 @@
 {% load currency_filters %}
 
 {% block content %}
-    <h1 class="page-header">Dashboard</h1>
+    <h1 class="page-header">
+        {{ organization.display_name }} <small>/ organization detail</small>
+        <div class="btn-group pull-right">
+            <a href="{% url 'books:organization-edit' organization.pk %}" class="btn btn-default" role="button">Edit</a>
+        </div>
+    </h1>
 
     <div class="row placeholders">
         <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>{{ organizations_count|default:0 }}</h4>
-            <span class="text-muted">Number of organizations</span>
+            <h4>{{ organization.turnover_excl_tax|currency|default:"-" }}</h4>
+            <span class="text-muted">Turnover</span>
         </div>
         <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>{{ organizations_cumulated_turnovers|currency|default:"-" }}</h4>
-            <span class="text-muted">Turnovers cumulated</span>
+            <h4>{{ organization.profits|currency|default:"-" }}</h4>
+            <span class="text-muted">Profits</span>
         </div>
         <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>{{ organizations_cumulated_profits|currency|default:"-" }}</h4>
-            <span class="text-muted">Profits cumulated</span>
+            <h4>{{ organization.tax_provisionning|currency|default:0 }}</h4>
+            <span class="text-muted">Tax Provisionning</span>
         </div>
         <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>{{ organizations_cumulated_active_days|default:0 }}</h4>
-            <span class="text-muted">Active days cumulated</span>
+            <h4>{{ organization.overdue_total|currency|default:0 }}</h4>
+            <span class="text-muted">Due payments</span>
         </div>
     </div>
 
-    <h2 class="sub-header">Organizations <small>shortcuts</small></h2>
-    <div class="row">
-        {% for orga in organizations %}
-        <div class="col-md-4">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">{{ orga.display_name }}</h3>
-                </div>
-                <div class="panel-body">
-                    <dl class="dl-horizontal">
-
-                        <dt>Turn over (excl. tax)</dt>
-                        <dd>{{ orga.turnover_excl_tax|currency|default:"-" }}</dd>
-
-                        <dt>Due payments</dt>
-                        <dd>{{ orga.overdue_total|currency|default:0 }}</dd>
-
-                    </dl>
-                    <a href="{% url 'books:organization-detail' orga.pk %}" class="btn btn-success btn-block" role="button">Select</a>
-                </div>
-            </div>
+    <div class="row-fluid">
+        <div class="col-xs-12 col-sm-6">
+            {% include "books/_partials/invoice_list.html" with invoices=organization.invoices.all hide_edit=True %}
+            <a href="{% url 'books:invoice-create' %}" class="btn btn-primary btn-lg" role="button">
+                Add an invoice
+            </a>
         </div>
-        {% endfor %}
+        <div class="col-xs-12 col-sm-6">
+            {% include "books/_partials/bill_list.html" with bills=organization.bills.all hide_edit=True %}
+            <a href="{% url 'books:bill-create' %}" class="btn btn-primary btn-lg" role="button">
+                Add an bill
+            </a>
+        </div>
     </div>
 {% endblock content %}

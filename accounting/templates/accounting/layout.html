@@ -32,8 +32,8 @@
             {% block sidebar %}
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    {% url 'books:organization-list' as books_organization_list_url %}
-                    <li class="{% active request books_organization_list_url exact_match=True %}"><a href="{{ books_organization_list_url }}">Organizations</a></li>
+                    {% url 'books:organization-selector' as books_organization_selector_url %}
+                    <li class="{% active request books_organization_selector_url exact_match=True %}"><a href="{{ books_organization_selector_url }}">Organizations</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
                     {% url 'books:dashboard' as books_dashboard_url %}
