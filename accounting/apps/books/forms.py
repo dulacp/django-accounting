@@ -45,7 +45,7 @@ class InvoiceForm(ModelForm):
             "sent",
             "paid",
             "date_issued",
-            "date_paid",
+            "date_dued",
         )
 
 
@@ -79,7 +79,7 @@ class BillForm(ModelForm):
             "sent",
             "paid",
             "date_issued",
-            "date_paid",
+            "date_dued",
         )
 
 
