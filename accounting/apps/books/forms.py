@@ -60,16 +60,20 @@ TaxComponentFormSet = inlineformset_factory(TaxRate,
                                             extra=0)
 
 
-class RestrictLineFormToOrganization(object):
+class RestrictLineFormToOrganizationMixin(object):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         instance = kwargs.get('instance', None)
         if instance:
-            self.fields['tax_rate'].queryset = (instance
-                .invoice
-                .organization
-                .tax_rates.all())
+            if isinstance(instance, InvoiceLine):
+                organization = instance.invoice.organization
+            elif isinstance(instance, BillLine):
+                organization = instance.bill.organization
+            else:
+                raise NotImplementedError("The mixin has been applied to a "
+                                          "form model that is not supported")
+            self.fields['tax_rate'].queryset = organization.tax_rates.all()
 
 
 class InvoiceForm(ModelForm):
@@ -88,7 +92,8 @@ class InvoiceForm(ModelForm):
         )
 
 
-class InvoiceLineForm(RestrictLineFormToOrganization, ModelForm):
+class InvoiceLineForm(RestrictLineFormToOrganizationMixin,
+                      ModelForm):
     class Meta:
         model = InvoiceLine
         fields = (
@@ -104,7 +109,8 @@ InvoiceLineFormSet = inlineformset_factory(Invoice,
                                            InvoiceLine,
                                            form=InvoiceLineForm,
                                            formset=RequiredFirstInlineFormSet,
-                                           extra=1)
+                                           min_num=1,
+                                           extra=0)
 
 
 class BillForm(ModelForm):
@@ -123,7 +129,8 @@ class BillForm(ModelForm):
         )
 
 
-class BillLineForm(RestrictLineFormToOrganization, ModelForm):
+class BillLineForm(RestrictLineFormToOrganizationMixin,
+                   ModelForm):
     class Meta:
         model = BillLine
         fields = (
@@ -139,7 +146,8 @@ BillLineFormSet = inlineformset_factory(Bill,
                                         BillLine,
                                         form=BillLineForm,
                                         formset=RequiredFirstInlineFormSet,
-                                        extra=1)
+                                        min_num=1,
+                                        extra=0)
 
 
 class PaymentForm(ModelForm):
