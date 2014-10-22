@@ -12,6 +12,9 @@ class SelectedOrganizationMixin(object):
 
     def get_selected_organization(self):
         key = self.selected_organization_key
+        if key not in self.request.session:
+            return
+
         pk = self.request.session[key]
         organization = Organization.objects.get(pk=pk)
         return organization
