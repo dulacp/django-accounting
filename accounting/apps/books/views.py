@@ -63,7 +63,7 @@ class DashboardView(SelectedOrganizationMixin,
 
     def get(self, request, *args, **kwargs):
         if self.get_selected_organization() is None:
-            return HttpResponseRedirect(reverse('books:organization_selector'))
+            return HttpResponseRedirect(reverse('books:organization-selector'))
         return super().get(request, *args, **kwargs)
 
 
