@@ -7,9 +7,9 @@
         <span class="check-item"><span class="glyphicon glyphicon-minus-sign"></span></span>
         {{ check.field.verbose_name }}
     </h4>
-    {% if check.field.help_text %}
+    {% if check.message %}
     <p class="list-group-item-text">
-        <small>{{ check.field.help_text }}</small>
+        <small>{{ check.message }}</small>
     </p>
     {% endif %}
 {% endif %}

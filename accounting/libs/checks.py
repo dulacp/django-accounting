@@ -20,15 +20,21 @@ class CheckResult(object):
             (RESULT_PASSED,    "Passed"),
         )
 
-    def __init__(self, field, result=None):
+    def __init__(self, field, result=None, message=None):
         self.field = field
 
         if not result:
             result = self.RESULT_NEUTRAL
         self.result = result
 
-    def mark_fail(self):
+        if not message:
+            message = self.field.help_text
+        self.message = message
+
+    def mark_fail(self, message=None):
         self.result = self.RESULT_FAILED
+        if message is not None:
+            self.message = message
 
     def mark_pass(self):
         self.result = self.RESULT_PASSED
@@ -72,12 +78,12 @@ class CheckingModelMixin(object):
         if not field_name in checking_fields:
             raise AttributeError("Field '%s' not checkable" % field_name)
 
+        field = checking_fields.get(field_name)
+        check = CheckResult(field=field)
+
         # custom check method
         if self.has_custom_check_for_field(field_name):
             return getattr(self, 'check_%s' % field_name)(check)
-
-        field = checking_fields.get(field_name)
-        check = CheckResult(field=field)
 
         # default check
         if isinstance(field, PrimaryKeyRelatedField):

@@ -12,7 +12,9 @@ from django.contrib.contenttypes.fields import (
 from django.contrib.contenttypes.models import ContentType
 
 from accounting.libs import prices
-from accounting.libs.checks import CheckingModelMixin, CheckingModelOptions
+from accounting.libs.checks import (
+    CheckingModelMixin,
+    CheckingModelOptions)
 from accounting.libs.templatetags.currency_filters import currency_formatter
 from .managers import InvoiceQuerySet, BillQuerySet
 from .utils import next_invoice_number
@@ -206,6 +208,25 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
     def is_partially_paid(self):
         paid = self.total_paid
         return paid and paid > 0 and paid < self.total_incl_tax
+
+    def _check_total(self, check, total, computed_total):
+        if total != computed_total:
+            check.mark_fail(message="The computed amount isn't correct, it "
+                                    "should be {}, please edit and save the "
+                                    "{} to fix it.".format(
+                                        currency_formatter(total),
+                                        self._meta.verbose_name))
+        else:
+            check.mark_pass()
+        return check
+
+    def check_total_excl_tax(self, check):
+        total = self.get_total_excl_tax()
+        return self._check_total(check, total, self.total_excl_tax)
+
+    def check_total_incl_tax(self, check):
+        total = self.get_total_incl_tax()
+        return self._check_total(check, total, self.total_incl_tax)
 
 
 class AbstractInvoiceOrBillLine(models.Model):
