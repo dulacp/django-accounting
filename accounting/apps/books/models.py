@@ -187,7 +187,8 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
 
     @property
     def total_paid(self):
-        return self.payments.all().aggregate(sum=Sum('amount'))["sum"]
+        total = self.payments.all().aggregate(sum=Sum('amount'))["sum"]
+        return total or D('0')
 
     @property
     def total_due_incl_tax(self):
