@@ -146,7 +146,10 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
     sent = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
     date_issued = models.DateField(default=date.today)
-    date_dued = models.DateField(blank=True, null=True)
+    date_dued = models.DateField("Due date",
+                                 blank=True, null=True,
+                                 help_text="The date when the total amount "
+                                           "should have been collected")
     date_paid = models.DateField(blank=True, null=True)
 
     class Meta:

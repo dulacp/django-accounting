@@ -35,7 +35,6 @@
         {% for check in checklist %}
             <div class="list-group-item {% if check.has_failed %}list-group-item-danger{% endif %}">
                 {% render_check check %}
-                {{ check.field_name }}
             </div>
         {% endfor %}
         </div>

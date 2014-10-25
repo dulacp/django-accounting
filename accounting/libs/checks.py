@@ -20,8 +20,8 @@ class CheckResult(object):
             (RESULT_PASSED,    "Passed"),
         )
 
-    def __init__(self, field_name, result=None):
-        self.field_name = field_name
+    def __init__(self, field, result=None):
+        self.field = field
 
         if not result:
             result = self.RESULT_NEUTRAL
@@ -66,8 +66,6 @@ class CheckingModelMixin(object):
         return hasattr(self, 'check_%s' % field_name)
 
     def get_check_for_field(self, field_name, checking_fields=None):
-        check = CheckResult(field_name=field_name)
-
         if checking_fields is None:
             checking_fields = self.get_checking_fields()
 
@@ -79,6 +77,7 @@ class CheckingModelMixin(object):
             return getattr(self, 'check_%s' % field_name)(check)
 
         field = checking_fields.get(field_name)
+        check = CheckResult(field=field)
 
         # default check
         if isinstance(field, PrimaryKeyRelatedField):
