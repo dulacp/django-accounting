@@ -126,7 +126,7 @@ class TaxComponent(models.Model):
                                                  MaxValueValidator(D('1'))])
 
 
-class AbstractInvoice(CheckingModelMixin, models.Model):
+class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
     number = models.CharField(max_length=6,
                               default=next_invoice_number)
 
@@ -152,7 +152,7 @@ class AbstractInvoice(CheckingModelMixin, models.Model):
     class Meta:
         abstract = True
 
-    class CheckingModelOptions:
+    class CheckingOptions:
         fields = (
             'total_incl_tax',
             'total_excl_tax',
@@ -203,7 +203,7 @@ class AbstractInvoice(CheckingModelMixin, models.Model):
         return paid and paid > 0 and paid < self.total_incl_tax
 
 
-class AbstractInvoiceLine(models.Model):
+class AbstractInvoiceOrBillLine(models.Model):
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     unit_price_excl_tax = models.DecimalField(max_digits=8,
@@ -241,7 +241,7 @@ class AbstractInvoiceLine(models.Model):
         raise NotImplementedError
 
 
-class Invoice(AbstractInvoice):
+class Invoice(AbstractInvoiceOrBill):
     organization = models.ForeignKey('books.Organization',
                                      related_name="invoices",
                                      verbose_name="From Organization")
@@ -262,7 +262,7 @@ class Invoice(AbstractInvoice):
         return self.client
 
 
-class InvoiceLine(AbstractInvoiceLine):
+class InvoiceLine(AbstractInvoiceOrBillLine):
     invoice = models.ForeignKey('books.Invoice',
                                 related_name="lines")
     tax_rate = models.ForeignKey('books.TaxRate')
@@ -271,7 +271,7 @@ class InvoiceLine(AbstractInvoiceLine):
         pass
 
 
-class Bill(AbstractInvoice):
+class Bill(AbstractInvoiceOrBill):
     organization = models.ForeignKey('books.Organization',
                                      related_name="bills",
                                      verbose_name="To Organization")
@@ -292,7 +292,7 @@ class Bill(AbstractInvoice):
         return self.organization
 
 
-class BillLine(AbstractInvoiceLine):
+class BillLine(AbstractInvoiceOrBillLine):
     bill = models.ForeignKey('books.Bill',
                              related_name="lines")
     tax_rate = models.ForeignKey('books.TaxRate')

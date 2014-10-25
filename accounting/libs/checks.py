@@ -48,7 +48,10 @@ class CheckingModelOptions(object):
     """
     def __init__(self, meta):
         self.fields = getattr(meta, 'fields', ())
+        assert isinstance(self.fields, (list, tuple)), '`fields` must be a list or tuple'
+
         self.exclude = getattr(meta, 'exclude', ())
+        assert isinstance(self.exclude, (list, tuple)), '`exclude` must be a list or tuple'
 
 
 class CheckingModelMixin(object):
@@ -116,17 +119,13 @@ class CheckingModelMixin(object):
 
         # If 'fields' is specified, use those fields, in that order.
         if self.opts.fields:
-            assert isinstance(self.opts.fields, (list, tuple)), '`fields` must be a list or tuple'
             new = SortedDict()
-            import ipdb
-            ipdb.set_trace()
             for key in self.opts.fields:
                 new[key] = ret[key]
             ret = new
 
         # Remove anything in 'exclude'
         if self.opts.exclude:
-            assert isinstance(self.opts.exclude, (list, tuple)), '`exclude` must be a list or tuple'
             for key in self.opts.exclude:
                 ret.pop(key, None)
 
