@@ -146,7 +146,7 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
     sent = models.BooleanField(default=False)
     paid = models.BooleanField(default=False)
     date_issued = models.DateField(default=date.today)
-    date_dued = models.DateField()
+    date_dued = models.DateField(blank=True, null=True)
     date_paid = models.DateField(blank=True, null=True)
 
     class Meta:
@@ -156,6 +156,7 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
         fields = (
             'total_incl_tax',
             'total_excl_tax',
+            'date_dued',
         )
 
     def __str__(self):

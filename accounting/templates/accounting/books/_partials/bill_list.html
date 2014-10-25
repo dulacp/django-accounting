@@ -1,4 +1,4 @@
-{% load currency_filters %}
+{% load currency_filters status_filters %}
 
 <table class="table table-striped">
     <thead>
@@ -14,7 +14,7 @@
     </thead>
     <tbody>
         {% for bill in bills %}
-        <tr class="row">
+        <tr class="row {{ bill|status_to_css_classname }}">
             <td>{{ bill.number }}</td>
             <td>{{ bill.client }}</td>
             {% if detailed %}
