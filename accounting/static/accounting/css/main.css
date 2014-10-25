@@ -103,3 +103,14 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+
+/*
+ * Check list
+ */
+.check-list {
+
+}
+.check-item {
+  margin-right: 10px;
+}

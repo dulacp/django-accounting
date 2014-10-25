@@ -297,6 +297,13 @@ class InvoiceDetailView(PaymentFormMixin,
     def get_success_url(self):
         return reverse('books:invoice-detail', args=[self.object.pk])
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        invoice = self.get_object()
+        ctx["checklist"] = invoice.full_check()
+        ctx["pass_checklist"] = invoice.pass_full_checking()
+        return ctx
+
 
 class BillListView(SelectedOrganizationMixin,
                    RestrictToSelectedOrganizationQuerySetMixin,

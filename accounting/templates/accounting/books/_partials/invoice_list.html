@@ -1,4 +1,4 @@
-{% load currency_filters %}
+{% load currency_filters status_filters %}
 
 <div class="table-responsive">
     <table class="table table-striped">
@@ -16,7 +16,7 @@
         </thead>
         <tbody>
             {% for inv in invoices %}
-            <tr class="row">
+            <tr class="row {{ inv|status_to_css_classname }}">
                 <td>{{ inv.number }}</td>
                 {% if detailed %}
                 <td>{{ inv.organization }}</td>

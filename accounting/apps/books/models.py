@@ -12,6 +12,7 @@ from django.contrib.contenttypes.fields import (
 from django.contrib.contenttypes.models import ContentType
 
 from accounting.libs import prices
+from accounting.libs.checks import CheckingModelMixin, CheckingModelOptions
 from accounting.libs.templatetags.currency_filters import currency_formatter
 from .managers import InvoiceQuerySet, BillQuerySet
 from .utils import next_invoice_number
@@ -125,7 +126,7 @@ class TaxComponent(models.Model):
                                                  MaxValueValidator(D('1'))])
 
 
-class AbstractInvoice(models.Model):
+class AbstractInvoice(CheckingModelMixin, models.Model):
     number = models.CharField(max_length=6,
                               default=next_invoice_number)
 
@@ -150,6 +151,12 @@ class AbstractInvoice(models.Model):
 
     class Meta:
         abstract = True
+
+    class CheckingModelOptions:
+        fields = (
+            'total_incl_tax',
+            'total_excl_tax',
+        )
 
     def __str__(self):
         return "#{} ({})".format(self.number, self.total_incl_tax)
@@ -187,6 +194,13 @@ class AbstractInvoice(models.Model):
         due = self.total_incl_tax
         due -= self.total_paid
         return due
+
+    def is_fully_paid(self):
+        return self.total_paid >= self.total_incl_tax
+
+    def is_partially_paid(self):
+        paid = self.total_paid
+        return paid and paid > 0 and paid < self.total_incl_tax
 
 
 class AbstractInvoiceLine(models.Model):

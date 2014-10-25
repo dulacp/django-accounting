@@ -1,4 +1,4 @@
-{% load currency_filters bootstrap3 form_filters %}
+{% load currency_filters bootstrap3 form_filters check_tags %}
 
 <div class="row placeholders">
     <div class="col-xs-6 col-sm-4 placeholder">
@@ -26,6 +26,22 @@
         <span class="text-muted">Date dued</span>
     </div>
 </div>
+
+{% if checklist %}
+<h3 class="page-header">Checklist</h3>
+<div class="row">
+    <div class="col-xs-6 col-sm-4">
+        <div class="list-group check-list">
+        {% for check in checklist %}
+            <div class="list-group-item {% if check.has_failed %}list-group-item-danger{% endif %}">
+                {% render_check check %}
+                {{ check.field_name }}
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <h3 class="page-header">Content</h3>
 {% include "books/_partials/invoice_or_bill_content.html" with object=object %}
