@@ -50,7 +50,7 @@
         <tr class="row">
             <td>{{ forloop.counter }}</td>
             <td>{{ line.label }}</td>
-            <td class="col-sm-4">{{ line.description }}</td>
+            <td class="col-sm-4">{{ line.description|linebreaks }}</td>
             <td class="col-sm-2">{{ line.unit_price_excl_tax|currency }}</td>
             <td class="col-sm-1">{{ line.quantity }}</td>
             <td class="col-sm-1">{{ line.tax_rate.rate|percentage }}</td>

@@ -51,31 +51,33 @@
     <div class="panel-heading">
         <h4>Payments</h4>
     </div>
+
     {% include "books/_partials/payment_list.html" with payments=object.payments.all %}
+
+    <div class="panel-footer">
+        <form action="." method="post" class="form">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+            <div class="row">
+                <div class="col-md-2">
+                    {% bootstrap_field form.date_paid show_label=False %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.reference show_label=False %}
+                </div>
+                <div class="col-md-4">
+                    {% bootstrap_field form.detail show_label=False %}
+                </div>
+                <div class="col-md-2">
+                    {% bootstrap_field form.amount show_label=False %}
+                </div>
+                <div class="col-md-2 text-right">
+                    <button type="submit" class="btn btn-success">Add payment</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
-<form action="." method="post" class="form">
-    {% csrf_token %}
 
-    {{ form.non_field_errors }}
-    <div class="row">
-        <div class="col-md-3">
-            {% bootstrap_field form.amount show_label=False %}
-        </div>
-        <div class="col-md-2">
-            {% bootstrap_field form.reference show_label=False %}
-        </div>
-        <div class="col-md-5">
-            {% bootstrap_field form.detail show_label=False %}
-        </div>
-        <div class="col-md-2">
-            {% bootstrap_field form.date_paid show_label=False %}
-        </div>
-    </div>
-
-    {% buttons layout='vertical' %}
-        <button type="submit" class="btn btn-success">
-            {% bootstrap_icon "star" %} Add a payment
-        </button>
-    {% endbuttons %}
-</form>
