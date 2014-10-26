@@ -322,7 +322,41 @@ class InvoiceDeleteView(generic.DeleteView):
     success_url = reverse_lazy('books:invoice-list')
 
 
+class InvoiceOrBillDetailMixin(object):
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = (queryset
+            .select_related(
+                'client',
+                'organization')
+            .prefetch_related(
+                'payments'))
+        return queryset
+
+    def get_object(self):
+        # save some db queries by caching the fetched object
+        if hasattr(self, '_object'):
+            return getattr(self, '_object')
+
+        obj = super().get_object()
+        setattr(self, '_object', obj)
+        return obj
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        obj = self.get_object()
+        ctx["checklist"] = obj.full_check()
+        ctx["lines"] = (obj.lines.all()
+            .select_related(
+                'tax_rate')
+            .prefetch_related(
+                'tax_rate__components'))
+        return ctx
+
+
 class InvoiceDetailView(PaymentFormMixin,
+                        InvoiceOrBillDetailMixin,
                         generic.DetailView):
     template_name = "books/invoice_detail.html"
     model = Invoice
@@ -330,15 +364,6 @@ class InvoiceDetailView(PaymentFormMixin,
 
     def get_success_url(self):
         return reverse('books:invoice-detail', args=[self.object.pk])
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        invoice = self.get_object()
-        ctx["checklist"] = invoice.full_check()
-        ctx["lines"] = (invoice.lines.all()
-            .select_related('tax_rate')
-            .prefetch_related('tax_rate__components'))
-        return ctx
 
 
 class BillListView(SelectedOrganizationMixin,
@@ -403,6 +428,7 @@ class BillDeleteView(generic.DeleteView):
 
 
 class BillDetailView(PaymentFormMixin,
+                     InvoiceOrBillDetailMixin,
                      generic.DetailView):
     template_name = "books/bill_detail.html"
     model = Bill
@@ -410,12 +436,3 @@ class BillDetailView(PaymentFormMixin,
 
     def get_success_url(self):
         return reverse('books:bill-detail', args=[self.object.pk])
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        bill = self.get_object()
-        ctx["checklist"] = bill.full_check()
-        ctx["lines"] = (invoice.lines.all()
-            .select_related('tax_rate')
-            .prefetch_related('tax_rate__components'))
-        return ctx
