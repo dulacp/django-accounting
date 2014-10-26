@@ -178,7 +178,10 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
         and returning the total.
         """
         total = D('0.00')
-        for line in self.lines.all():
+        line_queryset = (self.lines.all()
+            .select_related('tax_rate')
+            .prefetch_related('tax_rate__components'))
+        for line in line_queryset:
             total = total + getattr(line, prop)
         return total
 
