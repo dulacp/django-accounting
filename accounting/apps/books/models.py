@@ -13,6 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
 from accounting.libs import prices
+from accounting.libs.decorators import memoize
 from accounting.libs.checks import (
     CheckingModelMixin,
     CheckingModelOptions)
@@ -178,7 +179,8 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
         and returning the total.
         """
         total = D('0.00')
-        line_queryset = (self.lines.all()
+        line_queryset = self.lines.all()
+        line_queryset = (line_queryset
             .select_related('tax_rate')
             .prefetch_related('tax_rate__components'))
         for line in line_queryset:

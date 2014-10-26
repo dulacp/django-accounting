@@ -61,6 +61,23 @@ class DashboardView(SelectedOrganizationMixin,
     def get_object(self):
         return self.get_selected_organization()
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        organization = self.get_object()
+        ctx['invoices'] = (organization.invoices.all()
+            .select_related(
+                'client',
+                'organization')
+            .prefetch_related(
+                'lines'))
+        ctx['bills'] = (organization.bills.all()
+            .select_related(
+                'client',
+                'organization')
+            .prefetch_related(
+                'lines'))
+        return ctx
+
     def get(self, request, *args, **kwargs):
         if self.get_selected_organization() is None:
             return HttpResponseRedirect(reverse('books:organization-selector'))
@@ -101,6 +118,17 @@ class OrganizationDetailView(SelectedOrganizationMixin,
     template_name = "books/organization_detail.html"
     model = Organization
     context_object_name = "organization"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        organization = self.get_object()
+        ctx['invoices'] = (organization.invoices.all()
+            .select_related('client', 'organization')
+            .prefetch_related('lines'))
+        ctx['bills'] = (organization.bills.all()
+            .select_related('client', 'organization')
+            .prefetch_related('lines'))
+        return ctx
 
 
 class OrganizationSelectionView(SelectedOrganizationMixin,
@@ -301,6 +329,9 @@ class InvoiceDetailView(PaymentFormMixin,
         ctx = super().get_context_data(**kwargs)
         invoice = self.get_object()
         ctx["checklist"] = invoice.full_check()
+        ctx["lines"] = (invoice.lines.all()
+            .select_related('tax_rate')
+            .prefetch_related('tax_rate__components'))
         return ctx
 
 
@@ -378,4 +409,7 @@ class BillDetailView(PaymentFormMixin,
         ctx = super().get_context_data(**kwargs)
         bill = self.get_object()
         ctx["checklist"] = bill.full_check()
+        ctx["lines"] = (invoice.lines.all()
+            .select_related('tax_rate')
+            .prefetch_related('tax_rate__components'))
         return ctx
