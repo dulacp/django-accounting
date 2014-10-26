@@ -9,6 +9,15 @@ body {
 
 
 /*
+ * Utils
+ */
+
+.overflow-box {
+  overflow: auto;
+}
+
+
+/*
  * Global add-ons
  */
 
