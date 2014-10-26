@@ -1,4 +1,4 @@
-{% load currency_filters bootstrap3 form_filters check_tags %}
+{% load currency_filters bootstrap3 form_filters check_filters check_tags %}
 
 <div class="row placeholders">
     <div class="col-xs-6 col-sm-4 placeholder">
@@ -33,7 +33,7 @@
     <div class="col-xs-6 col-sm-4">
         <div class="list-group check-list">
         {% for check in checklist %}
-            <div class="list-group-item {% if check.has_failed %}list-group-item-danger{% endif %}">
+            <div class="list-group-item list-group-item-{{ check|level_to_css_classname }}">
                 {% render_check check %}
             </div>
         {% endfor %}

@@ -1,15 +1,14 @@
-{% if check.has_passed %}
-    <span class="check-item"><span class="glyphicon glyphicon-ok"></span></span>
-    {{ check.field.verbose_name }}
-{% endif %}
-{% if check.has_failed %}
+{% load check_filters %}
+
+{% if check.message %}
     <h4 class="list-group-item-heading">
-        <span class="check-item"><span class="glyphicon glyphicon-minus-sign"></span></span>
+        <span class="check-item"><span class="glyphicon glyphicon-{{ check|level_to_glyphicon }}"></span></span>
         {{ check.field.verbose_name }}
     </h4>
-    {% if check.message %}
     <p class="list-group-item-text">
         <small>{{ check.message }}</small>
     </p>
-    {% endif %}
+{% else %}
+    <span class="check-item"><span class="glyphicon glyphicon-{{ check|level_to_glyphicon }}"></span></span>
+    {{ check.field.verbose_name }}
 {% endif %}

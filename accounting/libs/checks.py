@@ -20,24 +20,33 @@ class CheckResult(object):
             (RESULT_PASSED,    "Passed"),
         )
 
-    def __init__(self, field, result=None, message=None):
+    LEVEL_WARNING = 'warning'
+    LEVEL_ERROR = 'error'
+    LEVEL_CHOICES = (
+            (LEVEL_WARNING, "Warning"),
+            (LEVEL_ERROR,   "Error"),
+        )
+
+    def __init__(self, field, result=None, level=None, message=None):
         self.field = field
+        self.message = message
 
         if not result:
             result = self.RESULT_NEUTRAL
         self.result = result
 
-        if not message:
-            message = self.field.help_text
+        if not level:
+            level = self.LEVEL_WARNING
+        self.level = level
+
+    def mark_fail(self, level=LEVEL_WARNING, message=None):
+        self.result = self.RESULT_FAILED
+        self.level = level
         self.message = message
 
-    def mark_fail(self, message=None):
-        self.result = self.RESULT_FAILED
-        if message is not None:
-            self.message = message
-
-    def mark_pass(self):
+    def mark_pass(self, message=None):
         self.result = self.RESULT_PASSED
+        self.message = message
 
     @property
     def has_failed(self):

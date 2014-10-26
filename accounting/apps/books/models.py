@@ -10,6 +10,7 @@ from django.contrib.contenttypes.fields import (
     GenericForeignKey,
     GenericRelation)
 from django.contrib.contenttypes.models import ContentType
+from django.utils import timezone
 
 from accounting.libs import prices
 from accounting.libs.checks import (
@@ -211,7 +212,8 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
 
     def _check_total(self, check, total, computed_total):
         if total != computed_total:
-            check.mark_fail(message="The computed amount isn't correct, it "
+            check.mark_fail(level=check.LEVEL_ERROR,
+                            message="The computed amount isn't correct, it "
                                     "should be {}, please edit and save the "
                                     "{} to fix it.".format(
                                         currency_formatter(total),
@@ -227,6 +229,24 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
     def check_total_incl_tax(self, check):
         total = self.get_total_incl_tax()
         return self._check_total(check, total, self.total_incl_tax)
+
+    def check_date_dued(self, check):
+        if self.date_dued is None:
+            check.mark_fail(message="No due date specified")
+            return check
+
+        if self.is_fully_paid():
+            last_payment = self.payments.all().order_by('-date_paid').first()
+            formatted_date = last_payment.date_paid.strftime('%B %d, %Y')
+            check.mark_pass(message="Has been paid on the {}".format(
+                                        formatted_date))
+            return check
+
+        if timezone.now().date() > self.date_dued:
+            check.mark_fail(message="The due date has been exceeded.")
+        else:
+            check.mark_pass()
+        return check
 
 
 class AbstractInvoiceOrBillLine(models.Model):

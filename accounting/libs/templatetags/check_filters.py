@@ -22,3 +22,35 @@ def check(obj, field_name=None):
         return None
 
     return check
+
+
+@register.filter('level_to_css_classname')
+def _check_level_to_classname(check):
+    """
+    Return the appropriated css classname for the check level
+    """
+    if check.has_failed:
+        if check.level == check.LEVEL_ERROR:
+            return 'danger'
+        elif check.level == check.LEVEL_WARNING:
+            return 'warning'
+        else:
+            return 'info'
+
+    return 'default'
+
+
+@register.filter('level_to_glyphicon')
+def _check_level_to_glyphicon(check):
+    """
+    Return the appropriated glyph icon for the check level
+    """
+    if check.has_failed:
+        if check.level == check.LEVEL_ERROR:
+            return 'minus-sign'
+        elif check.level == check.LEVEL_WARNING:
+            return 'exclamation-sign'
+        else:
+            return 'question-sign'
+
+    return 'ok'
