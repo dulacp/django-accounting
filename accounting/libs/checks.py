@@ -151,7 +151,9 @@ class CheckingModelMixin(object):
 
         Checks all fields and return a list of `CheckResult` instances
         """
-        self.clean_fields()
+        # TODO try to reintegrate this one without
+        #      increase the db queries too much
+        # self.clean_fields()
 
         checks = []
         fields = self.get_checking_fields()

@@ -180,9 +180,6 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
         """
         total = D('0.00')
         line_queryset = self.lines.all()
-        line_queryset = (line_queryset
-            .select_related('tax_rate')
-            .prefetch_related('tax_rate__components'))
         for line in line_queryset:
             total = total + getattr(line, prop)
         return total
@@ -199,8 +196,10 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
 
     @property
     def total_paid(self):
-        total = self.payments.all().aggregate(sum=Sum('amount'))["sum"]
-        return total or D('0')
+        total = D('0')
+        for p in self.payments.all():
+            total += p.amount
+        return total
 
     @property
     def total_due_incl_tax(self):
@@ -241,7 +240,7 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
             return check
 
         if self.is_fully_paid():
-            last_payment = self.payments.all().order_by('-date_paid').first()
+            last_payment = self.payments.all().first()
             formatted_date = last_payment.date_paid.strftime('%B %d, %Y')
             check.mark_pass(message="Has been paid on the {}".format(
                                         formatted_date))

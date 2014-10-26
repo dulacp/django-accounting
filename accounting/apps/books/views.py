@@ -69,13 +69,19 @@ class DashboardView(SelectedOrganizationMixin,
                 'client',
                 'organization')
             .prefetch_related(
-                'lines'))
+                'lines',
+                'lines__tax_rate',
+                'lines__tax_rate__components',
+                'payments'))
         ctx['bills'] = (organization.bills.all()
             .select_related(
                 'client',
                 'organization')
             .prefetch_related(
-                'lines'))
+                'lines',
+                'lines__tax_rate',
+                'lines__tax_rate__components',
+                'payments'))
         return ctx
 
     def get(self, request, *args, **kwargs):
