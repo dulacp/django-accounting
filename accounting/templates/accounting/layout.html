@@ -40,11 +40,13 @@
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     {% url 'books:dashboard' as books_dashboard_url %}
+                    <li class="{% active request books_dashboard_url exact_match=True %}"><a href="{{ books_dashboard_url }}">Overview</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
                     {% url 'books:estimate-list' as books_estimate_list_url %}
                     {% url 'books:invoice-list' as books_invoice_list_url %}
                     {% url 'books:bill-list' as books_bill_list_url %}
                     {% url 'books:tax_rate-list' as books_tax_rate_list_url %}
-                    <li class="{% active request books_dashboard_url exact_match=True %}"><a href="{{ books_dashboard_url }}">Overview</a></li>
                     <li class="{% active request books_estimate_list_url exact_match=True %}"><a href="{{ books_estimate_list_url }}">Estimates</a></li>
                     <li class="{% active request books_invoice_list_url exact_match=True %}"><a href="{{ books_invoice_list_url }}">Invoices</a></li>
                     <li class="{% active request books_bill_list_url exact_match=True %}"><a href="{{ books_bill_list_url }}">Bills</a></li>
@@ -55,7 +57,10 @@
                     <li class="{% active request clients_client_list_url exact_match=True %}"><a href="{{ clients_client_list_url }}">Clients</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
-                    <li class="disabled"><a href="">Exports</a></li>
+                    {% url 'reports:report-list' as reports_report_list_url %}
+                    {% url 'reports:settings-list' as reports_settings_list_url %}
+                    <li class="{% active request reports_report_list_url exact_match=True %}"><a href="{{ reports_report_list_url }}">Reports</a></li>
+                    <li class="{% active request reports_settings_list_url exact_match=True %}"><a href="{{ reports_settings_list_url }}">Settings</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
                     <li class="disabled"><a href="">Reconciliation</a></li>

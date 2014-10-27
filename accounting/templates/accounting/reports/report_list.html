@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1 class="page-header">Reports <small>which belong to you</small></h1>
+
+    <div class="panel panel-default panel-link">
+        <div class="panel-heading">
+            <a href="#"><h3 class="panel-title">Tax Report</h3></a>
+        </div>
+        <div class="panel-body">
+            Prepare the tax report for your tax period (defined in the <a href="{% url 'reports:settings-financial' %}">financial settings</a>)
+        </div>
+    </div>
+{% endblock content %}

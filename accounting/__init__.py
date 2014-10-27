@@ -35,6 +35,7 @@ ACCOUNTING_APPS = (
     'accounting.libs',
     'accounting.apps.clients',
     'accounting.apps.books',
+    'accounting.apps.reports',
 
     # Third party apps that accounting depends on
     'djangobower',

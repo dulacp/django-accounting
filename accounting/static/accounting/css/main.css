@@ -33,14 +33,16 @@ body {
 .navbar-fixed-top {
   border: 0;
 }
-
+.navbar-inverse {
+  background: #222;
+}
 .nav .breadcrumb {
-    margin: 0 7px;
+  margin: 0 7px;
 }
 @media (min-width: 768px) {
-    .nav .breadcrumb {
-        margin: 7px 10px 7px 0px;
-    }
+  .nav .breadcrumb {
+    margin: 7px 10px 7px 0px;
+  }
 }
 
 /*
@@ -120,6 +122,18 @@ body {
 .placeholder img {
   display: inline-block;
   border-radius: 50%;
+}
+
+
+/*
+ * Panels
+ */
+.panel-link {
+  display: block;
+}
+.panel-link:hover {
+  background: #f0f0f0;
+  text-decoration: none;
 }
 
 
