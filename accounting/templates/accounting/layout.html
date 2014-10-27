@@ -17,7 +17,7 @@
                     <ul class="breadcrumb">
                         <li><a href="{{ books_organization_selector_url }}">Organizations</a></li>
                         {% if selected_organization %}
-                        <li><a href="{{ books_dashboard_url }}">{{ selected_organization }}</a></li>
+                        <li><a href="{{ books_dashboard_url }}">{{ selected_organization.display_name }}</a></li>
                         {% endif %}
                     </ul>
                 </div>
