@@ -43,34 +43,35 @@
 {% endif %}
 
 <h3 class="page-header">Content</h3>
-{% include "books/_partials/invoice_or_bill_content.html" with object=object %}
+{% include "books/_generics/sale_content.html" with object=object %}
 
 <hr>
 
+{% if payment_form %}
 <div class="panel panel-default">
     <div class="panel-heading">
         <h4>Payments</h4>
     </div>
 
-    {% include "books/_partials/payment_list.html" with payments=object.payments.all %}
+    {% include "books/_partials/payment_list.html" with payments=payments %}
 
     <div class="panel-footer">
         <form action="." method="post" class="form">
             {% csrf_token %}
 
-            {{ form.non_field_errors }}
+            {{ payment_form.non_field_errors }}
             <div class="row">
                 <div class="col-md-2">
-                    {% bootstrap_field form.date_paid show_label=False %}
+                    {% bootstrap_field payment_form.date_paid show_label=False %}
                 </div>
                 <div class="col-md-2">
-                    {% bootstrap_field form.reference show_label=False %}
+                    {% bootstrap_field payment_form.reference show_label=False %}
                 </div>
                 <div class="col-md-4">
-                    {% bootstrap_field form.detail show_label=False %}
+                    {% bootstrap_field payment_form.detail show_label=False %}
                 </div>
                 <div class="col-md-2">
-                    {% bootstrap_field form.amount show_label=False %}
+                    {% bootstrap_field payment_form.amount show_label=False %}
                 </div>
                 <div class="col-md-2 text-right">
                     <button type="submit" class="btn btn-success">Add payment</button>
@@ -79,5 +80,4 @@
         </form>
     </div>
 </div>
-
-
+{% endif %}

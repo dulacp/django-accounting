@@ -9,6 +9,6 @@
         </div>
     </h1>
 
-    {% include "books/_partials/invoice_or_bill_detail.html" with object=bill lines=lines form=form %}
+    {% include "books/_generics/sale_detail.html" with object=bill lines=lines payments=bill.payments.all form=form %}
 
 {% endblock content %}

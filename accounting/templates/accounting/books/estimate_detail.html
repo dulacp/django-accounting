@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1 class="page-header">
+        Estimate #{{ estimate.number }} <small>/ detail</small>
+        <div class="btn-group pull-right">
+            <a href="{% url 'books:estimate-edit' estimate.pk %}" class="btn btn-default" role="button">Edit</a>
+            <a href="{% url 'books:estimate-delete' estimate.pk %}" class="btn btn-danger" role="button">Supprimer</a>
+        </div>
+    </h1>
+
+    {% include "books/_generics/sale_detail.html" with object=estimate lines=lines form=form %}
+
+{% endblock content %}

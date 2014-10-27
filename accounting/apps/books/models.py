@@ -133,7 +133,7 @@ class TaxComponent(models.Model):
                                                  MaxValueValidator(D('1'))])
 
 
-class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
+class AbstractSale(CheckingModelMixin, models.Model):
     number = models.CharField(max_length=6,
                               default=next_invoice_number)
 
@@ -171,6 +171,12 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
 
     def __str__(self):
         return "#{} ({})".format(self.number, self.total_incl_tax)
+
+    def get_detail_url(self):
+        raise NotImplementedError
+
+    def get_edit_url(self):
+        raise NotImplementedError
 
     def compute_totals(self):
         self.total_excl_tax = self.get_total_excl_tax()
@@ -256,7 +262,7 @@ class AbstractInvoiceOrBill(CheckingModelMixin, models.Model):
         return check
 
 
-class AbstractInvoiceOrBillLine(models.Model):
+class AbstractSaleLine(models.Model):
     label = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     unit_price_excl_tax = models.DecimalField(max_digits=8,
@@ -294,7 +300,7 @@ class AbstractInvoiceOrBillLine(models.Model):
         raise NotImplementedError
 
 
-class Estimate(AbstractInvoiceOrBill):
+class Estimate(AbstractSale):
     organization = models.ForeignKey('books.Organization',
                                      related_name="estimates",
                                      verbose_name="From Organization")
@@ -307,6 +313,12 @@ class Estimate(AbstractInvoiceOrBill):
         unique_together = (("number", "organization"),)
         ordering = ('-date_issued', 'id')
 
+    def get_detail_url(self):
+        return reverse('books:estimate-detail', args=[self.pk])
+
+    def get_edit_url(self):
+        return reverse('books:estimate-edit', args=[self.pk])
+
     def from_client(self):
         return self.organization
 
@@ -314,7 +326,16 @@ class Estimate(AbstractInvoiceOrBill):
         return self.client
 
 
-class Invoice(AbstractInvoiceOrBill):
+class EstimateLine(AbstractSaleLine):
+    invoice = models.ForeignKey('books.Estimate',
+                                related_name="lines")
+    tax_rate = models.ForeignKey('books.TaxRate')
+
+    class Meta:
+        pass
+
+
+class Invoice(AbstractSale):
     organization = models.ForeignKey('books.Organization',
                                      related_name="invoices",
                                      verbose_name="From Organization")
@@ -328,6 +349,12 @@ class Invoice(AbstractInvoiceOrBill):
         unique_together = (("number", "organization"),)
         ordering = ('-date_issued', 'id')
 
+    def get_detail_url(self):
+        return reverse('books:invoice-detail', args=[self.pk])
+
+    def get_edit_url(self):
+        return reverse('books:invoice-edit', args=[self.pk])
+
     def from_client(self):
         return self.organization
 
@@ -335,7 +362,7 @@ class Invoice(AbstractInvoiceOrBill):
         return self.client
 
 
-class InvoiceLine(AbstractInvoiceOrBillLine):
+class InvoiceLine(AbstractSaleLine):
     invoice = models.ForeignKey('books.Invoice',
                                 related_name="lines")
     tax_rate = models.ForeignKey('books.TaxRate')
@@ -344,7 +371,7 @@ class InvoiceLine(AbstractInvoiceOrBillLine):
         pass
 
 
-class Bill(AbstractInvoiceOrBill):
+class Bill(AbstractSale):
     organization = models.ForeignKey('books.Organization',
                                      related_name="bills",
                                      verbose_name="To Organization")
@@ -358,6 +385,12 @@ class Bill(AbstractInvoiceOrBill):
         unique_together = (("number", "organization"),)
         ordering = ('-date_issued', 'id')
 
+    def get_detail_url(self):
+        return reverse('books:bill-detail', args=[self.pk])
+
+    def get_edit_url(self):
+        return reverse('books:bill-edit', args=[self.pk])
+
     def from_client(self):
         return self.client
 
@@ -365,7 +398,7 @@ class Bill(AbstractInvoiceOrBill):
         return self.organization
 
 
-class BillLine(AbstractInvoiceOrBillLine):
+class BillLine(AbstractSaleLine):
     bill = models.ForeignKey('books.Bill',
                              related_name="lines")
     tax_rate = models.ForeignKey('books.TaxRate')

@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% load currency_filters %}
+
+{% block content %}
+    <h1 class="page-header">Estimates <small>which belong to you</small></h1>
+
+    {% include "books/_generics/sale_list.html" with sales=estimates detailed=True %}
+
+    <a href="{% url 'books:estimate-create' %}" class="btn btn-primary btn-lg" role="button">
+        Add a estimate
+    </a>
+{% endblock content %}

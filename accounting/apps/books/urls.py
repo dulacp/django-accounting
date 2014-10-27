@@ -42,6 +42,23 @@ urlpatterns = patterns('',
         views.TaxRateDeleteView.as_view(),
         name="tax_rate-delete"),
 
+    # Estimates
+    url(r'^estimate/$',
+        views.EstimateListView.as_view(),
+        name="estimate-list"),
+    url(r'^estimate/create/$',
+        views.EstimateCreateView.as_view(),
+        name="estimate-create"),
+    url(r'^estimate/(?P<pk>\d+)/edit/$',
+        views.EstimateUpdateView.as_view(),
+        name="estimate-edit"),
+    url(r'^estimate/(?P<pk>\d+)/delete/$',
+        views.EstimateDeleteView.as_view(),
+        name="estimate-delete"),
+    url(r'^estimate/(?P<pk>\d+)/detail/$',
+        views.EstimateDetailView.as_view(),
+        name="estimate-detail"),
+
     # Invoices
     url(r'^invoice/$',
         views.InvoiceListView.as_view(),

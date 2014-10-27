@@ -10,8 +10,8 @@
         {% bootstrap_form form %}
 
         <h2 class="page-header">Content</h2>
-        {{ invoiceline_formset.management_form }}
-        {{ invoiceline_formset.non_field_errors }}
+        {{ line_formset.management_form }}
+        {{ line_formset.non_field_errors }}
         <table class="table table-striped table-bordered">
             <thead>
                 <th>#</th>
@@ -23,28 +23,28 @@
                 <th>Total</th>
             </thead>
             <tbody>
-            {% for invoiceline_form in invoiceline_formset %}
+            {% for line_form in line_formset %}
                 <tr class="formset-form">
                     <td class="col-md-0 counter">
                         {{ forloop.counter }}
-                        {{ invoiceline_form.id }}
+                        {{ line_form.id }}
                     </td>
                     <td class="col-md-2">
-                        {% bootstrap_field invoiceline_form.label show_label=False %}
+                        {% bootstrap_field line_form.label show_label=False %}
                     </td>
                     <td class="col-md-4">
-                        {% bootstrap_field invoiceline_form.description show_label=False %}
+                        {% bootstrap_field line_form.description show_label=False %}
                     </td>
                     <td class="col-md-2">
-                        {% bootstrap_field invoiceline_form.unit_price_excl_tax show_label=False %}
+                        {% bootstrap_field line_form.unit_price_excl_tax show_label=False %}
                     </td>
                     <td class="col-md-1">
-                        {% bootstrap_field invoiceline_form.quantity show_label=False %}
+                        {% bootstrap_field line_form.quantity show_label=False %}
                     </td>
                     <td class="col-md-1">
-                        {% bootstrap_field invoiceline_form.tax_rate show_label=False %}
+                        {% bootstrap_field line_form.tax_rate show_label=False %}
                     </td>
-                    <td>{{ invoiceline_form.DELETE }}</td>
+                    <td>{{ line_form.DELETE }}</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -5,6 +5,8 @@ from .models import (
     Organization,
     TaxRate,
     TaxComponent,
+    Estimate,
+    EstimateLine,
     Invoice,
     InvoiceLine,
     Bill,
@@ -74,6 +76,43 @@ class RestrictLineFormToOrganizationMixin(object):
                 raise NotImplementedError("The mixin has been applied to a "
                                           "form model that is not supported")
             self.fields['tax_rate'].queryset = organization.tax_rates.all()
+
+
+class EstimateForm(ModelForm):
+    class Meta:
+        model = Estimate
+        fields = (
+            "number",
+            "organization",
+            "client",
+
+            "draft",
+            "sent",
+            "paid",
+            "date_issued",
+            "date_dued",
+        )
+
+
+class EstimateLineForm(RestrictLineFormToOrganizationMixin,
+                      ModelForm):
+    class Meta:
+        model = EstimateLine
+        fields = (
+            "label",
+            "description",
+            "unit_price_excl_tax",
+            "quantity",
+            "tax_rate",
+        )
+
+
+EstimateLineFormSet = inlineformset_factory(Estimate,
+                                            EstimateLine,
+                                            form=EstimateLineForm,
+                                            formset=RequiredFirstInlineFormSet,
+                                            min_num=1,
+                                            extra=0)
 
 
 class InvoiceForm(ModelForm):

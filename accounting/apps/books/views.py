@@ -7,11 +7,16 @@ from django.http import HttpResponseRedirect
 
 from .mixins import (
     SelectedOrganizationMixin,
-    RestrictToSelectedOrganizationQuerySetMixin)
+    RestrictToSelectedOrganizationQuerySetMixin,
+    AbstractSaleCreateUpdateMixin,
+    AbstractSaleDetailMixin,
+    TaxRateCreateUpdateMixin,
+    PaymentFormMixin)
 from .models import (
     Organization,
     TaxRate,
     TaxComponent,
+    Estimate,
     Invoice,
     Bill,
     Payment)
@@ -19,6 +24,8 @@ from .forms import (
     OrganizationForm,
     TaxRateForm,
     TaxComponentFormSet,
+    EstimateForm,
+    EstimateLineFormSet,
     InvoiceForm,
     InvoiceLineFormSet,
     BillForm,
@@ -155,36 +162,11 @@ class TaxRateListView(SelectedOrganizationMixin,
     context_object_name = "tax_rates"
 
 
-class TaxRateCreateUpdateMixin(object):
-    formset_class = TaxComponentFormSet
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['tax_component_formset'] = (
-                self.formset_class(self.request.POST, instance=self.object))
-        else:
-            context['tax_component_formset'] = (
-                self.formset_class(instance=self.object))
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        tax_component_formset = context['tax_component_formset']
-        if not tax_component_formset.is_valid():
-            return super().form_invalid(form)
-
-        self.object = form.save()
-        tax_component_formset.instance = self.object
-        tax_component_formset.save()
-
-        return super().form_valid(form)
-
-
 class TaxRateCreateView(TaxRateCreateUpdateMixin, generic.CreateView):
     template_name = "books/tax_rate_create_or_update.html"
     model = TaxRate
     form_class = TaxRateForm
+    formset_class = TaxComponentFormSet
 
     def get_success_url(self):
         return reverse("books:tax_rate-list")
@@ -194,6 +176,7 @@ class TaxRateUpdateView(TaxRateCreateUpdateMixin, generic.UpdateView):
     template_name = "books/tax_rate_create_or_update.html"
     model = TaxRate
     form_class = TaxRateForm
+    formset_class = TaxComponentFormSet
 
     def get_success_url(self):
         return reverse("books:tax_rate-list")
@@ -203,39 +186,6 @@ class TaxRateDeleteView(generic.DeleteView):
     template_name = "_generics/delete_entity.html"
     model = TaxRate
     success_url = reverse_lazy('books:tax_rate-list')
-
-
-class PaymentFormMixin(generic.edit.FormMixin):
-    form_class = PaymentForm
-
-    def get_context_data(self, **kwargs):
-        self.object = self.get_object()
-        context = super().get_context_data(**kwargs)
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        context['form'] = form
-        return context
-
-    def post(self, request, *args, **kwargs):
-        """
-        Handles POST requests, instantiating a form instance with the passed
-        POST variables and then checked for validity.
-        """
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        self.object = self.get_object()
-
-        # save payment
-        payment = form.save(commit=False)
-        payment.content_object = self.object
-        payment.save()
-        return super().form_valid(form)
 
 
 class PaymentUpdateView(generic.UpdateView):
@@ -261,6 +211,52 @@ class PaymentDeleteView(generic.DeleteView):
     success_url = reverse_lazy('books:invoice-list')
 
 
+class EstimateListView(SelectedOrganizationMixin,
+                       RestrictToSelectedOrganizationQuerySetMixin,
+                       generic.ListView):
+    template_name = "books/estimate_list.html"
+    model = Estimate
+    context_object_name = "estimates"
+
+
+class EstimateCreateView(AbstractSaleCreateUpdateMixin,
+                         generic.CreateView):
+    template_name = "books/bill_create_or_update.html"
+    model = Estimate
+    form_class = EstimateForm
+    formset_class = EstimateLineFormSet
+
+    def get_success_url(self):
+        return reverse("books:estimate-list")
+
+
+class EstimateUpdateView(AbstractSaleCreateUpdateMixin,
+                         generic.UpdateView):
+    template_name = "books/estimate_create_or_update.html"
+    model = Estimate
+    form_class = EstimateForm
+    formset_class = EstimateLineFormSet
+
+    def get_success_url(self):
+        return reverse("books:estimate-list")
+
+
+class EstimateDeleteView(generic.DeleteView):
+    template_name = "_generics/delete_entity.html"
+    model = Estimate
+    success_url = reverse_lazy('books:estimate-list')
+
+
+class EstimateDetailView(AbstractSaleDetailMixin,
+                         generic.DetailView):
+    template_name = "books/estimate_detail.html"
+    model = Estimate
+    context_object_name = "estimate"
+
+    def get_success_url(self):
+        return reverse('books:estimate-detail', args=[self.object.pk])
+
+
 class InvoiceListView(SelectedOrganizationMixin,
                       RestrictToSelectedOrganizationQuerySetMixin,
                       generic.ListView):
@@ -269,48 +265,23 @@ class InvoiceListView(SelectedOrganizationMixin,
     context_object_name = "invoices"
 
 
-class InvoiceCreateUpdateMixin(object):
-    formset_class = InvoiceLineFormSet
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['invoiceline_formset'] = (
-                self.formset_class(self.request.POST, instance=self.object))
-        else:
-            context['invoiceline_formset'] = (
-                self.formset_class(instance=self.object))
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        invoiceline_formset = context['invoiceline_formset']
-        if not invoiceline_formset.is_valid():
-            return super().form_invalid(form)
-
-        self.object = form.save()
-        invoiceline_formset.instance = self.object
-        invoiceline_formset.save()
-
-        # update totals
-        self.object.compute_totals()
-
-        return super().form_valid(form)
-
-
-class InvoiceCreateView(InvoiceCreateUpdateMixin, generic.CreateView):
+class InvoiceCreateView(AbstractSaleCreateUpdateMixin,
+                        generic.CreateView):
     template_name = "books/invoice_create_or_update.html"
     model = Invoice
     form_class = InvoiceForm
+    formset_class = InvoiceLineFormSet
 
     def get_success_url(self):
         return reverse("books:invoice-list")
 
 
-class InvoiceUpdateView(InvoiceCreateUpdateMixin, generic.UpdateView):
+class InvoiceUpdateView(AbstractSaleCreateUpdateMixin,
+                        generic.UpdateView):
     template_name = "books/invoice_create_or_update.html"
     model = Invoice
     form_class = InvoiceForm
+    formset_class = InvoiceLineFormSet
 
     def get_success_url(self):
         return reverse("books:invoice-list")
@@ -322,45 +293,13 @@ class InvoiceDeleteView(generic.DeleteView):
     success_url = reverse_lazy('books:invoice-list')
 
 
-class InvoiceOrBillDetailMixin(object):
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = (queryset
-            .select_related(
-                'client',
-                'organization')
-            .prefetch_related(
-                'payments'))
-        return queryset
-
-    def get_object(self):
-        # save some db queries by caching the fetched object
-        if hasattr(self, '_object'):
-            return getattr(self, '_object')
-
-        obj = super().get_object()
-        setattr(self, '_object', obj)
-        return obj
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        obj = self.get_object()
-        ctx["checklist"] = obj.full_check()
-        ctx["lines"] = (obj.lines.all()
-            .select_related(
-                'tax_rate')
-            .prefetch_related(
-                'tax_rate__components'))
-        return ctx
-
-
 class InvoiceDetailView(PaymentFormMixin,
-                        InvoiceOrBillDetailMixin,
+                        AbstractSaleDetailMixin,
                         generic.DetailView):
     template_name = "books/invoice_detail.html"
     model = Invoice
     context_object_name = "invoice"
+    payment_form_class = PaymentForm
 
     def get_success_url(self):
         return reverse('books:invoice-detail', args=[self.object.pk])
@@ -374,48 +313,23 @@ class BillListView(SelectedOrganizationMixin,
     context_object_name = "bills"
 
 
-class BillCreateUpdateMixin(object):
-    formset_class = BillLineFormSet
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['billline_formset'] = (
-                self.formset_class(self.request.POST, instance=self.object))
-        else:
-            context['billline_formset'] = (
-                self.formset_class(instance=self.object))
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        billline_formset = context['billline_formset']
-        if not billline_formset.is_valid():
-            return super().form_invalid(form)
-
-        self.object = form.save()
-        billline_formset.instance = self.object
-        billline_formset.save()
-
-        # update totals
-        self.object.compute_totals()
-
-        return super().form_valid(form)
-
-
-class BillCreateView(BillCreateUpdateMixin, generic.CreateView):
+class BillCreateView(AbstractSaleCreateUpdateMixin,
+                     generic.CreateView):
     template_name = "books/bill_create_or_update.html"
     model = Bill
     form_class = BillForm
+    formset_class = BillLineFormSet
 
     def get_success_url(self):
         return reverse("books:bill-list")
 
 
-class BillUpdateView(BillCreateUpdateMixin, generic.UpdateView):
+class BillUpdateView(AbstractSaleCreateUpdateMixin,
+                     generic.UpdateView):
     template_name = "books/bill_create_or_update.html"
     model = Bill
     form_class = BillForm
+    formset_class = BillLineFormSet
 
     def get_success_url(self):
         return reverse("books:bill-list")
@@ -428,11 +342,12 @@ class BillDeleteView(generic.DeleteView):
 
 
 class BillDetailView(PaymentFormMixin,
-                     InvoiceOrBillDetailMixin,
+                     AbstractSaleDetailMixin,
                      generic.DetailView):
     template_name = "books/bill_detail.html"
     model = Bill
     context_object_name = "bill"
+    payment_form_class = PaymentForm
 
     def get_success_url(self):
         return reverse('books:bill-detail', args=[self.object.pk])

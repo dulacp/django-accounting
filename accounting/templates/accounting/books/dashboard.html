@@ -43,7 +43,7 @@
                 </div>
                 <div class="panel-body">
                 </div>
-                {% include "books/_partials/invoice_list.html" with invoices=invoices hide_edit=True %}
+                {% include "books/_generics/sale_list.html" with sales=invoices hide_edit=True %}
             </div>
         </div>
         <div class="col-xs-12 col-sm-6">
@@ -56,7 +56,7 @@
                         </a>
                     </div>
                 </div>
-                {% include "books/_partials/bill_list.html" with bills=bills hide_edit=True %}
+                {% include "books/_generics/sale_list.html" with sales=bills hide_edit=True %}
             </div>
         </div>
     </div>

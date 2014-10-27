@@ -26,6 +26,21 @@ class PaymentInline(GenericTabularInline):
     extra = 1
 
 
+class EstimateLineInline(admin.TabularInline):
+    model = models.EstimateLine
+    extra = 1
+
+
+@admin.register(models.Estimate)
+class EstimateAdmin(admin.ModelAdmin):
+    inlines = (
+        EstimateLineInline,
+    )
+    readonly = (
+        'total_incl_tax', 'total_excl_tax',
+    )
+
+
 class InvoiceLineInline(admin.TabularInline):
     model = models.InvoiceLine
     extra = 1

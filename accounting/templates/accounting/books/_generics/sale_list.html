@@ -13,18 +13,18 @@
         </tr>
     </thead>
     <tbody>
-        {% for bill in bills %}
-        <tr class="row {{ bill|status_to_css_classname }}">
-            <td>{{ bill.number }}</td>
-            <td>{{ bill.client }}</td>
+        {% for sale in sales %}
+        <tr class="row {{ sale|status_to_css_classname }}">
+            <td>{{ sale.number }}</td>
+            <td>{{ sale.client }}</td>
             {% if detailed %}
-            <td>{{ bill.description }}</td>
+            <td>{{ sale.description }}</td>
             {% endif %}
-            <td class="col-sm-2">{{ bill.total_excl_tax|currency }}</td>
+            <td class="col-sm-2">{{ sale.total_excl_tax|currency }}</td>
             <td class="text-right col-sm-4">
-                <a href="{% url 'books:bill-detail' bill.pk %}" class="btn btn-success btn-sm" role="button">View</a>
+                <a href="{{ sale.get_detail_url }}" class="btn btn-success btn-sm" role="button">View</a>
                 {% if not hide_edit %}
-                <a href="{% url 'books:bill-edit' bill.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
+                <a href="{{ sale.get_edit_url }}" class="btn btn-default btn-sm" role="button">Edit</a>
                 {% endif %}
             </td>
         </tr>
