@@ -18,7 +18,10 @@ from accounting.libs.checks import (
     CheckingModelMixin,
     CheckingModelOptions)
 from accounting.libs.templatetags.currency_filters import currency_formatter
-from .managers import InvoiceQuerySet, BillQuerySet
+from .managers import (
+    EstimateQuerySet,
+    InvoiceQuerySet,
+    BillQuerySet)
 from .utils import next_invoice_number
 
 
@@ -289,6 +292,26 @@ class AbstractInvoiceOrBillLine(models.Model):
 
     def to_client(self):
         raise NotImplementedError
+
+
+class Estimate(AbstractInvoiceOrBill):
+    organization = models.ForeignKey('books.Organization',
+                                     related_name="estimates",
+                                     verbose_name="From Organization")
+    client = models.ForeignKey('clients.Client',
+                               verbose_name="To Client")
+
+    objects = EstimateQuerySet.as_manager()
+
+    class Meta:
+        unique_together = (("number", "organization"),)
+        ordering = ('-date_issued', 'id')
+
+    def from_client(self):
+        return self.organization
+
+    def to_client(self):
+        return self.client
 
 
 class Invoice(AbstractInvoiceOrBill):

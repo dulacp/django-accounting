@@ -4,14 +4,7 @@ from django.db import models
 from django.db.models import Sum
 
 
-class InvoiceQuerySetMixin(object):
-    def draft(self):
-        return self.filter(draft=True)
-
-    def dued(self):
-        return self.filter(date_issued__lte=date.today(),
-                           draft=False,
-                           paid=False)
+class TotalQuerySetMixin(object):
 
     def _get_total(self, prop):
         return self.aggregate(sum=Sum(prop))["sum"]
@@ -20,7 +13,24 @@ class InvoiceQuerySetMixin(object):
         return self._get_total('payments__amount')
 
 
-class InvoiceQuerySet(InvoiceQuerySetMixin, models.QuerySet):
+class InvoiceQuerySetMixin(object):
+
+    def draft(self):
+        return self.filter(draft=True)
+
+    def dued(self):
+        return self.filter(date_issued__lte=date.today(),
+                           draft=False,
+                           paid=False)
+
+
+class EstimateQuerySet(TotalQuerySetMixin, models.QuerySet):
+    pass
+
+
+class InvoiceQuerySet(TotalQuerySetMixin,
+                      InvoiceQuerySetMixin,
+                      models.QuerySet):
 
     def turnover_excl_tax(self):
         return self._get_total('total_excl_tax')
@@ -29,7 +39,9 @@ class InvoiceQuerySet(InvoiceQuerySetMixin, models.QuerySet):
         return self._get_total('total_incl_tax')
 
 
-class BillQuerySet(InvoiceQuerySetMixin, models.QuerySet):
+class BillQuerySet(TotalQuerySetMixin,
+                   InvoiceQuerySetMixin,
+                   models.QuerySet):
 
     def debts_excl_tax(self):
         return self._get_total('total_excl_tax')
