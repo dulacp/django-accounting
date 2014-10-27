@@ -42,5 +42,11 @@ ACCOUNTING_APPS = (
 )
 
 
+ACCOUNTING_MIDDLEWARE_CLASSES = (
+    'accounting.apps.context_processors.metadata',
+    'accounting.apps.books.context_processors.organizations',
+)
+
+
 def get_apps():
     return ACCOUNTING_APPS

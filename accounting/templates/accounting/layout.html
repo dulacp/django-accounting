@@ -11,13 +11,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Accounting {{ display_version }}</a>
+                {% url 'books:organization-selector' as books_organization_selector_url %}
+                {% url 'books:dashboard' as books_dashboard_url %}
+                <div class="nav navbar-nav">
+                    <ul class="breadcrumb">
+                        <li><a href="{{ books_organization_selector_url }}">Organizations</a></li>
+                        {% if selected_organization %}
+                        <li><a href="{{ books_dashboard_url }}">{{ selected_organization }}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{% url 'books:dashboard' %}">Dashboard</a></li>
-                    <li><a href="#">Settings</a></li>
-                    <li><a href="#">Help</a></li>
+                    <li><a href="#">Accounting {{ display_version }}</a></li>
                 </ul>
                 <form class="navbar-form navbar-right">
                     <input type="text" class="form-control" placeholder="Search...">
@@ -31,10 +38,6 @@
         <div class="row">
             {% block sidebar %}
             <div class="col-sm-3 col-md-2 sidebar">
-                <ul class="nav nav-sidebar">
-                    {% url 'books:organization-selector' as books_organization_selector_url %}
-                    <li class="{% active request books_organization_selector_url exact_match=True %}"><a href="{{ books_organization_selector_url }}">Organizations</a></li>
-                </ul>
                 <ul class="nav nav-sidebar">
                     {% url 'books:dashboard' as books_dashboard_url %}
                     {% url 'books:estimate-list' as books_estimate_list_url %}

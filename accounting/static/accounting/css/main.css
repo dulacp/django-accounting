@@ -34,6 +34,15 @@ body {
   border: 0;
 }
 
+.nav .breadcrumb {
+    margin: 0 7px;
+}
+@media (min-width: 768px) {
+    .nav .breadcrumb {
+        margin: 7px 10px 7px 0px;
+    }
+}
+
 /*
  * Sidebar
  */

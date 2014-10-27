@@ -6,7 +6,6 @@ from django.db.models import Sum
 from django.http import HttpResponseRedirect
 
 from .mixins import (
-    SelectedOrganizationMixin,
     RestrictToSelectedOrganizationQuerySetMixin,
     AbstractSaleCreateUpdateMixin,
     AbstractSaleDetailMixin,
@@ -31,6 +30,7 @@ from .forms import (
     BillForm,
     BillLineFormSet,
     PaymentForm)
+from .utils import organization_manager
 
 logger = logging.getLogger(__name__)
 
@@ -59,14 +59,13 @@ class OrganizationSelectorView(generic.TemplateView):
         return context
 
 
-class DashboardView(SelectedOrganizationMixin,
-                    generic.DetailView):
+class DashboardView(generic.DetailView):
     template_name = "books/dashboard.html"
     model = Organization
     context_object_name = "organization"
 
     def get_object(self):
-        return self.get_selected_organization()
+        return organization_manager.get_selected_organization(self.request)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -92,7 +91,8 @@ class DashboardView(SelectedOrganizationMixin,
         return ctx
 
     def get(self, request, *args, **kwargs):
-        if self.get_selected_organization() is None:
+        orga = organization_manager.get_selected_organization(self.request)
+        if orga is None:
             return HttpResponseRedirect(reverse('books:organization-selector'))
         return super().get(request, *args, **kwargs)
 
@@ -126,8 +126,7 @@ class OrganizationUpdateView(generic.UpdateView):
         return reverse("books:organization-list")
 
 
-class OrganizationDetailView(SelectedOrganizationMixin,
-                             generic.DetailView):
+class OrganizationDetailView(generic.DetailView):
     template_name = "books/organization_detail.html"
     model = Organization
     context_object_name = "organization"
@@ -144,18 +143,16 @@ class OrganizationDetailView(SelectedOrganizationMixin,
         return ctx
 
 
-class OrganizationSelectionView(SelectedOrganizationMixin,
-                                generic.DetailView):
+class OrganizationSelectionView(generic.DetailView):
     model = Organization
 
     def post(self, request, *args, **kwargs):
         orga = self.get_object()
-        self.set_selected_organization(orga)
+        organization_manager.set_selected_organization(self.request, orga)
         return HttpResponseRedirect(reverse('books:dashboard'))
 
 
-class TaxRateListView(SelectedOrganizationMixin,
-                      RestrictToSelectedOrganizationQuerySetMixin,
+class TaxRateListView(RestrictToSelectedOrganizationQuerySetMixin,
                       generic.ListView):
     template_name = "books/tax_rate_list.html"
     model = TaxRate
@@ -211,8 +208,7 @@ class PaymentDeleteView(generic.DeleteView):
     success_url = reverse_lazy('books:invoice-list')
 
 
-class EstimateListView(SelectedOrganizationMixin,
-                       RestrictToSelectedOrganizationQuerySetMixin,
+class EstimateListView(RestrictToSelectedOrganizationQuerySetMixin,
                        generic.ListView):
     template_name = "books/estimate_list.html"
     model = Estimate
@@ -257,8 +253,7 @@ class EstimateDetailView(AbstractSaleDetailMixin,
         return reverse('books:estimate-detail', args=[self.object.pk])
 
 
-class InvoiceListView(SelectedOrganizationMixin,
-                      RestrictToSelectedOrganizationQuerySetMixin,
+class InvoiceListView(RestrictToSelectedOrganizationQuerySetMixin,
                       generic.ListView):
     template_name = "books/invoice_list.html"
     model = Invoice
@@ -305,8 +300,7 @@ class InvoiceDetailView(PaymentFormMixin,
         return reverse('books:invoice-detail', args=[self.object.pk])
 
 
-class BillListView(SelectedOrganizationMixin,
-                   RestrictToSelectedOrganizationQuerySetMixin,
+class BillListView(RestrictToSelectedOrganizationQuerySetMixin,
                    generic.ListView):
     template_name = "books/bill_list.html"
     model = Bill
