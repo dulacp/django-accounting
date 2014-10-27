@@ -26,6 +26,26 @@ class RestrictToSelectedOrganizationQuerySetMixin(object):
         return queryset
 
 
+class SaleListQuerySetMixin(object):
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = (queryset
+            .select_related(
+                'client',
+                'organization')
+            .prefetch_related(
+                'lines',
+                'lines__tax_rate',
+                'lines__tax_rate__components'))
+        try:
+            payments_field = self.model._meta.get_field_by_name('payments')
+            queryset = queryset.prefetch_related('payments')
+        except FieldDoesNotExist:
+            pass
+        return queryset
+
+
 class AbstractSaleCreateUpdateMixin(object):
     formset_class = None
 

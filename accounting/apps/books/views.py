@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect
 
 from .mixins import (
     RestrictToSelectedOrganizationQuerySetMixin,
+    SaleListQuerySetMixin,
     AbstractSaleCreateUpdateMixin,
     AbstractSaleDetailMixin,
     TaxRateCreateUpdateMixin,
@@ -209,6 +210,7 @@ class PaymentDeleteView(generic.DeleteView):
 
 
 class EstimateListView(RestrictToSelectedOrganizationQuerySetMixin,
+                       SaleListQuerySetMixin,
                        generic.ListView):
     template_name = "books/estimate_list.html"
     model = Estimate
@@ -254,6 +256,7 @@ class EstimateDetailView(AbstractSaleDetailMixin,
 
 
 class InvoiceListView(RestrictToSelectedOrganizationQuerySetMixin,
+                      SaleListQuerySetMixin,
                       generic.ListView):
     template_name = "books/invoice_list.html"
     model = Invoice
@@ -301,6 +304,7 @@ class InvoiceDetailView(PaymentFormMixin,
 
 
 class BillListView(RestrictToSelectedOrganizationQuerySetMixin,
+                   SaleListQuerySetMixin,
                    generic.ListView):
     template_name = "books/bill_list.html"
     model = Bill
