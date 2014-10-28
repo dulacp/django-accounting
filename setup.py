@@ -37,6 +37,8 @@ setup(name='django-accounting',
           'django-classy-tags==0.5.1',
           # Internationalization
           'Babel>=1.0,<1.4',
+          # Date utilities
+          'python-dateutil>=2.2,<2.3',
       ],
       # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
