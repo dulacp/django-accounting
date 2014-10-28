@@ -105,33 +105,16 @@ class TaxRate(models.Model):
                                      verbose_name="Attached to Organization")
 
     name = models.CharField(max_length=50)
+    rate = models.DecimalField(max_digits=6,
+                               decimal_places=5,
+                               validators=[MinValueValidator(D('0')),
+                                           MaxValueValidator(D('1'))])
 
     class Meta:
         pass
 
     def __str__(self):
         return "{} ({})".format(self.name, percentage_formatter(self.rate))
-
-    @property
-    def rate(self):
-        r = D('0.000')
-        for c in self.components.all():
-            r += c.percentage
-        return r
-
-
-class TaxComponent(models.Model):
-    """
-    See the `TaxRate` class for an explanation
-    """
-    tax_rate = models.ForeignKey('books.TaxRate',
-                                 related_name="components")
-
-    name = models.CharField(max_length=50)
-    percentage = models.DecimalField(max_digits=6,
-                                     decimal_places=5,
-                                     validators=[MinValueValidator(D('0')),
-                                                 MaxValueValidator(D('1'))])
 
 
 class AbstractSale(CheckingModelMixin, models.Model):

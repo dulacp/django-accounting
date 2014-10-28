@@ -10,12 +10,10 @@ from .mixins import (
     SaleListQuerySetMixin,
     AbstractSaleCreateUpdateMixin,
     AbstractSaleDetailMixin,
-    TaxRateCreateUpdateMixin,
     PaymentFormMixin)
 from .models import (
     Organization,
     TaxRate,
-    TaxComponent,
     Estimate,
     Invoice,
     Bill,
@@ -23,7 +21,6 @@ from .models import (
 from .forms import (
     OrganizationForm,
     TaxRateForm,
-    TaxComponentFormSet,
     EstimateForm,
     EstimateLineFormSet,
     InvoiceForm,
@@ -78,7 +75,6 @@ class DashboardView(generic.DetailView):
             .prefetch_related(
                 'lines',
                 'lines__tax_rate',
-                'lines__tax_rate__components',
                 'payments'))
         ctx['bills'] = (organization.bills.all()
             .select_related(
@@ -87,7 +83,6 @@ class DashboardView(generic.DetailView):
             .prefetch_related(
                 'lines',
                 'lines__tax_rate',
-                'lines__tax_rate__components',
                 'payments'))
         return ctx
 
@@ -160,21 +155,19 @@ class TaxRateListView(RestrictToSelectedOrganizationQuerySetMixin,
     context_object_name = "tax_rates"
 
 
-class TaxRateCreateView(TaxRateCreateUpdateMixin, generic.CreateView):
+class TaxRateCreateView(generic.CreateView):
     template_name = "books/tax_rate_create_or_update.html"
     model = TaxRate
     form_class = TaxRateForm
-    formset_class = TaxComponentFormSet
 
     def get_success_url(self):
         return reverse("books:tax_rate-list")
 
 
-class TaxRateUpdateView(TaxRateCreateUpdateMixin, generic.UpdateView):
+class TaxRateUpdateView(generic.UpdateView):
     template_name = "books/tax_rate_create_or_update.html"
     model = TaxRate
     form_class = TaxRateForm
-    formset_class = TaxComponentFormSet
 
     def get_success_url(self):
         return reverse("books:tax_rate-list")

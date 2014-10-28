@@ -36,8 +36,7 @@ class SaleListQuerySetMixin(object):
                 'organization')
             .prefetch_related(
                 'lines',
-                'lines__tax_rate',
-                'lines__tax_rate__components'))
+                'lines__tax_rate'))
         try:
             payments_field = self.model._meta.get_field_by_name('payments')
             queryset = queryset.prefetch_related('payments')
@@ -101,37 +100,8 @@ class AbstractSaleDetailMixin(object):
         ctx["checklist"] = obj.full_check()
         ctx["lines"] = (obj.lines.all()
             .select_related(
-                'tax_rate')
-            .prefetch_related(
-                'tax_rate__components'))
+                'tax_rate'))
         return ctx
-
-
-class TaxRateCreateUpdateMixin(object):
-    formset_class = None
-
-    def get_context_data(self, **kwargs):
-        assert self.formset_class is not None, "No formset class specified"
-        context = super().get_context_data(**kwargs)
-        if self.request.POST:
-            context['tax_component_formset'] = (
-                self.formset_class(self.request.POST, instance=self.object))
-        else:
-            context['tax_component_formset'] = (
-                self.formset_class(instance=self.object))
-        return context
-
-    def form_valid(self, form):
-        context = self.get_context_data()
-        tax_component_formset = context['tax_component_formset']
-        if not tax_component_formset.is_valid():
-            return super().form_invalid(form)
-
-        self.object = form.save()
-        tax_component_formset.instance = self.object
-        tax_component_formset.save()
-
-        return super().form_valid(form)
 
 
 class PaymentFormMixin(generic.edit.FormMixin):

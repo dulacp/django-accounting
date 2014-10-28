@@ -4,7 +4,6 @@ from django.forms.models import inlineformset_factory
 from .models import (
     Organization,
     TaxRate,
-    TaxComponent,
     Estimate,
     EstimateLine,
     Invoice,
@@ -43,23 +42,6 @@ class TaxRateForm(ModelForm):
             "name",
             "organization",
         )
-
-
-class TaxComponentForm(ModelForm):
-    class Meta:
-        model = TaxComponent
-        fields = (
-            "name",
-            "percentage",
-        )
-
-
-TaxComponentFormSet = inlineformset_factory(TaxRate,
-                                            TaxComponent,
-                                            form=TaxComponentForm,
-                                            formset=RequiredFirstInlineFormSet,
-                                            min_num=1,
-                                            extra=0)
 
 
 class RestrictLineFormToOrganizationMixin(object):

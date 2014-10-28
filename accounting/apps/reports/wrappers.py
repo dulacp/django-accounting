@@ -72,11 +72,9 @@ class TaxReport(BaseReport):
         sales_queryset = (sales_queryset.filter(organization=self.organization)
             .filter(payments__date_paid__gte=self.period.start)
             .filter(payments__date_paid__lte=self.period.end)
-            .select_related(
-                'lines__tax_rate')
             .prefetch_related(
                 'lines',
-                'lines__tax_rate__components',
+                'lines__tax_rate',
                 'payments')
             .distinct())
 
