@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% load currency_filters %}
+
+{% block content %}
+    <h1 class="page-header">Profit and Loss <small>how ur doin'?</small></h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                {% for key_date in summaries.keys %}
+                <th class="text-right">{{ key_date|date:"b" }}</th>
+                {% endfor %}
+                <th class="text-right">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td colspan="{{ summaries.keys|length|add:'2' }}">&nbsp;</td></tr>
+            <tr>
+                <td colspan="{{ summaries.keys|length|add:'2' }}"><strong>Income</strong></td>
+            </tr>
+            <tr class="text-right">
+                <td></td>
+                {% for summary in summaries.values %}
+                <td>{{ summary.sales_amount|currency }}</td>
+                {% endfor %}
+                <td>{{ total_summary.sales_amount|currency }}</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr><td colspan="{{ summaries.keys|length|add:'2' }}">&nbsp;</td></tr>
+            <tr>
+                <td colspan="{{ summaries.keys|length|add:'2' }}"><strong>Expenses</strong></td>
+            </tr>
+            <tr class="text-right">
+                <td></td>
+                {% for summary in summaries.values %}
+                <td>{{ summary.expenses_amount|currency }}</td>
+                {% endfor %}
+                <td>{{ total_summary.expenses_amount|currency }}</td>
+            </tr>
+        </tbody>
+        <tbody>
+            <tr><td colspan="{{ summaries.keys|length|add:'2' }}">&nbsp;</td></tr>
+            <tr>
+                <td colspan="{{ summaries.keys|length|add:'2' }}"><strong>Net Profit</strong></td>
+            </tr>
+            <tr class="text-right">
+                <td></td>
+                {% for summary in summaries.values %}
+                <td>{{ summary.net_profit|currency }}</td>
+                {% endfor %}
+                <td>{{ total_summary.net_profit|currency }}</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock content %}

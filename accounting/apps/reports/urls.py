@@ -12,6 +12,9 @@ urlpatterns = patterns('',
     url(r'^report/tax/$',
         views.TaxReportView.as_view(),
         name="tax-report"),
+    url(r'^report/profitloss/$',
+        views.ProfitAndLossReportView.as_view(),
+        name="profit-and-loss-report"),
 
     # Settings
     url(r'^settings/$',

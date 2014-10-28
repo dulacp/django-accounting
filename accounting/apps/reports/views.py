@@ -2,11 +2,14 @@ from datetime import date
 
 from django.views import generic
 from django.core.urlresolvers import reverse
+from django.utils import timezone
+
+from dateutil.relativedelta import relativedelta
 
 from accounting.apps.books.utils import organization_manager
 from .models import FinancialSettings
 from .forms import FinancialSettingsForm
-from .wrappers import TaxReport
+from .wrappers import TaxReport, ProfitAndLossReport
 
 
 class ReportListView(generic.TemplateView):
@@ -45,5 +48,23 @@ class TaxReportView(generic.TemplateView):
                            end=date(2014, 12, 1))
         report.generate()
         ctx['tax_summaries'] = report.tax_summaries.values()
-        # ctx['report'] = TaxReport(start=None, end=None)
+        return ctx
+
+
+class ProfitAndLossReportView(generic.TemplateView):
+    template_name = "reports/profit_and_loss_report.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        orga = organization_manager.get_selected_organization(self.request)
+
+        # currrent quarter
+        now = timezone.now()
+        start = date(year=now.year, month=(now.month - ((now.month-1) % 3)), day=1)
+        end = start + relativedelta(months=3)
+
+        report = ProfitAndLossReport(orga, start=start, end=end)
+        report.generate()
+        ctx['summaries'] = report.summaries
+        ctx['total_summary'] = report.total_summary
         return ctx

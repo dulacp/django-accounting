@@ -1,6 +1,8 @@
 from datetime import date
 from decimal import Decimal as D
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
+
+from dateutil.relativedelta import relativedelta
 
 from accounting.apps.books.models import Invoice, Bill
 from accounting.libs import prices
@@ -80,6 +82,10 @@ class TaxReport(BaseReport):
 
         for sale in sales_queryset:
             for pay in sale.payments.all():
+
+                # NB: even with the queryset filters we can still get payments
+                #     outside the period interval [start, end], because
+                #     `self.payements.all()` is uncorrelated with the filters
                 if pay.date_paid < self.period.start:
                     continue
                 if pay.date_paid > self.period.end:
@@ -103,3 +109,108 @@ class TaxReport(BaseReport):
                     else:
                         raise ValueError("Unsupported type of sale {}"
                             .format(sale.__class__))
+
+
+class ProfitAndLossSummary(object):
+    grouping_date = None
+    sales_amount = D('0')
+    expenses_amount = D('0')
+
+    @property
+    def net_profit(self):
+        return self.sales_amount - self.expenses_amount
+
+
+class ProfitAndLossReport(BaseReport):
+    # TODO implement 'Billed (Accrual) / Collected (Cash based)'
+    organization = None
+    summaries = None
+    total_summary = None
+
+    RESOLUTION_MONTHLY = 'monthly'
+    RESOLUTION_CHOICES = (
+        RESOLUTION_MONTHLY,
+    )
+    group_by_resolution = RESOLUTION_MONTHLY
+
+    def __init__(self, organization, start, end):
+        super().__init__("Profit and Loss", start, end)
+        self.organization = organization
+        self.summaries = {}
+        steps_interval = relativedelta(end, start)
+
+        assert(self.group_by_resolution in self.RESOLUTION_CHOICES,
+            "No a resolution choice")
+        if self.group_by_resolution == self.RESOLUTION_MONTHLY:
+            for step in range(0, steps_interval.months):
+                key_date = start + relativedelta(months=step)
+                self.summaries[key_date] = ProfitAndLossSummary()
+        else:
+            raise ValueError("Unsupported resolution {}"
+                .format(self.group_by_resolution))
+
+        self.total_summary = ProfitAndLossSummary()
+
+    def group_by_date(self, date):
+        if self.group_by_resolution == self.RESOLUTION_MONTHLY:
+            grouping_date = date.replace(day=1)
+        else:
+            raise ValueError("Unsupported resolution {}"
+                .format(self.group_by_resolution))
+        return grouping_date
+
+    def generate(self):
+        invoice_queryset = Invoice.objects.all()
+        bill_queryset = Bill.objects.all()
+        self.generate_for_sales(invoice_queryset)
+        self.generate_for_sales(bill_queryset)
+
+        # order the results
+        self.summaries = OrderedDict(sorted(self.summaries.items()))
+
+        # compute totals
+        for summary in self.summaries.values():
+            self.total_summary.sales_amount += summary.sales_amount
+            self.total_summary.expenses_amount += summary.expenses_amount
+
+    def generate_for_sales(self, sales_queryset):
+        # optimize the queryset
+        sales_queryset = (sales_queryset.filter(organization=self.organization)
+            .filter(payments__date_paid__gte=self.period.start)
+            .filter(payments__date_paid__lte=self.period.end)
+            .prefetch_related(
+                'lines',
+                'lines__tax_rate',
+                'payments')
+            .distinct())
+
+        for sale in sales_queryset:
+            for pay in sale.payments.all():
+
+                # NB: even with the queryset filters we can still get payments
+                #     outside the period interval [start, end], because
+                #     `self.payements.all()` is uncorrelated with the filters
+                if pay.date_paid < self.period.start:
+                    continue
+                if pay.date_paid > self.period.end:
+                    continue
+
+                amount_excl_tax = D('0')
+                for line in sale.lines.all():
+                    tax_rate = line.tax_rate
+                    line_factor = line.line_price_incl_tax / sale.total_incl_tax
+                    portion_line_amount = pay.amount * line_factor
+                    portion_amount_excl_tax = portion_line_amount / (D('1') + tax_rate.rate)
+
+                    amount_excl_tax += portion_amount_excl_tax
+
+                key_date = self.group_by_date(pay.date_paid)
+                summary = self.summaries[key_date]
+
+                if isinstance(sale, Invoice):
+                    summary.sales_amount += amount_excl_tax
+                elif isinstance(sale, Bill):
+                    summary.expenses_amount += amount_excl_tax
+                else:
+                    raise ValueError("Unsupported type of sale {}"
+                        .format(sale.__class__))
