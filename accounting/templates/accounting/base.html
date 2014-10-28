@@ -17,7 +17,10 @@
 
         <style>
             @import url(http://fonts.googleapis.com/css?family=Bree+Serif);
-            body, h1, h2, h3, h4, h5, h6{
+            body {
+                font-family: 'Helvetica Neue', sans-serif;
+            }
+            h1, h2, h3, h4, h5, h6{
                 font-family: 'Bree Serif', serif;
             }
         </style>
@@ -43,6 +46,7 @@
         {% block scripts %}
             <script src="{% static 'jquery/dist/jquery.js' %}"></script>
             <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
+            <script src="{% static 'accounting/js/main.js' %}"></script>
         {% endblock %}
     </body>
 </html>

@@ -1,9 +1,12 @@
+from datetime import date
+
 from django.views import generic
 from django.core.urlresolvers import reverse
 
 from accounting.apps.books.utils import organization_manager
 from .models import FinancialSettings
 from .forms import FinancialSettingsForm
+from .wrappers import TaxReport
 
 
 class ReportListView(generic.TemplateView):
@@ -29,3 +32,18 @@ class FinancialSettingsUpdateView(generic.UpdateView):
 
     def get_success_url(self):
         return reverse("reports:settings-list")
+
+
+class TaxReportView(generic.TemplateView):
+    template_name = "reports/tax_report.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        orga = organization_manager.get_selected_organization(self.request)
+        report = TaxReport(orga,
+                           start=date(2014, 1, 1),
+                           end=date(2014, 12, 1))
+        report.generate()
+        ctx['tax_summaries'] = report.tax_summaries.values()
+        # ctx['report'] = TaxReport(start=None, end=None)
+        return ctx

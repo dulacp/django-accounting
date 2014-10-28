@@ -10,8 +10,8 @@ from babel.numbers import format_percent
 register = template.Library()
 
 
-@register.filter
-def percentage(value):
+@register.filter('percentage')
+def percentage_formatter(value):
     if value or value == 0:
         kwargs = {
             'locale': to_locale(get_language()),

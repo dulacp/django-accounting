@@ -71,6 +71,8 @@ body {
 
 /* Sidebar navigation */
 .nav-sidebar {
+  font-weight: 500;
+
   margin-right: -21px; /* 20px padding + 1px border */
   margin-bottom: 20px;
   margin-left: -20px;

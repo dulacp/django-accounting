@@ -18,6 +18,7 @@ from accounting.libs.checks import (
     CheckingModelMixin,
     CheckingModelOptions)
 from accounting.libs.templatetags.currency_filters import currency_formatter
+from accounting.libs.templatetags.format_filters import percentage_formatter
 from .managers import (
     EstimateQuerySet,
     InvoiceQuerySet,
@@ -109,7 +110,7 @@ class TaxRate(models.Model):
         pass
 
     def __str__(self):
-        return self.name
+        return "{} ({})".format(self.name, percentage_formatter(self.rate))
 
     @property
     def rate(self):
