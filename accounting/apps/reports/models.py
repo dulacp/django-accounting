@@ -41,3 +41,26 @@ class FinancialSettings(models.Model):
 
     class Meta:
         pass
+
+
+class PayRunSettings(models.Model):
+    salaries_follow_profits = models.BooleanField(default=False)
+
+    PAYRUN_MONTHLY =   'monthly'      # 1 month
+    # PAYRUN_QUARTER =   'quarter'      # 3 months
+    PAYRUN_CHOICES = (
+        (PAYRUN_MONTHLY,   "monthly"),
+    )
+    payrun_period = models.CharField("Payrun Period",
+                                     max_length=20,
+                                     choices=PAYRUN_CHOICES,
+                                     default=PAYRUN_MONTHLY)
+
+    # optionnaly linked to an organization
+    # for automated behaviors during cross-organizations invoicing
+    organization = models.OneToOneField('books.Organization',
+                                        related_name="payrun_settings",
+                                        blank=True, null=True)
+
+    class Meta:
+        pass

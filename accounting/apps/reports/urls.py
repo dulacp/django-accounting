@@ -23,4 +23,7 @@ urlpatterns = patterns('',
     url(r'^settings/financial/$',
         views.FinancialSettingsUpdateView.as_view(),
         name="settings-financial"),
+    url(r'^settings/payrun/$',
+        views.PayRunSettingsUpdateView.as_view(),
+        name="settings-payrun"),
 )

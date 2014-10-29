@@ -7,8 +7,8 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
 from accounting.apps.books.utils import organization_manager
-from .models import FinancialSettings
-from .forms import FinancialSettingsForm
+from .models import FinancialSettings, PayRunSettings
+from .forms import FinancialSettingsForm, PayRunSettingsForm
 from .wrappers import TaxReport, ProfitAndLossReport
 
 
@@ -31,6 +31,23 @@ class FinancialSettingsUpdateView(generic.UpdateView):
             settings = orga.financial_settings
         except FinancialSettings.DoesNotExist:
             settings = FinancialSettings(organization=orga)
+        return settings
+
+    def get_success_url(self):
+        return reverse("reports:settings-list")
+
+
+class PayRunSettingsUpdateView(generic.UpdateView):
+    template_name = "reports/payrun_settings_update.html"
+    model = PayRunSettings
+    form_class = PayRunSettingsForm
+
+    def get_object(self):
+        orga = organization_manager.get_selected_organization(self.request)
+        try:
+            settings = orga.payrun_settings
+        except PayRunSettings.DoesNotExist:
+            settings = PayRunSettings(organization=orga)
         return settings
 
     def get_success_url(self):

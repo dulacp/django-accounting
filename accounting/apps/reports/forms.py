@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from .models import FinancialSettings
+from .models import FinancialSettings, PayRunSettings
 
 
 class FinancialSettingsForm(ModelForm):
@@ -13,4 +13,13 @@ class FinancialSettingsForm(ModelForm):
             "tax_id_number",
             "tax_id_display_name",
             "tax_period",
+        )
+
+
+class PayRunSettingsForm(ModelForm):
+    class Meta:
+        model = PayRunSettings
+        fields = (
+            "salaries_follow_profits",
+            "payrun_period",
         )
