@@ -1,22 +1,12 @@
-from datetime import date
 from decimal import Decimal as D
 from collections import defaultdict, OrderedDict
 
 from dateutil.relativedelta import relativedelta
 
 from accounting.apps.books.models import Invoice, Bill
+from accounting.apps.books.calculators import ProfitsLossCalculator
 from accounting.libs import prices
-
-
-class ReportPeriod(object):
-    start = None
-    end = None
-
-    def __init__(self, start, end):
-        assert isinstance(start, date), "start should be a date instance"
-        assert isinstance(end, date), "end should be a date instance"
-        self.start = start
-        self.end = end
+from accounting.libs.intervals import TimeInterval
 
 
 class BaseReport(object):
@@ -25,7 +15,7 @@ class BaseReport(object):
 
     def __init__(self, title, start, end):
         self.title = title
-        self.period = ReportPeriod(start, end)
+        self.period = TimeInterval(start, end)
 
     def generate(self):
         raise NotImplementedError
@@ -174,46 +164,21 @@ class ProfitAndLossReport(BaseReport):
             self.total_summary.expenses_amount += summary.expenses_amount
 
     def generate_for_sales(self, sales_queryset):
-        # optimize the queryset
-        sales_queryset = (sales_queryset.filter(organization=self.organization)
-            .filter(payments__date_paid__gte=self.period.start)
-            .filter(payments__date_paid__lte=self.period.end)
-            .prefetch_related(
-                'lines',
-                'lines__tax_rate',
-                'payments')
-            .distinct())
+        calculator = ProfitsLossCalculator(self.organization,
+                                           start=self.period.start,
+                                           end=self.period.end)
 
-        for sale in sales_queryset:
-            for pay in sale.payments.all():
+        for sale, payment, amount_excl_tax in calculator.process_generator(sales_queryset):
+            key_date = self.group_by_date(payment.date_paid)
+            summary = self.summaries[key_date]
 
-                # NB: even with the queryset filters we can still get payments
-                #     outside the period interval [start, end], because
-                #     `self.payements.all()` is uncorrelated with the filters
-                if pay.date_paid < self.period.start:
-                    continue
-                if pay.date_paid > self.period.end:
-                    continue
-
-                amount_excl_tax = D('0')
-                for line in sale.lines.all():
-                    tax_rate = line.tax_rate
-                    line_factor = line.line_price_incl_tax / sale.total_incl_tax
-                    portion_line_amount = pay.amount * line_factor
-                    portion_amount_excl_tax = portion_line_amount / (D('1') + tax_rate.rate)
-
-                    amount_excl_tax += portion_amount_excl_tax
-
-                key_date = self.group_by_date(pay.date_paid)
-                summary = self.summaries[key_date]
-
-                if isinstance(sale, Invoice):
-                    summary.sales_amount += amount_excl_tax
-                elif isinstance(sale, Bill):
-                    summary.expenses_amount += amount_excl_tax
-                else:
-                    raise ValueError("Unsupported type of sale {}"
-                        .format(sale.__class__))
+            if isinstance(sale, Invoice):
+                summary.sales_amount += amount_excl_tax
+            elif isinstance(sale, Bill):
+                summary.expenses_amount += amount_excl_tax
+            else:
+                raise ValueError("Unsupported type of sale {}"
+                    .format(sale.__class__))
 
 
 class PayRunSummary(object):
@@ -241,6 +206,9 @@ class PayRunReport(BaseReport):
 
     def generate_for_employees(self, employee_queryset):
         total_payroll_taxes = D('0')
+        calculator = ProfitsLossCalculator(self.organization,
+                                           start=self.period.start,
+                                           end=self.period.end)
 
         for emp in employee_queryset:
             summary = self.summaries[emp.composite_name]
@@ -248,7 +216,7 @@ class PayRunReport(BaseReport):
             summary.payroll_tax_rate = emp.payroll_tax_rate
             if emp.salary_follows_profits:
                 # TODO compute profits based on the period interval
-                profits = self.organization.profits
+                profits = calculator.profits()
                 summary.total_excl_tax = profits * emp.shares_percentage
             else:
                 raise ValueError("Salary not indexed on the profits "
