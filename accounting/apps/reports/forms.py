@@ -1,4 +1,6 @@
-from django.forms import ModelForm
+from datetime import timedelta
+
+from django import forms
 
 from .models import (
     BusinessSettings,
@@ -6,7 +8,7 @@ from .models import (
     PayRunSettings)
 
 
-class BusinessSettingsForm(ModelForm):
+class BusinessSettingsForm(forms.ModelForm):
     class Meta:
         model = BusinessSettings
         fields = (
@@ -14,7 +16,7 @@ class BusinessSettingsForm(ModelForm):
         )
 
 
-class FinancialSettingsForm(ModelForm):
+class FinancialSettingsForm(forms.ModelForm):
     class Meta:
         model = FinancialSettings
         fields = (
@@ -27,10 +29,61 @@ class FinancialSettingsForm(ModelForm):
         )
 
 
-class PayRunSettingsForm(ModelForm):
+class PayRunSettingsForm(forms.ModelForm):
     class Meta:
         model = PayRunSettings
         fields = (
             "salaries_follow_profits",
             "payrun_period",
         )
+
+
+class PayRunForm(forms.Form):
+    date_from = forms.DateField(required=False,
+                                label="From")
+    date_to = forms.DateField(required=False,
+                              label="To")
+
+    _filters = None
+    _description = None
+
+    def _determine_filter_metadata(self):
+        self._filters = {}
+        self._description = "All orders"
+        if self.errors:
+            return
+
+        date_from = self.cleaned_data['date_from']
+        date_to = self.cleaned_data['date_to']
+        if date_from and date_to:
+            # We want to include end date so we adjust the date we
+            # use with the 'range' function.
+            self._filters = {
+                'date_placed__range': [
+                    date_from,
+                    date_to + timedelta(days=1)
+                ]
+            }
+            self._description = "Profits between %(date_from)s and " \
+                                "%(date_to)s".format(
+                                    date_from=date_from,
+                                    date_to=date_to)
+        elif date_from and not date_to:
+            self._filters = {'date_placed__gte': date_from}
+            self._description = "Profits since {}".format(date_from)
+        elif not date_from and date_to:
+            self._filters = {'date_placed__lte': date_to}
+            self._description = "Profits until {}".format(date_to)
+        else:
+            self._filters = {}
+            self._description = "Profits from the begining to now"
+
+    def get_filters(self):
+        if self._filters is None:
+            self._determine_filter_metadata()
+        return self._filters
+
+    def get_filter_description(self):
+        if self._description is None:
+            self._determine_filter_metadata()
+        return self._description

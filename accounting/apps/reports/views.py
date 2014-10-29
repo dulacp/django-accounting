@@ -14,7 +14,8 @@ from .models import (
 from .forms import (
     BusinessSettingsForm,
     FinancialSettingsForm,
-    PayRunSettingsForm)
+    PayRunSettingsForm,
+    PayRunForm)
 from .wrappers import (
     TaxReport,
     ProfitAndLossReport,
@@ -97,20 +98,44 @@ class ProfitAndLossReportView(generic.TemplateView):
         return ctx
 
 
-class PayRunReportView(generic.TemplateView):
+class PayRunReportView(generic.FormView):
     template_name = "reports/pay_run_report.html"
+    form_class = PayRunForm
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        orga = organization_manager.get_selected_organization(self.request)
+    def get_initial(self):
+        initial = super().get_initial()
 
         # currrent quarter
         now = timezone.now()
         start = date(year=now.year, month=(now.month - ((now.month-1) % 3)), day=1)
         end = start + relativedelta(months=3)
 
+        initial['date_from'] = start
+        initial['date_to'] = end
+
+        return initial
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'data': self.request.GET,
+        })
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        orga = organization_manager.get_selected_organization(self.request)
+
+        form = ctx['form']
+        if form.is_valid():
+            start = form.cleaned_data['date_from']
+            end = form.cleaned_data['date_to']
+        else:
+            start = end = None
+
         report = PayRunReport(orga, start=start, end=end)
         report.generate()
         ctx['summaries'] = report.summaries.values()
         ctx['total_payroll_taxes'] = report.total_payroll_taxes
+
         return ctx

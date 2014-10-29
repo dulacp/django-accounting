@@ -39,10 +39,18 @@ class ProfitsLossCalculator(object):
             (sale, payment, amount)
 
         """
+        sales_queryset = sales_queryset.filter(organization=self.organization)
+
+        if self.period.start:
+            sales_queryset = (sales_queryset
+                .filter(payments__date_paid__gte=self.period.start))
+
+        if self.period.end:
+            sales_queryset = (sales_queryset
+                .filter(payments__date_paid__lte=self.period.end))
+
         # optimize the queryset
-        sales_queryset = (sales_queryset.filter(organization=self.organization)
-            .filter(payments__date_paid__gte=self.period.start)
-            .filter(payments__date_paid__lte=self.period.end)
+        sales_queryset = (sales_queryset
             .prefetch_related(
                 'lines',
                 'lines__tax_rate',
@@ -55,9 +63,9 @@ class ProfitsLossCalculator(object):
                 # NB: even with the queryset filters we can still get payments
                 #     outside the period interval [start, end], because
                 #     `self.payements.all()` is uncorrelated with the filters
-                if pay.date_paid < self.period.start:
+                if self.period.start and pay.date_paid < self.period.start:
                     continue
-                if pay.date_paid > self.period.end:
+                if self.period.end and pay.date_paid > self.period.end:
                     continue
 
                 amount_excl_tax = D('0')
