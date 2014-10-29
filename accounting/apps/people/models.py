@@ -15,11 +15,8 @@ class Client(models.Model):
     postal_code = models.CharField(max_length=7)
     country = models.CharField(max_length=50)
 
-    # optionnaly linked to an organization
-    # for automated behaviors during cross-organizations invoicing
     organization = models.ForeignKey('books.Organization',
-                                     related_name="orgas",
-                                     blank=True, null=True)
+                                     related_name="clients")
 
     class Meta:
         pass
