@@ -41,18 +41,3 @@ class FinancialSettings(models.Model):
 
     class Meta:
         pass
-
-    def __str__(self):
-        return self.name
-
-    def active_address_fields(self):
-        """
-        Return the non-empty components of the address
-        """
-        fields = [self.address_line_1, self.address_line_2,
-                  self.city, self.postal_code, self.country]
-        fields = [f.strip() for f in fields if f]
-        return fields
-
-    def full_address(self, separator="\n"):
-        return separator.join(filter(bool, self.active_address_fields()))
