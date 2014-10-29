@@ -3,6 +3,12 @@
 {% block content %}
     <h1 class="page-header">Settings <small>for powerful reports</small></h1>
 
+    <a href="{% url 'reports:settings-business' %}" class="panel panel-default panel-link">
+        <div class="panel-body">
+            Business settings
+        </div>
+    </a>
+
     <a href="{% url 'reports:settings-financial' %}" class="panel panel-default panel-link">
         <div class="panel-body">
             Financial settings

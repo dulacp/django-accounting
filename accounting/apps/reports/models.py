@@ -2,6 +2,24 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+class BusinessSettings(models.Model):
+    BUSINESS_TYPE_SOLE_PROPRIETORSHIP = 'sole_proprietorship'
+    BUSINESS_TYPE_CHOICES = (
+        (BUSINESS_TYPE_SOLE_PROPRIETORSHIP, "Sole Proprietorship"),
+    )
+    business_type = models.CharField(max_length=50,
+                                     choices=BUSINESS_TYPE_CHOICES)
+
+    # optionnaly linked to an organization
+    # for automated behaviors during cross-organizations invoicing
+    organization = models.OneToOneField('books.Organization',
+                                        related_name="business_settings",
+                                        blank=True, null=True)
+
+    class Meta:
+        pass
+
+
 class FinancialSettings(models.Model):
     financial_year_end_day = models.PositiveSmallIntegerField(validators=[
         MinValueValidator(1),

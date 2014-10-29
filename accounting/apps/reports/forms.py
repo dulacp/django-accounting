@@ -1,6 +1,17 @@
 from django.forms import ModelForm
 
-from .models import FinancialSettings, PayRunSettings
+from .models import (
+    BusinessSettings,
+    FinancialSettings,
+    PayRunSettings)
+
+
+class BusinessSettingsForm(ModelForm):
+    class Meta:
+        model = BusinessSettings
+        fields = (
+            "business_type",
+        )
 
 
 class FinancialSettingsForm(ModelForm):

@@ -7,8 +7,14 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
 from accounting.apps.books.utils import organization_manager
-from .models import FinancialSettings, PayRunSettings
-from .forms import FinancialSettingsForm, PayRunSettingsForm
+from .models import (
+    BusinessSettings,
+    FinancialSettings,
+    PayRunSettings)
+from .forms import (
+    BusinessSettingsForm,
+    FinancialSettingsForm,
+    PayRunSettingsForm)
 from .wrappers import TaxReport, ProfitAndLossReport
 
 
@@ -20,38 +26,39 @@ class SettingsListView(generic.TemplateView):
     template_name = "reports/settings_list.html"
 
 
-class FinancialSettingsUpdateView(generic.UpdateView):
+class GenericSettingsMixin(object):
+
+    def get_object(self):
+        orga = organization_manager.get_selected_organization(self.request)
+        try:
+            settings = self.model.objects.get(organization=orga)
+        except self.model.DoesNotExist:
+            settings = self.model.objects.create(organization=orga)
+        return settings
+
+    def get_success_url(self):
+        return reverse("reports:settings-list")
+
+
+class BusinessSettingsUpdateView(GenericSettingsMixin,
+                                  generic.UpdateView):
+    template_name = "reports/financial_settings_update.html"
+    model = BusinessSettings
+    form_class = BusinessSettingsForm
+
+
+class FinancialSettingsUpdateView(GenericSettingsMixin,
+                                  generic.UpdateView):
     template_name = "reports/financial_settings_update.html"
     model = FinancialSettings
     form_class = FinancialSettingsForm
 
-    def get_object(self):
-        orga = organization_manager.get_selected_organization(self.request)
-        try:
-            settings = orga.financial_settings
-        except FinancialSettings.DoesNotExist:
-            settings = FinancialSettings(organization=orga)
-        return settings
 
-    def get_success_url(self):
-        return reverse("reports:settings-list")
-
-
-class PayRunSettingsUpdateView(generic.UpdateView):
+class PayRunSettingsUpdateView(GenericSettingsMixin,
+                               generic.UpdateView):
     template_name = "reports/payrun_settings_update.html"
     model = PayRunSettings
     form_class = PayRunSettingsForm
-
-    def get_object(self):
-        orga = organization_manager.get_selected_organization(self.request)
-        try:
-            settings = orga.payrun_settings
-        except PayRunSettings.DoesNotExist:
-            settings = PayRunSettings(organization=orga)
-        return settings
-
-    def get_success_url(self):
-        return reverse("reports:settings-list")
 
 
 class TaxReportView(generic.TemplateView):
