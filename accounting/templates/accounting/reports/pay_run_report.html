@@ -4,23 +4,32 @@
 {% block content %}
     <h1 class="page-header">Pay Run Report <small>don't spend that money neither</small></h1>
 
-    <form action="." method="get">
-        {% bootstrap_form_errors form %}
-
-        <div class="row">
-            <div class="col-md-5">
-                {% bootstrap_field form.date_from show_label=False %}
-            </div>
-            <div class="col-md-5">
-                {% bootstrap_field form.date_to show_label=False %}
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-info" type="submit">
-                    Update
-                </button>
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ form_title }}</h3>
         </div>
-    </form>
+        <div class="panel-body">
+            <form action="." method="get">
+                {% bootstrap_form_errors form %}
+
+                <div class="row">
+                    <div class="col-md-5">
+                        {% bootstrap_field form.date_from show_label=False %}
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form.date_to show_label=False %}
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-info" type="submit">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <hr>
 
     <table class="table table-striped table-bordered">
         <thead>

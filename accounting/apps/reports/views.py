@@ -117,9 +117,10 @@ class PayRunReportView(generic.FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs.update({
-            'data': self.request.GET,
-        })
+        if self.request.GET:
+            kwargs.update({
+                'data': self.request.GET,
+            })
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -130,8 +131,10 @@ class PayRunReportView(generic.FormView):
         if form.is_valid():
             start = form.cleaned_data['date_from']
             end = form.cleaned_data['date_to']
+            ctx['form_title'] = form.get_filter_description()
         else:
             start = end = None
+            ctx['form_title'] = "Time Interval"
 
         report = PayRunReport(orga, start=start, end=end)
         report.generate()

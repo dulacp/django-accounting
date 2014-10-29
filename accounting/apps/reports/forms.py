@@ -64,10 +64,8 @@ class PayRunForm(forms.Form):
                     date_to + timedelta(days=1)
                 ]
             }
-            self._description = "Profits between %(date_from)s and " \
-                                "%(date_to)s".format(
-                                    date_from=date_from,
-                                    date_to=date_to)
+            self._description = ("Profits between {} and {}"
+                                    .format(date_from, date_to))
         elif date_from and not date_to:
             self._filters = {'date_placed__gte': date_from}
             self._description = "Profits since {}".format(date_from)
