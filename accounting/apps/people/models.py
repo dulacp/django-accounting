@@ -1,4 +1,7 @@
+from decimal import Decimal as D
+
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Client(models.Model):
@@ -15,6 +18,7 @@ class Client(models.Model):
     # optionnaly linked to an organization
     # for automated behaviors during cross-organizations invoicing
     organization = models.ForeignKey('books.Organization',
+                                     related_name="orgas",
                                      blank=True, null=True)
 
     class Meta:
@@ -34,3 +38,28 @@ class Client(models.Model):
 
     def full_address(self, separator="\n"):
         return separator.join(filter(bool, self.active_address_fields()))
+
+
+class Employee(models.Model):
+    first_name = models.CharField(max_length=150)
+    last_name = models.CharField(max_length=150)
+    email = models.EmailField(max_length=254)
+
+    salaries_follow_profits = models.BooleanField(default=False)
+    shares_percentage = models.DecimalField(max_digits=6,
+                                            decimal_places=5,
+                                            validators=[MinValueValidator(D('0')),
+                                                        MaxValueValidator(D('1'))])
+
+    organization = models.ForeignKey('books.Organization',
+                                     related_name="employees")
+
+    class Meta:
+        pass
+
+    def __str__(self):
+        return "{}".format(self.composite_name)
+
+    @property
+    def composite_name(self):
+        return "{} {}".format(self.first_name, self.last_name)

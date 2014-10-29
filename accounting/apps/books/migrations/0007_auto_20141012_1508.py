@@ -48,7 +48,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='bill',
             name='client',
-            field=models.ForeignKey(to='clients.Client', verbose_name='From Client'),
+            field=models.ForeignKey(to='people.Client', verbose_name='From Client'),
         ),
         migrations.AlterField(
             model_name='bill',

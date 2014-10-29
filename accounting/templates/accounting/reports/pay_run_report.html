@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+{% load currency_filters %}
+
+{% block content %}
+    <h1 class="page-header">Tax Report <small>don't spend that money</small></h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tax Name</th>
+                <th>Taxable Amount</th>
+                <th>Taxes</th>
+            </tr>
+        </thead>
+        {% for summary in summaries %}
+        <tbody>
+            <tr><td colspan="4">&nbsp;</td></tr>
+            <tr>
+                <td><strong>{{ summary.tax_rate }}</strong></td>
+                <td></td>
+                <td></td>
+            <tr>
+                <td>
+                    <abbr href="#" data-toggle="tooltip" data-placement="top" title="The amount includes fully or partially paid invoices">
+                        Collected
+                    </abbr>
+                </td>
+                <td>{{ summary.taxable_amount|currency }}</td>
+                <td>{{ summary.collected_taxes|currency }}</td>
+            </tr>
+            <tr>
+                <td>Expenses</td>
+                <td>{{ summary.expenses_amount|currency }}</td>
+                <td>{{ summary.deductible_taxes|currency }}</td>
+            </tr>
+            <tr>
+                <td>NET</td>
+                <td>{{ summary.net_amount|currency }}</td>
+                <td>{{ summary.net_taxes|currency }}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+{% endblock content %}

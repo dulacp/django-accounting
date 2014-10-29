@@ -11,7 +11,7 @@ import accounting.libs.checks
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clients', '0001_initial'),
+        ('people', '0001_initial'),
         ('books', '0022_auto_20141025_1102'),
     ]
 
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('date_issued', models.DateField(default=datetime.date.today)),
                 ('date_dued', models.DateField(blank=True, null=True, verbose_name='Due date', help_text='The date when the total amount should have been collected')),
                 ('date_paid', models.DateField(blank=True, null=True)),
-                ('client', models.ForeignKey(verbose_name='To Client', to='clients.Client')),
+                ('client', models.ForeignKey(verbose_name='To Client', to='people.Client')),
                 ('organization', models.ForeignKey(related_name='estimates', verbose_name='From Organization', to='books.Organization')),
             ],
             options={

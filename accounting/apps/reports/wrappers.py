@@ -214,3 +214,22 @@ class ProfitAndLossReport(BaseReport):
                 else:
                     raise ValueError("Unsupported type of sale {}"
                         .format(sale.__class__))
+
+
+class PayRunSummary(object):
+    payroll_tax_rate = None
+    total_excl_tax = D('0')
+
+
+class PayRunReport(BaseReport):
+    organization = None
+    summaries = None
+
+    def __init__(self, organization, start, end):
+        super().__init__("Pay Run Report", start, end)
+        self.organization = organization
+        self.summaries = defaultdict(TaxRateSummary)
+
+    def generate(self):
+        employee_queryset = Employee.objects.all()
+        self.generate_for_employees(employee_queryset)

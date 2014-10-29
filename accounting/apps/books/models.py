@@ -288,7 +288,7 @@ class Estimate(AbstractSale):
     organization = models.ForeignKey('books.Organization',
                                      related_name="estimates",
                                      verbose_name="From Organization")
-    client = models.ForeignKey('clients.Client',
+    client = models.ForeignKey('people.Client',
                                verbose_name="To Client")
 
     objects = EstimateQuerySet.as_manager()
@@ -323,7 +323,7 @@ class Invoice(AbstractSale):
     organization = models.ForeignKey('books.Organization',
                                      related_name="invoices",
                                      verbose_name="From Organization")
-    client = models.ForeignKey('clients.Client',
+    client = models.ForeignKey('people.Client',
                                verbose_name="To Client")
     payments = GenericRelation('books.Payment')
 
@@ -359,7 +359,7 @@ class Bill(AbstractSale):
     organization = models.ForeignKey('books.Organization',
                                      related_name="bills",
                                      verbose_name="To Organization")
-    client = models.ForeignKey('clients.Client',
+    client = models.ForeignKey('people.Client',
                                verbose_name="From Client")
     payments = GenericRelation('books.Payment')
 

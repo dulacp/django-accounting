@@ -53,7 +53,7 @@
                     <li class="{% active request books_tax_rate_list_url exact_match=True %}"><a href="{{ books_tax_rate_list_url }}">Tax Rates</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
-                    {% url 'clients:client-list' as clients_client_list_url %}
+                    {% url 'people:client-list' as clients_client_list_url %}
                     <li class="{% active request clients_client_list_url exact_match=True %}"><a href="{{ clients_client_list_url }}">Clients</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">

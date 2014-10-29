@@ -15,7 +15,10 @@ from .forms import (
     BusinessSettingsForm,
     FinancialSettingsForm,
     PayRunSettingsForm)
-from .wrappers import TaxReport, ProfitAndLossReport
+from .wrappers import (
+    TaxReport,
+    ProfitAndLossReport,
+    PayRunReport)
 
 
 class ReportListView(generic.TemplateView):
@@ -77,6 +80,25 @@ class TaxReportView(generic.TemplateView):
 
 class ProfitAndLossReportView(generic.TemplateView):
     template_name = "reports/profit_and_loss_report.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        orga = organization_manager.get_selected_organization(self.request)
+
+        # currrent quarter
+        now = timezone.now()
+        start = date(year=now.year, month=(now.month - ((now.month-1) % 3)), day=1)
+        end = start + relativedelta(months=3)
+
+        report = ProfitAndLossReport(orga, start=start, end=end)
+        report.generate()
+        ctx['summaries'] = report.summaries
+        ctx['total_summary'] = report.total_summary
+        return ctx
+
+
+class PayRunReportView(generic.TemplateView):
+    template_name = "reports/pay_run_report.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

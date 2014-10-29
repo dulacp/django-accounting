@@ -9,7 +9,7 @@ import accounting.apps.books.utils
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clients', '0001_initial'),
+        ('people', '0001_initial'),
         ('books', '0005_invoice_client'),
     ]
 
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('paid', models.BooleanField(default=False)),
                 ('date_issued', models.DateField(default=datetime.date.today)),
                 ('date_paid', models.DateField(blank=True, null=True)),
-                ('client', models.ForeignKey(verbose_name='To Client', to='clients.Client')),
+                ('client', models.ForeignKey(verbose_name='To Client', to='people.Client')),
                 ('organization', models.ForeignKey(to='books.Organization')),
             ],
             options={

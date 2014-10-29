@@ -33,7 +33,7 @@ ACCOUNTING_MAIN_TEMPLATE_DIR = os.path.join(
 ACCOUNTING_APPS = (
     'accounting',
     'accounting.libs',
-    'accounting.apps.clients',
+    'accounting.apps.people',
     'accounting.apps.books',
     'accounting.apps.reports',
 

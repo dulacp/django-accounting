@@ -15,6 +15,9 @@ urlpatterns = patterns('',
     url(r'^report/profitloss/$',
         views.ProfitAndLossReportView.as_view(),
         name="profit-and-loss-report"),
+    url(r'^report/payrun/$',
+        views.PayRunReportView.as_view(),
+        name="pay-run-report"),
 
     # Settings
     url(r'^settings/$',

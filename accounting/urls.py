@@ -7,8 +7,8 @@ from django.contrib import admin
 urlpatterns = patterns('',
     url(r'^books/', include('accounting.apps.books.urls',
         namespace="books")),
-    url(r'^clients/', include('accounting.apps.clients.urls',
-        namespace="clients")),
+    url(r'^people/', include('accounting.apps.people.urls',
+        namespace="people")),
     url(r'^reports/', include('accounting.apps.reports.urls',
         namespace="reports")),
 )

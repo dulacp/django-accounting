@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('clients', '0001_initial'),
+        ('people', '0001_initial'),
         ('books', '0004_auto_20141012_1117'),
     ]
 
@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='invoice',
             name='client',
-            field=models.ForeignKey(verbose_name='To Client', default=0, to='clients.Client'),
+            field=models.ForeignKey(verbose_name='To Client', default=0, to='people.Client'),
             preserve_default=False,
         ),
     ]
