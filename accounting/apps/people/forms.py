@@ -25,6 +25,8 @@ class EmployeeForm(ModelForm):
             "last_name",
             "email",
 
+            "payroll_tax_rate",
+
             "salary_follows_profits",
             "shares_percentage",
 

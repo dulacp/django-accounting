@@ -42,7 +42,7 @@
             <th class="col-sm-2">Unit (excl. tax)</th>
             <th class="col-sm-1">Qt.</th>
             <th class="col-sm-1">Tax rate</th>
-            <th class="col-sm-2">Amount</th>
+            <th class="col-sm-2 text-right">Amount</th>
         </tr>
     </thead>
     <tbody>
@@ -54,7 +54,7 @@
             <td class="col-sm-2">{{ line.unit_price_excl_tax|currency }}</td>
             <td class="col-sm-1">{{ line.quantity }}</td>
             <td class="col-sm-1">{{ line.tax_rate.rate|percentage }}</td>
-            <td class="col-sm-2">{{ line.line_price_excl_tax|currency }}</td>
+            <td class="col-sm-2 text-right">{{ line.line_price_excl_tax|currency }}</td>
         </tr>
         {% endfor %}
     </tbody>

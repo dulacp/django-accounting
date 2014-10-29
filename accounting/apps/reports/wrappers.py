@@ -220,16 +220,41 @@ class PayRunSummary(object):
     payroll_tax_rate = None
     total_excl_tax = D('0')
 
+    @property
+    def payroll_taxes(self):
+        return self.payroll_tax_rate * self.total_excl_tax
+
 
 class PayRunReport(BaseReport):
     organization = None
     summaries = None
+    total_payroll_taxes = D('0')
 
     def __init__(self, organization, start, end):
         super().__init__("Pay Run Report", start, end)
         self.organization = organization
-        self.summaries = defaultdict(TaxRateSummary)
+        self.summaries = defaultdict(PayRunSummary)
 
     def generate(self):
-        employee_queryset = Employee.objects.all()
+        employee_queryset = self.organization.employees.all()
         self.generate_for_employees(employee_queryset)
+
+    def generate_for_employees(self, employee_queryset):
+        total_payroll_taxes = D('0')
+
+        for emp in employee_queryset:
+            summary = self.summaries[emp.composite_name]
+            summary.employee = emp
+            summary.payroll_tax_rate = emp.payroll_tax_rate
+            if emp.salary_follows_profits:
+                # TODO compute profits based on the period interval
+                profits = self.organization.profits
+                summary.total_excl_tax = profits * emp.shares_percentage
+            else:
+                raise ValueError("Salary not indexed on the profits "
+                                 "are not supported yet")
+
+            total_payroll_taxes += summary.payroll_taxes
+
+        # Total payroll
+        self.total_payroll_taxes = total_payroll_taxes

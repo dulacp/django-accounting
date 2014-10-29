@@ -1,44 +1,42 @@
 {% extends "layout.html" %}
-{% load currency_filters %}
+{% load currency_filters format_filters %}
 
 {% block content %}
-    <h1 class="page-header">Tax Report <small>don't spend that money</small></h1>
+    <h1 class="page-header">Pay Run Report <small>don't spend that money neither</small></h1>
 
-    <table class="table">
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th>Tax Name</th>
-                <th>Taxable Amount</th>
-                <th>Taxes</th>
+                <th>Employee</th>
+                <th>Gross pay</th>
+                <th>Payroll Tax Rate</th>
+                <th class="text-right">Payroll Taxes</th>
             </tr>
         </thead>
-        {% for summary in summaries %}
         <tbody>
-            <tr><td colspan="4">&nbsp;</td></tr>
+            {% for summary in summaries %}
             <tr>
-                <td><strong>{{ summary.tax_rate }}</strong></td>
-                <td></td>
-                <td></td>
+                <td><strong>{{ summary.employee }}</strong></td>
+                <td>{{ summary.total_excl_tax|currency }}</td>
+                <td>{{ summary.payroll_tax_rate|percentage }}</td>
+                <td class="text-right">{{ summary.payroll_taxes|currency }}</td>
             <tr>
-                <td>
-                    <abbr href="#" data-toggle="tooltip" data-placement="top" title="The amount includes fully or partially paid invoices">
-                        Collected
-                    </abbr>
-                </td>
-                <td>{{ summary.taxable_amount|currency }}</td>
-                <td>{{ summary.collected_taxes|currency }}</td>
-            </tr>
-            <tr>
-                <td>Expenses</td>
-                <td>{{ summary.expenses_amount|currency }}</td>
-                <td>{{ summary.deductible_taxes|currency }}</td>
-            </tr>
-            <tr>
-                <td>NET</td>
-                <td>{{ summary.net_amount|currency }}</td>
-                <td>{{ summary.net_taxes|currency }}</td>
-            </tr>
+            {% endfor %}
         </tbody>
-        {% endfor %}
     </table>
+
+    <div class="row text-right">
+        <div class="col-xs-2 col-xs-offset-8">
+            <p>
+                <strong>
+                    Total Taxes : <br>
+                </strong>
+            </p>
+        </div>
+        <div class="col-xs-2">
+            <strong>
+                {{ total_payroll_taxes|currency }} <br>
+            </strong>
+        </div>
+    </div>
 {% endblock content %}

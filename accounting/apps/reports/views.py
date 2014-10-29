@@ -109,8 +109,8 @@ class PayRunReportView(generic.TemplateView):
         start = date(year=now.year, month=(now.month - ((now.month-1) % 3)), day=1)
         end = start + relativedelta(months=3)
 
-        report = ProfitAndLossReport(orga, start=start, end=end)
+        report = PayRunReport(orga, start=start, end=end)
         report.generate()
-        ctx['summaries'] = report.summaries
-        ctx['total_summary'] = report.total_summary
+        ctx['summaries'] = report.summaries.values()
+        ctx['total_payroll_taxes'] = report.total_payroll_taxes
         return ctx
