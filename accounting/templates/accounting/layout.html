@@ -54,7 +54,9 @@
                 </ul>
                 <ul class="nav nav-sidebar">
                     {% url 'people:client-list' as clients_client_list_url %}
+                    {% url 'people:employee-list' as employees_employee_list_url %}
                     <li class="{% active request clients_client_list_url exact_match=True %}"><a href="{{ clients_client_list_url }}">Clients</a></li>
+                    <li class="{% active request employees_employee_list_url exact_match=True %}"><a href="{{ employees_employee_list_url }}">Employees</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
                     {% url 'reports:report-list' as reports_report_list_url %}

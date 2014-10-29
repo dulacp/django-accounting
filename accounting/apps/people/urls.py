@@ -18,4 +18,18 @@ urlpatterns = patterns('',
     url(r'^client/(?P<pk>\d+)/detail/$',
         views.ClientDetailView.as_view(),
         name="client-detail"),
+
+    # Employees
+    url(r'^employee/$',
+        views.EmployeeListView.as_view(),
+        name="employee-list"),
+    url(r'^employee/create/$',
+        views.EmployeeCreateView.as_view(),
+        name="employee-create"),
+    url(r'^employee/(?P<pk>\d+)/edit/$',
+        views.EmployeeUpdateView.as_view(),
+        name="employee-edit"),
+    url(r'^employee/(?P<pk>\d+)/detail/$',
+        views.EmployeeDetailView.as_view(),
+        name="employee-detail"),
 )

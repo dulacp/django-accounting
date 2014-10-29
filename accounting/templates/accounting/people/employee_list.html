@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <h1 class="page-header">Employees <small>which belong to you</small></h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Email</th>
+                <th class="text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emp in employees %}
+            <tr>
+                <td>{{ emp.id }}</td>
+                <td>{{ emp.first_name }}</td>
+                <td>{{ emp.last_name }}</td>
+                <td>{{ emp.email }}</td>
+                <td class="text-right">
+                    <a href="{% url 'people:employee-edit' emp.pk %}" class="btn btn-default btn-sm" role="button">Edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'people:employee-create' %}" class="btn btn-primary btn-lg" role="button">
+        Add an employee
+    </a>
+{% endblock content %}

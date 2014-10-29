@@ -45,7 +45,7 @@ class Employee(models.Model):
     last_name = models.CharField(max_length=150)
     email = models.EmailField(max_length=254)
 
-    salaries_follow_profits = models.BooleanField(default=False)
+    salary_follows_profits = models.BooleanField(default=False)
     shares_percentage = models.DecimalField(max_digits=6,
                                             decimal_places=5,
                                             validators=[MinValueValidator(D('0')),
