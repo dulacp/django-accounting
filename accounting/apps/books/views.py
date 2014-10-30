@@ -263,6 +263,12 @@ class InvoiceCreateView(AbstractSaleCreateUpdateMixin,
     form_class = InvoiceForm
     formset_class = InvoiceLineFormSet
 
+    def get_form(self, form_class):
+        form = super().get_form(form_class)
+        orga = organization_manager.get_selected_organization(self.request)
+        self.restrict_fields_choices_to_organization(form, orga)
+        return form
+
     def get_success_url(self):
         return reverse("books:invoice-list")
 

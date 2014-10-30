@@ -77,7 +77,7 @@ class EstimateForm(ModelForm):
 
 
 class EstimateLineForm(RestrictLineFormToOrganizationMixin,
-                      ModelForm):
+                       ModelForm):
     class Meta:
         model = EstimateLine
         fields = (

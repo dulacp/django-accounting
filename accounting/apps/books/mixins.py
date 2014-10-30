@@ -26,6 +26,34 @@ class RestrictToSelectedOrganizationQuerySetMixin(object):
         return queryset
 
 
+class RestrictToOrganizationFormRelationsMixin(object):
+    """
+    To restrict relations choices to the organization linked instances
+    """
+    relation_name = 'organization'
+
+    def restrict_fields_choices_to_organization(self, form, organization):
+        assert organization is not None, "no organization to restrict to"
+        model = form._meta.model
+        for source in form.fields:
+            field, m, direct, m2m = model._meta.get_field_by_name(source)
+            rel = field.rel
+            if not rel:
+                # next field
+                continue
+
+            rel_model = rel.to
+            try:
+                rel_field = rel_model._meta.get_field_by_name(self.relation_name)
+            except FieldDoesNotExist:
+                # next field
+                continue
+
+            form_field = form.fields[source]
+            form_field.queryset = (form_field.choices.queryset
+                .filter(**{ self.relation_name: organization }))
+
+
 class SaleListQuerySetMixin(object):
 
     def get_queryset(self):
@@ -45,7 +73,8 @@ class SaleListQuerySetMixin(object):
         return queryset
 
 
-class AbstractSaleCreateUpdateMixin(object):
+class AbstractSaleCreateUpdateMixin(RestrictToOrganizationFormRelationsMixin,
+                                    object):
     formset_class = None
 
     def get_context_data(self, **kwargs):
@@ -58,6 +87,13 @@ class AbstractSaleCreateUpdateMixin(object):
             context['line_formset'] = (
                 self.formset_class(instance=self.object))
         return context
+
+    def get_form(self, form_class):
+        """Restrict the form relations to the current organization"""
+        form = super().get_form(form_class)
+        orga = organization_manager.get_selected_organization(self.request)
+        self.restrict_fields_choices_to_organization(form, orga)
+        return form
 
     def form_valid(self, form):
         context = self.get_context_data()
