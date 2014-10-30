@@ -40,6 +40,7 @@ class TaxRateForm(ModelForm):
         model = TaxRate
         fields = (
             "name",
+            "rate",
         )
 
 
