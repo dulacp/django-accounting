@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from .mixins import (
     RestrictToSelectedOrganizationQuerySetMixin,
     SaleListQuerySetMixin,
+    AutoSetSelectedOrganizationMixin,
     AbstractSaleCreateUpdateMixin,
     AbstractSaleDetailMixin,
     PaymentFormMixin)
@@ -155,7 +156,8 @@ class TaxRateListView(RestrictToSelectedOrganizationQuerySetMixin,
     context_object_name = "tax_rates"
 
 
-class TaxRateCreateView(generic.CreateView):
+class TaxRateCreateView(AutoSetSelectedOrganizationMixin,
+                        generic.CreateView):
     template_name = "books/tax_rate_create_or_update.html"
     model = TaxRate
     form_class = TaxRateForm
@@ -164,7 +166,8 @@ class TaxRateCreateView(generic.CreateView):
         return reverse("books:tax_rate-list")
 
 
-class TaxRateUpdateView(generic.UpdateView):
+class TaxRateUpdateView(AutoSetSelectedOrganizationMixin,
+                        generic.UpdateView):
     template_name = "books/tax_rate_create_or_update.html"
     model = TaxRate
     form_class = TaxRateForm
@@ -210,7 +213,8 @@ class EstimateListView(RestrictToSelectedOrganizationQuerySetMixin,
     context_object_name = "estimates"
 
 
-class EstimateCreateView(AbstractSaleCreateUpdateMixin,
+class EstimateCreateView(AutoSetSelectedOrganizationMixin,
+                         AbstractSaleCreateUpdateMixin,
                          generic.CreateView):
     template_name = "books/bill_create_or_update.html"
     model = Estimate
@@ -221,7 +225,8 @@ class EstimateCreateView(AbstractSaleCreateUpdateMixin,
         return reverse("books:estimate-list")
 
 
-class EstimateUpdateView(AbstractSaleCreateUpdateMixin,
+class EstimateUpdateView(AutoSetSelectedOrganizationMixin,
+                         AbstractSaleCreateUpdateMixin,
                          generic.UpdateView):
     template_name = "books/estimate_create_or_update.html"
     model = Estimate
@@ -256,7 +261,8 @@ class InvoiceListView(RestrictToSelectedOrganizationQuerySetMixin,
     context_object_name = "invoices"
 
 
-class InvoiceCreateView(AbstractSaleCreateUpdateMixin,
+class InvoiceCreateView(AutoSetSelectedOrganizationMixin,
+                        AbstractSaleCreateUpdateMixin,
                         generic.CreateView):
     template_name = "books/invoice_create_or_update.html"
     model = Invoice
@@ -273,7 +279,8 @@ class InvoiceCreateView(AbstractSaleCreateUpdateMixin,
         return reverse("books:invoice-list")
 
 
-class InvoiceUpdateView(AbstractSaleCreateUpdateMixin,
+class InvoiceUpdateView(AutoSetSelectedOrganizationMixin,
+                        AbstractSaleCreateUpdateMixin,
                         generic.UpdateView):
     template_name = "books/invoice_create_or_update.html"
     model = Invoice
@@ -310,7 +317,8 @@ class BillListView(RestrictToSelectedOrganizationQuerySetMixin,
     context_object_name = "bills"
 
 
-class BillCreateView(AbstractSaleCreateUpdateMixin,
+class BillCreateView(AutoSetSelectedOrganizationMixin,
+                     AbstractSaleCreateUpdateMixin,
                      generic.CreateView):
     template_name = "books/bill_create_or_update.html"
     model = Bill
@@ -321,7 +329,8 @@ class BillCreateView(AbstractSaleCreateUpdateMixin,
         return reverse("books:bill-list")
 
 
-class BillUpdateView(AbstractSaleCreateUpdateMixin,
+class BillUpdateView(AutoSetSelectedOrganizationMixin,
+                     AbstractSaleCreateUpdateMixin,
                      generic.UpdateView):
     template_name = "books/bill_create_or_update.html"
     model = Bill

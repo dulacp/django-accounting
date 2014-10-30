@@ -2,7 +2,8 @@ from django.views import generic
 from django.core.urlresolvers import reverse
 
 from accounting.apps.books.mixins import (
-    RestrictToSelectedOrganizationQuerySetMixin)
+    RestrictToSelectedOrganizationQuerySetMixin,
+    AutoSetSelectedOrganizationMixin)
 from .models import Client, Employee
 from .forms import ClientForm, EmployeeForm
 
@@ -14,7 +15,8 @@ class ClientListView(RestrictToSelectedOrganizationQuerySetMixin,
     context_object_name = "clients"
 
 
-class ClientCreateView(generic.CreateView):
+class ClientCreateView(AutoSetSelectedOrganizationMixin,
+                       generic.CreateView):
     template_name = "people/client_create_or_update.html"
     model = Client
     form_class = ClientForm
@@ -24,6 +26,7 @@ class ClientCreateView(generic.CreateView):
 
 
 class ClientUpdateView(RestrictToSelectedOrganizationQuerySetMixin,
+                       AutoSetSelectedOrganizationMixin,
                        generic.UpdateView):
     template_name = "people/client_create_or_update.html"
     model = Client
@@ -47,7 +50,8 @@ class EmployeeListView(RestrictToSelectedOrganizationQuerySetMixin,
     context_object_name = "employees"
 
 
-class EmployeeCreateView(generic.CreateView):
+class EmployeeCreateView(AutoSetSelectedOrganizationMixin,
+                         generic.CreateView):
     template_name = "people/employee_create_or_update.html"
     model = Employee
     form_class = EmployeeForm
@@ -57,6 +61,7 @@ class EmployeeCreateView(generic.CreateView):
 
 
 class EmployeeUpdateView(RestrictToSelectedOrganizationQuerySetMixin,
+                         AutoSetSelectedOrganizationMixin,
                          generic.UpdateView):
     template_name = "people/employee_create_or_update.html"
     model = Employee

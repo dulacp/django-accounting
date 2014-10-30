@@ -40,7 +40,6 @@ class TaxRateForm(ModelForm):
         model = TaxRate
         fields = (
             "name",
-            "organization",
         )
 
 
@@ -65,7 +64,6 @@ class EstimateForm(ModelForm):
         model = Estimate
         fields = (
             "number",
-            "organization",
             "client",
 
             "draft",
@@ -102,7 +100,6 @@ class InvoiceForm(ModelForm):
         model = Invoice
         fields = (
             "number",
-            "organization",
             "client",
 
             "draft",
@@ -140,7 +137,6 @@ class BillForm(ModelForm):
         fields = (
             "number",
             "client",
-            "organization",
 
             "draft",
             "sent",

@@ -13,7 +13,6 @@ class ClientForm(ModelForm):
             "city",
             "postal_code",
             "country",
-            "organization",
         )
 
 
@@ -30,5 +29,4 @@ class EmployeeForm(ModelForm):
             "salary_follows_profits",
             "shares_percentage",
 
-            "organization",
         )

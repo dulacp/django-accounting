@@ -73,6 +73,16 @@ class SaleListQuerySetMixin(object):
         return queryset
 
 
+class AutoSetSelectedOrganizationMixin(object):
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        orga = organization_manager.get_selected_organization(self.request)
+        obj.organization = orga
+
+        return super().form_valid(form)
+
+
 class AbstractSaleCreateUpdateMixin(RestrictToOrganizationFormRelationsMixin,
                                     object):
     formset_class = None
