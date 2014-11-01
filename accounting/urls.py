@@ -5,6 +5,8 @@ from django.contrib import admin
 
 
 urlpatterns = patterns('',
+    url(r'^', include('accounting.apps.connect.urls',
+        namespace="connect")),
     url(r'^books/', include('accounting.apps.books.urls',
         namespace="books")),
     url(r'^people/', include('accounting.apps.people.urls',
