@@ -60,45 +60,21 @@ class TaxReport(BaseReport):
         self.generate_for_sales(bill_queryset)
 
     def generate_for_sales(self, sales_queryset):
-        # optimize the queryset
-        sales_queryset = (sales_queryset.filter(organization=self.organization)
-            .filter(payments__date_paid__gte=self.period.start)
-            .filter(payments__date_paid__lte=self.period.end)
-            .prefetch_related(
-                'lines',
-                'lines__tax_rate',
-                'payments')
-            .distinct())
+        calculator = ProfitsLossCalculator(self.organization,
+                                           start=self.period.start,
+                                           end=self.period.end)
 
-        for sale in sales_queryset:
-            for pay in sale.payments.all():
+        for output in calculator.process_generator(sales_queryset):
+            summary = self.tax_summaries[output.tax_rate.pk]
+            summary.tax_rate = output.tax_rate
 
-                # NB: even with the queryset filters we can still get payments
-                #     outside the period interval [start, end], because
-                #     `self.payements.all()` is uncorrelated with the filters
-                if pay.date_paid < self.period.start:
-                    continue
-                if pay.date_paid > self.period.end:
-                    continue
-
-                # compute the percentage of the amount paid
-                # against each line amount
-                for line in sale.lines.all():
-                    tax_rate = line.tax_rate
-                    line_factor = line.line_price_incl_tax / sale.total_incl_tax
-                    portion_line_amount = pay.amount * line_factor
-                    portion_taxable_amount = portion_line_amount / (D('1') + tax_rate.rate)
-
-                    summary = self.tax_summaries[tax_rate.pk]
-                    summary.tax_rate = tax_rate
-
-                    if isinstance(sale, Invoice):
-                        summary.taxable_amount += portion_taxable_amount
-                    elif isinstance(sale, Bill):
-                        summary.expenses_amount += portion_taxable_amount
-                    else:
-                        raise ValueError("Unsupported type of sale {}"
-                            .format(sale.__class__))
+            if isinstance(output.sale, Invoice):
+                summary.taxable_amount += output.amount_excl_tax
+            elif isinstance(output.sale, Bill):
+                summary.expenses_amount += output.amount_excl_tax
+            else:
+                raise ValueError("Unsupported type of sale {}"
+                    .format(sale.__class__))
 
 
 class ProfitAndLossSummary(object):
@@ -168,14 +144,14 @@ class ProfitAndLossReport(BaseReport):
                                            start=self.period.start,
                                            end=self.period.end)
 
-        for sale, payment, amount_excl_tax in calculator.process_generator(sales_queryset):
-            key_date = self.group_by_date(payment.date_paid)
+        for output in calculator.process_generator(sales_queryset):
+            key_date = self.group_by_date(output.payment.date_paid)
             summary = self.summaries[key_date]
 
-            if isinstance(sale, Invoice):
-                summary.sales_amount += amount_excl_tax
-            elif isinstance(sale, Bill):
-                summary.expenses_amount += amount_excl_tax
+            if isinstance(output.sale, Invoice):
+                summary.sales_amount += output.amount_excl_tax
+            elif isinstance(output.sale, Bill):
+                summary.expenses_amount += output.amount_excl_tax
             else:
                 raise ValueError("Unsupported type of sale {}"
                     .format(sale.__class__))
