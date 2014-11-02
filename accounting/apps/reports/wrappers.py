@@ -202,3 +202,27 @@ class PayRunReport(BaseReport):
 
         # Total payroll
         self.total_payroll_taxes = total_payroll_taxes
+
+
+class InvoiceDetailsReport(BaseReport):
+    organization = None
+    invoices = None
+    tax_rates = None
+
+    def __init__(self, organization, start, end):
+        super().__init__("Pay Run Report", start, end)
+        self.organization = organization
+        self.taxes = organization.tax_rates.all()
+
+    def generate(self):
+        invoice_queryset = self.organization.invoices.all()
+        self.generate_for_invoices(invoice_queryset)
+
+    def generate_for_invoices(self, invoice_queryset):
+        invoice_queryset = (invoice_queryset
+            .filter(date_issued__range=[self.period.start, self.period.end]))
+
+        # optimize the query
+        # TODO
+
+        self.invoices = invoice_queryset

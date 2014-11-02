@@ -18,6 +18,9 @@ urlpatterns = patterns('',
     url(r'^report/payrun/$',
         views.PayRunReportView.as_view(),
         name="pay-run-report"),
+    url(r'^report/invoicedetails/$',
+        views.InvoiceDetailsView.as_view(),
+        name="invoice-details-report"),
 
     # Settings
     url(r'^settings/$',

@@ -7,6 +7,7 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
 from accounting.apps.books.utils import organization_manager
+from accounting.libs.intervals import TimeInterval
 from .models import (
     BusinessSettings,
     FinancialSettings,
@@ -15,11 +16,12 @@ from .forms import (
     BusinessSettingsForm,
     FinancialSettingsForm,
     PayRunSettingsForm,
-    PayRunForm)
+    TimePeriodForm)
 from .wrappers import (
     TaxReport,
     ProfitAndLossReport,
-    PayRunReport)
+    PayRunReport,
+    InvoiceDetailsReport)
 
 
 class ReportListView(generic.TemplateView):
@@ -98,9 +100,9 @@ class ProfitAndLossReportView(generic.TemplateView):
         return ctx
 
 
-class PayRunReportView(generic.FormView):
-    template_name = "reports/pay_run_report.html"
-    form_class = PayRunForm
+class TimePeriodFormMixin(object):
+
+    period = None
 
     def get_initial(self):
         initial = super().get_initial()
@@ -125,7 +127,6 @@ class PayRunReportView(generic.FormView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        orga = organization_manager.get_selected_organization(self.request)
 
         form = ctx['form']
         if form.is_valid():
@@ -136,9 +137,40 @@ class PayRunReportView(generic.FormView):
             start = end = None
             ctx['form_title'] = "Time Interval"
 
+        if self.period is None:
+            self.period = TimeInterval(start=start, end=end)
+
+        return ctx
+
+
+class PayRunReportView(TimePeriodFormMixin,
+                       generic.FormView):
+    template_name = "reports/pay_run_report.html"
+    form_class = TimePeriodForm
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        orga = organization_manager.get_selected_organization(self.request)
+
         report = PayRunReport(orga, start=start, end=end)
         report.generate()
         ctx['summaries'] = report.summaries.values()
         ctx['total_payroll_taxes'] = report.total_payroll_taxes
 
+        return ctx
+
+
+class InvoiceDetailsView(TimePeriodFormMixin,
+                         generic.FormView):
+    template_name = "reports/invoice_details_report.html"
+    form_class = TimePeriodForm
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        orga = organization_manager.get_selected_organization(self.request)
+        report = InvoiceDetailsReport(orga,
+                                      start=self.period.start,
+                                      end=self.period.end)
+        report.generate()
+        ctx['invoices'] = report.invoices
         return ctx

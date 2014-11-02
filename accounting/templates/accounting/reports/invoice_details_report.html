@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+{% load currency_filters bootstrap3 %}
+
+{% block content %}
+    <h1 class="page-header">Invoice Details</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ form_title }}</h3>
+        </div>
+        <div class="panel-body">
+            <form action="." method="get">
+                {% bootstrap_form_errors form %}
+
+                <div class="row">
+                    <div class="col-md-5">
+                        {% bootstrap_field form.date_from show_label=False %}
+                    </div>
+                    <div class="col-md-5">
+                        {% bootstrap_field form.date_to show_label=False %}
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-info" type="submit">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Invoice #</th>
+                <th>Issue Date</th>
+                <th>Status</th>
+                <th>Item</th>
+                <th>Unit Cost</th>
+                <th>Quantity</th>
+                {% for t in tax_rates %}
+                <th>{{ t.name }}</th>
+                {% endfor %}
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for inv in invoices %}
+            <tr>
+                <td>{{ inv.number }}</td>
+                <td>{{ inv.date_issued }}</td>
+                <td>{{ inv.status }}</td>
+            {% for line in inv.lines.all %}
+                <td>{{ line.label }}</td>
+                <td>{{ line.unit_price.excl_tax|currency }}</td>
+                <td>{{ line.quantity }}</td>
+                {% for t in tax_rates %}
+                <td>-</td>
+                {% endfor %}
+                <td>{{ line.line_price_excl_tax|currency }}</td>
+            {% if not forloop.last %}
+            <tr>
+                <td colspan=3></td>
+            {% endif %}
+            {% endfor %}
+            </tr>
+            <tr>
+                <td colspan={{ tax_rates|length|add:"5" }}></td>
+                <td class="text-right">Subtotal</td>
+                <td>{{ inv.total_excl_tax|currency }}</td>
+            </tr>
+            <tr>
+                <td colspan={{ tax_rates|length|add:"5" }} class="empty-cell"></td>
+                <td class="text-right">Taxes</td>
+                <td>{{ inv.total_tax|currency }}</td>
+            </tr>
+            <tr>
+                <td colspan={{ tax_rates|length|add:"5" }} class="empty-cell"></td>
+                <td class="text-right"><strong>Total</strong></td>
+                <td><strong>{{ inv.total_incl_tax|currency }}</strong></td>
+            </tr>
+            <tr>
+                <td colspan={{ tax_rates|length|add:"5" }} class="empty-cell"></td>
+                <td class="text-right">Paid</td>
+                <td>{{ inv.total_paid|currency }}</td>
+            </tr>
+            <tr>
+                <td colspan={{ tax_rates|length|add:"5" }} class="empty-cell"></td>
+                <td class="text-right"><strong>Balance</strong></td>
+                <td><strong>{{ inv.total_due_incl_tax|currency }}</strong></td>
+            </tr>
+            <tr class="empty-line"><td></td></tr>
+        {% if not forloop.last %}
+        </tbody>
+        <tbody>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

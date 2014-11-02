@@ -16,6 +16,17 @@ body {
   overflow: auto;
 }
 
+.table .empty-line > td {
+  border-top: none;
+}
+.table .empty-line + tr > td {
+  border-top: none;
+}
+
+.table .empty-cell {
+  border-top: none;
+}
+
 
 /*
  * Global add-ons

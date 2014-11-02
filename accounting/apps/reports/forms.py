@@ -38,7 +38,7 @@ class PayRunSettingsForm(forms.ModelForm):
         )
 
 
-class PayRunForm(forms.Form):
+class TimePeriodForm(forms.Form):
     date_from = forms.DateField(required=False,
                                 label="From")
     date_to = forms.DateField(required=False,
@@ -64,17 +64,17 @@ class PayRunForm(forms.Form):
                     date_to + timedelta(days=1)
                 ]
             }
-            self._description = ("Profits between {} and {}"
+            self._description = ("Between {} and {}"
                                     .format(date_from, date_to))
         elif date_from and not date_to:
             self._filters = {'date_placed__gte': date_from}
-            self._description = "Profits since {}".format(date_from)
+            self._description = "Since {}".format(date_from)
         elif not date_from and date_to:
             self._filters = {'date_placed__lte': date_to}
-            self._description = "Profits until {}".format(date_to)
+            self._description = "Until {}".format(date_to)
         else:
             self._filters = {}
-            self._description = "Profits from the begining to now"
+            self._description = "From the begining to now"
 
     def get_filters(self):
         if self._filters is None:
