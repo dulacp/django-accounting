@@ -223,6 +223,13 @@ class InvoiceDetailsReport(BaseReport):
             .filter(date_issued__range=[self.period.start, self.period.end]))
 
         # optimize the query
-        # TODO
+        invoice_queryset = (invoice_queryset
+            .select_related(
+                'organization')
+            .prefetch_related(
+                'lines',
+                'lines__tax_rate',
+                'payments',
+                'organization__employees',))
 
         self.invoices = invoice_queryset
