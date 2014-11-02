@@ -173,4 +173,5 @@ class InvoiceDetailsView(TimePeriodFormMixin,
                                       end=self.period.end)
         report.generate()
         ctx['invoices'] = report.invoices
+        ctx['payrun_settings'] = orga.payrun_settings
         return ctx

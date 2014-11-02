@@ -207,6 +207,17 @@ class AbstractSale(CheckingModelMixin, models.Model):
         paid = self.total_paid
         return paid and paid > 0 and paid < self.total_incl_tax
 
+    @property
+    def payroll_taxes(self):
+        # TODO implement collected/accurial
+        paid = self.total_paid
+        payroll = D('0')
+        for emp in self.organization.employees.all():
+            if not emp.salary_follows_profits:
+                continue
+            payroll += paid * emp.shares_percentage * emp.payroll_tax_rate
+        return payroll
+
     def _check_total(self, check, total, computed_total):
         if total != computed_total:
             check.mark_fail(level=check.LEVEL_ERROR,

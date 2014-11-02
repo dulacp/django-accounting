@@ -91,6 +91,13 @@
                 <td class="text-right"><strong>Balance</strong></td>
                 <td><strong>{{ inv.total_due_incl_tax|currency }}</strong></td>
             </tr>
+            {% if payrun_settings.salaries_follow_profits %}
+            <tr>
+                <td colspan={{ tax_rates|length|add:"5" }} class="empty-cell"></td>
+                <td class="text-right">Payroll taxes</td>
+                <td>{{ inv.payroll_taxes|currency }}</td>
+            </tr>
+            {% endif %}
             <tr class="empty-line"><td></td></tr>
         {% if not forloop.last %}
         </tbody>
