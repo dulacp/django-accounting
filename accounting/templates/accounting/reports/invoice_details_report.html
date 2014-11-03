@@ -54,10 +54,14 @@
                 <td>{{ inv.status }}</td>
             {% for line in inv.lines.all %}
                 <td>{{ line.label }}</td>
-                <td>{{ line.unit_price.excl_tax|currency }}</td>
+                <td>{{ line.unit_price.excl_tax }}</td>
                 <td>{{ line.quantity }}</td>
                 {% for t in tax_rates %}
+                {% if t.pk == line.tax_rate_id %}
+                <td>{{ line.taxes }}</td>
+                {% else %}
                 <td>-</td>
+                {% endif %}
                 {% endfor %}
                 <td>{{ line.line_price_excl_tax|currency }}</td>
             {% if not forloop.last %}

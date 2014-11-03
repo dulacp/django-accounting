@@ -288,6 +288,10 @@ class AbstractSaleLine(models.Model):
     def line_price_incl_tax(self):
         return self.quantity * self.unit_price.incl_tax
 
+    @property
+    def taxes(self):
+        return self.line_price_incl_tax - self.line_price_excl_tax
+
     def from_client(self):
         raise NotImplementedError
 

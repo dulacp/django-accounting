@@ -212,7 +212,7 @@ class InvoiceDetailsReport(BaseReport):
     def __init__(self, organization, start, end):
         super().__init__("Pay Run Report", start, end)
         self.organization = organization
-        self.taxes = organization.tax_rates.all()
+        self.tax_rates = organization.tax_rates.all()
 
     def generate(self):
         invoice_queryset = self.organization.invoices.all()
