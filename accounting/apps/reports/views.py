@@ -152,7 +152,7 @@ class PayRunReportView(TimePeriodFormMixin,
         ctx = super().get_context_data(**kwargs)
         orga = organization_manager.get_selected_organization(self.request)
 
-        report = PayRunReport(orga, start=start, end=end)
+        report = PayRunReport(orga, start=self.period.start, end=self.period.end)
         report.generate()
         ctx['summaries'] = report.summaries.values()
         ctx['total_payroll_taxes'] = report.total_payroll_taxes
