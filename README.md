@@ -41,7 +41,7 @@ Check the associated project [Accountant](https://github.com/dulaccc/Accountant)
 
 ## Contact
 
-[Pierre Dulac](http://github.com/dulaccc)
+[Pierre Dulac](http://github.com/dulaccc)  
 [@dulaccc](https://twitter.com/dulaccc)
 
 ## License
