@@ -21,6 +21,34 @@ class OrganizationManager(object):
 organization_manager = OrganizationManager()
 
 
-# TODO implement nicely this feature
-def next_invoice_number():
-    return 100
+class BaseNumberGenerator(object):
+    """
+    Simple object for generating sale numbers.
+    """
+
+    def next_number(self, organization):
+        raise NotImplementedError
+
+
+class EstimateNumberGenerator(BaseNumberGenerator):
+
+    def next_number(self, organization):
+        last = organization.estimates.all().order_by('-number').first()
+        last_number = int(last.number)
+        return last_number + 1
+
+
+class InvoiceNumberGenerator(BaseNumberGenerator):
+
+    def next_number(self, organization):
+        last = organization.invoices.all().order_by('-number').first()
+        last_number = int(last.number)
+        return last_number + 1
+
+
+class BillNumberGenerator(BaseNumberGenerator):
+
+    def next_number(self, organization):
+        last = organization.bills.all().order_by('-number').first()
+        last_number = int(last.number)
+        return last_number + 1

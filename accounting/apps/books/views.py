@@ -29,7 +29,11 @@ from .forms import (
     BillForm,
     BillLineFormSet,
     PaymentForm)
-from .utils import organization_manager
+from .utils import (
+    organization_manager,
+    EstimateNumberGenerator,
+    InvoiceNumberGenerator,
+    BillNumberGenerator)
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +80,8 @@ class DashboardView(generic.DetailView):
             .prefetch_related(
                 'lines',
                 'lines__tax_rate',
-                'payments'))
+                'payments')
+            .distinct())
         ctx['bills'] = (organization.bills.all()
             .select_related(
                 'client',
@@ -84,7 +89,8 @@ class DashboardView(generic.DetailView):
             .prefetch_related(
                 'lines',
                 'lines__tax_rate',
-                'payments'))
+                'payments')
+            .distinct())
         return ctx
 
     def get(self, request, *args, **kwargs):
@@ -221,6 +227,20 @@ class EstimateCreateView(AutoSetSelectedOrganizationMixin,
     form_class = EstimateForm
     formset_class = EstimateLineFormSet
 
+    def get_form(self, form_class):
+        form = super().get_form(form_class)
+        orga = organization_manager.get_selected_organization(self.request)
+        self.restrict_fields_choices_to_organization(form, orga)
+        return form
+
+    def get_initial(self):
+        initial = super().get_initial()
+
+        orga = organization_manager.get_selected_organization(self.request)
+        initial['number'] = EstimateNumberGenerator().next_number(orga)
+
+        return initial
+
     def get_success_url(self):
         return reverse("books:estimate-list")
 
@@ -275,6 +295,14 @@ class InvoiceCreateView(AutoSetSelectedOrganizationMixin,
         self.restrict_fields_choices_to_organization(form, orga)
         return form
 
+    def get_initial(self):
+        initial = super().get_initial()
+
+        orga = organization_manager.get_selected_organization(self.request)
+        initial['number'] = InvoiceNumberGenerator().next_number(orga)
+
+        return initial
+
     def get_success_url(self):
         return reverse("books:invoice-list")
 
@@ -324,6 +352,20 @@ class BillCreateView(AutoSetSelectedOrganizationMixin,
     model = Bill
     form_class = BillForm
     formset_class = BillLineFormSet
+
+    def get_form(self, form_class):
+        form = super().get_form(form_class)
+        orga = organization_manager.get_selected_organization(self.request)
+        self.restrict_fields_choices_to_organization(form, orga)
+        return form
+
+    def get_initial(self):
+        initial = super().get_initial()
+
+        orga = organization_manager.get_selected_organization(self.request)
+        initial['number'] = BillNumberGenerator().next_number(orga)
+
+        return initial
 
     def get_success_url(self):
         return reverse("books:bill-list")

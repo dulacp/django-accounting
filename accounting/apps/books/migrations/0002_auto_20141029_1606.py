@@ -9,6 +9,10 @@ import datetime
 import accounting.libs.checks
 
 
+def next_invoice_number():
+    return 100
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -21,7 +25,7 @@ class Migration(migrations.Migration):
             name='Bill',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('number', models.CharField(default=accounting.apps.books.utils.next_invoice_number, max_length=6)),
+                ('number', models.CharField(default=next_invoice_number, max_length=6)),
                 ('total_incl_tax', models.DecimalField(decimal_places=2, default=Decimal('0'), verbose_name='Total (inc. tax)', max_digits=12)),
                 ('total_excl_tax', models.DecimalField(decimal_places=2, default=Decimal('0'), verbose_name='Total (excl. tax)', max_digits=12)),
                 ('draft', models.BooleanField(default=False)),
@@ -53,7 +57,7 @@ class Migration(migrations.Migration):
             name='Estimate',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('number', models.CharField(default=accounting.apps.books.utils.next_invoice_number, max_length=6)),
+                ('number', models.CharField(default=next_invoice_number, max_length=6)),
                 ('total_incl_tax', models.DecimalField(decimal_places=2, default=Decimal('0'), verbose_name='Total (inc. tax)', max_digits=12)),
                 ('total_excl_tax', models.DecimalField(decimal_places=2, default=Decimal('0'), verbose_name='Total (excl. tax)', max_digits=12)),
                 ('draft', models.BooleanField(default=False)),
@@ -85,7 +89,7 @@ class Migration(migrations.Migration):
             name='Invoice',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('number', models.CharField(default=accounting.apps.books.utils.next_invoice_number, max_length=6)),
+                ('number', models.CharField(default=next_invoice_number, max_length=6)),
                 ('total_incl_tax', models.DecimalField(decimal_places=2, default=Decimal('0'), verbose_name='Total (inc. tax)', max_digits=12)),
                 ('total_excl_tax', models.DecimalField(decimal_places=2, default=Decimal('0'), verbose_name='Total (excl. tax)', max_digits=12)),
                 ('draft', models.BooleanField(default=False)),

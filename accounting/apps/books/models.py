@@ -23,7 +23,6 @@ from .managers import (
     EstimateQuerySet,
     InvoiceQuerySet,
     BillQuerySet)
-from .utils import next_invoice_number
 
 
 class Organization(models.Model):
@@ -119,7 +118,8 @@ class TaxRate(models.Model):
 
 class AbstractSale(CheckingModelMixin, models.Model):
     number = models.CharField(max_length=6,
-                              default=next_invoice_number)
+                              default=1,
+                              db_index=True)
 
     # Total price needs to be stored with and wihtout taxes
     # because the tax percentage can vary depending on the associated lines
@@ -310,7 +310,7 @@ class Estimate(AbstractSale):
 
     class Meta:
         unique_together = (("number", "organization"),)
-        ordering = ('-date_issued', 'id')
+        ordering = ('-number',)
 
     def get_detail_url(self):
         return reverse('books:estimate-detail', args=[self.pk])
@@ -346,7 +346,7 @@ class Invoice(AbstractSale):
 
     class Meta:
         unique_together = (("number", "organization"),)
-        ordering = ('-date_issued', 'id')
+        ordering = ('-number',)
 
     def get_detail_url(self):
         return reverse('books:invoice-detail', args=[self.pk])
@@ -382,7 +382,7 @@ class Bill(AbstractSale):
 
     class Meta:
         unique_together = (("number", "organization"),)
-        ordering = ('-date_issued', 'id')
+        ordering = ('-number',)
 
     def get_detail_url(self):
         return reverse('books:bill-detail', args=[self.pk])
