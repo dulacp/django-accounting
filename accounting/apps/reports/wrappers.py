@@ -220,7 +220,7 @@ class InvoiceDetailsReport(BaseReport):
 
     def generate_for_invoices(self, invoice_queryset):
         invoice_queryset = (invoice_queryset
-            .filter(date_issued__range=[self.period.start, self.period.end]))
+            .filter(payments__date_paid__range=[self.period.start, self.period.end]))
 
         # optimize the query
         invoice_queryset = (invoice_queryset
@@ -230,6 +230,7 @@ class InvoiceDetailsReport(BaseReport):
                 'lines',
                 'lines__tax_rate',
                 'payments',
-                'organization__employees',))
+                'organization__employees',)
+            .distinct())
 
         self.invoices = invoice_queryset
