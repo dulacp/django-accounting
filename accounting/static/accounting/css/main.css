@@ -47,8 +47,15 @@ body {
 .navbar-inverse {
   background: #222;
 }
-.nav .breadcrumb {
-  margin: 0 7px;
+.navbar-nav > li {
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+}
+.navbar-nav > li > a {
+  padding-left: 2em;
+  padding-right: 2em;
+}
+.navbar-nav > li > a:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
 }
 @media (min-width: 768px) {
   .nav .breadcrumb {
