@@ -10,5 +10,7 @@ urlpatterns = patterns('',
         name="root"),
 
     # Step by step
-
+    url(r'^getting-started/$',
+        views.GettingStartedView.as_view(),
+        name="getting-started")
 )

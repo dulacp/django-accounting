@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block container %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 main">
+            <h1 class="page-header text-center">Getting Started</h1>
+
+            <div class="row">
+                <ol class="list-group">
+                    {% for step in steps %}
+                    {% if not step.completed %}
+                    <a class="list-group-item {% ifequal step next_step %}active{% endifequal %}" href="{{ step.get_action_url }}">
+                        {{ step.opts.name }}
+                    </a>
+                    {% else %}
+                    <li class="list-group-item disabled {% ifequal step next_step %}active{% endifequal %}">
+                        {{ step.opts.name }}
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock container %}

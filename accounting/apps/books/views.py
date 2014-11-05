@@ -110,23 +110,19 @@ class OrganizationCreateView(generic.CreateView):
     template_name = "books/organization_create_or_update.html"
     model = Organization
     form_class = OrganizationForm
+    success_url = reverse_lazy("books:organization-list")
 
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.owner = self.request.user
         return super().form_valid(form)
 
-    def get_success_url(self):
-        return reverse("books:organization-list")
-
 
 class OrganizationUpdateView(generic.UpdateView):
     template_name = "books/organization_create_or_update.html"
     model = Organization
     form_class = OrganizationForm
-
-    def get_success_url(self):
-        return reverse("books:organization-list")
+    success_url = reverse_lazy("books:organization-list")
 
 
 class OrganizationDetailView(generic.DetailView):
@@ -167,9 +163,7 @@ class TaxRateCreateView(AutoSetSelectedOrganizationMixin,
     template_name = "books/tax_rate_create_or_update.html"
     model = TaxRate
     form_class = TaxRateForm
-
-    def get_success_url(self):
-        return reverse("books:tax_rate-list")
+    success_url = reverse_lazy("books:tax_rate-list")
 
 
 class TaxRateUpdateView(AutoSetSelectedOrganizationMixin,
@@ -177,9 +171,7 @@ class TaxRateUpdateView(AutoSetSelectedOrganizationMixin,
     template_name = "books/tax_rate_create_or_update.html"
     model = TaxRate
     form_class = TaxRateForm
-
-    def get_success_url(self):
-        return reverse("books:tax_rate-list")
+    success_url = reverse_lazy("books:tax_rate-list")
 
 
 class TaxRateDeleteView(generic.DeleteView):
@@ -226,6 +218,7 @@ class EstimateCreateView(AutoSetSelectedOrganizationMixin,
     model = Estimate
     form_class = EstimateForm
     formset_class = EstimateLineFormSet
+    success_url = reverse_lazy("books:estimate-list")
 
     def get_form(self, form_class):
         form = super().get_form(form_class)
@@ -241,9 +234,6 @@ class EstimateCreateView(AutoSetSelectedOrganizationMixin,
 
         return initial
 
-    def get_success_url(self):
-        return reverse("books:estimate-list")
-
 
 class EstimateUpdateView(AutoSetSelectedOrganizationMixin,
                          AbstractSaleCreateUpdateMixin,
@@ -252,9 +242,7 @@ class EstimateUpdateView(AutoSetSelectedOrganizationMixin,
     model = Estimate
     form_class = EstimateForm
     formset_class = EstimateLineFormSet
-
-    def get_success_url(self):
-        return reverse("books:estimate-list")
+    success_url = reverse_lazy("books:estimate-list")
 
 
 class EstimateDeleteView(generic.DeleteView):
@@ -288,6 +276,7 @@ class InvoiceCreateView(AutoSetSelectedOrganizationMixin,
     model = Invoice
     form_class = InvoiceForm
     formset_class = InvoiceLineFormSet
+    success_url = reverse_lazy("books:invoice-list")
 
     def get_form(self, form_class):
         form = super().get_form(form_class)
@@ -303,9 +292,6 @@ class InvoiceCreateView(AutoSetSelectedOrganizationMixin,
 
         return initial
 
-    def get_success_url(self):
-        return reverse("books:invoice-list")
-
 
 class InvoiceUpdateView(AutoSetSelectedOrganizationMixin,
                         AbstractSaleCreateUpdateMixin,
@@ -314,9 +300,7 @@ class InvoiceUpdateView(AutoSetSelectedOrganizationMixin,
     model = Invoice
     form_class = InvoiceForm
     formset_class = InvoiceLineFormSet
-
-    def get_success_url(self):
-        return reverse("books:invoice-list")
+    success_url = reverse_lazy("books:invoice-list")
 
 
 class InvoiceDeleteView(generic.DeleteView):
@@ -352,6 +336,7 @@ class BillCreateView(AutoSetSelectedOrganizationMixin,
     model = Bill
     form_class = BillForm
     formset_class = BillLineFormSet
+    success_url = reverse_lazy("books:bill-list")
 
     def get_form(self, form_class):
         form = super().get_form(form_class)
@@ -367,9 +352,6 @@ class BillCreateView(AutoSetSelectedOrganizationMixin,
 
         return initial
 
-    def get_success_url(self):
-        return reverse("books:bill-list")
-
 
 class BillUpdateView(AutoSetSelectedOrganizationMixin,
                      AbstractSaleCreateUpdateMixin,
@@ -378,9 +360,7 @@ class BillUpdateView(AutoSetSelectedOrganizationMixin,
     model = Bill
     form_class = BillForm
     formset_class = BillLineFormSet
-
-    def get_success_url(self):
-        return reverse("books:bill-list")
+    success_url = reverse_lazy("books:bill-list")
 
 
 class BillDeleteView(generic.DeleteView):

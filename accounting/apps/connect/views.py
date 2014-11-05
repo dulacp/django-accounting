@@ -3,9 +3,16 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from accounting.apps.books.models import Organization
+from .steps import (
+    CreateOrganizationStep,
+    ConfigureTaxRatesStep,
+    ConfigureBusinessSettingsStep,
+    ConfigureFinancialSettingsStep,
+    AddEmployeesStep,
+    ConfigurePayRunSettingsStep)
 
 
-class RootRedirectionView(generic.TemplateView):
+class RootRedirectionView(generic.View):
     """
     Redirect to the books if an organization is already configured
 
@@ -16,3 +23,26 @@ class RootRedirectionView(generic.TemplateView):
     def get(self, *args, **kwargs):
         if Organization.objects.all().count():
             return HttpResponseRedirect(reverse('books:dashboard'))
+
+
+class GettingStartedView(generic.TemplateView):
+    template_name = "connect/getting_started.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        user = self.request.user
+        steps = [
+            CreateOrganizationStep(user),
+            ConfigureTaxRatesStep(user),
+            ConfigureBusinessSettingsStep(user),
+            ConfigureFinancialSettingsStep(user),
+            AddEmployeesStep(user),
+            ConfigurePayRunSettingsStep(user),
+        ]
+        next_step = next(s for s in steps if not s.completed)
+
+        ctx['steps'] = steps
+        ctx['next_step'] = next_step
+
+        return ctx

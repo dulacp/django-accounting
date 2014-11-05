@@ -21,7 +21,13 @@
                 </div>
             </div>
             <div class="navbar-collapse collapse">
-                <p class="navbar-text navbar-right">Accounting {{ display_version }}</p>
+                {% url 'connect:getting-started' as getting_started_url %}
+                <div class="navbar-collapse navbar-right">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ getting_started_url }}">Getting started</a></li></li>
+                    </ul>
+                    <p class="navbar-text">Accounting {{ display_version }}</p>
+                </div>
             </div>
         </div>
     </div>
