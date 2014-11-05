@@ -23,6 +23,8 @@
                     {% endif %}
                     {% endfor %}
                 </ol>
+
+                <a href="{% url 'books:dashboard' %}" {% if not all_steps_completed %}disabled{% endif %} class="btn btn-success btn-lg btn-block">All Good! Go make invoices</a>
             </div>
         </div>
     </div>

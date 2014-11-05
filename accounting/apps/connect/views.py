@@ -44,9 +44,14 @@ class GettingStartedView(generic.TemplateView):
             AddFirstClientStep(user),
             AddFirstInvoiceStep(user),
         ]
-        next_step = next(s for s in steps if not s.completed)
+        uncompleted_steps = filter(lambda s: not s.completed, steps)
+        try:
+            next_step = next(uncompleted_steps)
+        except StopIteration:
+            next_step = None
 
         ctx['steps'] = steps
         ctx['next_step'] = next_step
+        ctx['all_steps_completed'] = bool(next_step is None)
 
         return ctx
