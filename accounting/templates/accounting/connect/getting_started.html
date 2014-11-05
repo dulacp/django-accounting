@@ -7,7 +7,7 @@
             <h1 class="page-header text-center">Getting Started</h1>
 
             <div class="row">
-                <ol class="list-group">
+                <ol class="list-group check-list">
                     {% for step in steps %}
                     {% if not step.completed %}
                     <a class="list-group-item {% ifequal step next_step %}active{% endifequal %}" href="{{ step.get_action_url }}">
@@ -15,8 +15,10 @@
                     </a>
                     {% else %}
                     <li class="list-group-item disabled {% ifequal step next_step %}active{% endifequal %}">
+                        <span class="check-item">
+                            <span class="glyphicon glyphicon-ok"></span>
+                        </span>
                         {{ step.opts.name }}
-                        <span class="glyphicon glyphicon-ok"></span>
                     </li>
                     {% endif %}
                     {% endfor %}

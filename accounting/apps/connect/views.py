@@ -9,7 +9,9 @@ from .steps import (
     ConfigureBusinessSettingsStep,
     ConfigureFinancialSettingsStep,
     AddEmployeesStep,
-    ConfigurePayRunSettingsStep)
+    ConfigurePayRunSettingsStep,
+    AddFirstClientStep,
+    AddFirstInvoiceStep)
 
 
 class RootRedirectionView(generic.View):
@@ -39,6 +41,8 @@ class GettingStartedView(generic.TemplateView):
             ConfigureFinancialSettingsStep(user),
             AddEmployeesStep(user),
             ConfigurePayRunSettingsStep(user),
+            AddFirstClientStep(user),
+            AddFirstInvoiceStep(user),
         ]
         next_step = next(s for s in steps if not s.completed)
 
