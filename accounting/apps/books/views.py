@@ -81,7 +81,9 @@ class DashboardView(generic.DetailView):
                 'lines',
                 'lines__tax_rate',
                 'payments')
-            .distinct())
+            .distinct()
+            .extra(select={'int_number': 'CAST(number AS INTEGER)'},
+                   order_by=['-int_number']))
         ctx['bills'] = (organization.bills.all()
             .select_related(
                 'client',
@@ -90,7 +92,9 @@ class DashboardView(generic.DetailView):
                 'lines',
                 'lines__tax_rate',
                 'payments')
-            .distinct())
+            .distinct()
+            .extra(select={'int_number': 'CAST(number AS INTEGER)'},
+                   order_by=['-int_number']))
         return ctx
 
     def get(self, request, *args, **kwargs):

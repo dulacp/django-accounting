@@ -30,11 +30,9 @@ class RootRedirectionView(generic.View):
 class GettingStartedView(generic.TemplateView):
     template_name = "connect/getting_started.html"
 
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-
-        user = self.request.user
-        steps = [
+    def get_steps(self, request):
+        user = request.user
+        steps = steps = [
             CreateOrganizationStep(user),
             ConfigureTaxRatesStep(user),
             ConfigureBusinessSettingsStep(user),
@@ -44,6 +42,12 @@ class GettingStartedView(generic.TemplateView):
             AddFirstClientStep(user),
             AddFirstInvoiceStep(user),
         ]
+        return steps
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+
+        steps = self.get_steps(self.request)
         uncompleted_steps = filter(lambda s: not s.completed, steps)
         try:
             next_step = next(uncompleted_steps)
@@ -55,3 +59,13 @@ class GettingStartedView(generic.TemplateView):
         ctx['all_steps_completed'] = bool(next_step is None)
 
         return ctx
+
+    def post(self, request, *args, **kwargs):
+        steps = self.get_steps(request)
+        uncompleted_steps = filter(lambda s: not s.completed, steps)
+        if not len(uncompleted_steps):
+            return super().post(request, *args, **kwargs)
+
+        # unmark the session as getting started
+        request.sessions['getting_started_done'] = True
+        return HttpResponseRedirect(reverse('books:dashboard'))
