@@ -9,23 +9,7 @@
             <h3 class="panel-title">{{ form_title }}</h3>
         </div>
         <div class="panel-body">
-            <form action="." method="get">
-                {% bootstrap_form_errors form %}
-
-                <div class="row">
-                    <div class="col-md-5">
-                        {% bootstrap_field form.date_from show_label=False %}
-                    </div>
-                    <div class="col-md-5">
-                        {% bootstrap_field form.date_to show_label=False %}
-                    </div>
-                    <div class="col-md-2">
-                        <button class="btn btn-info" type="submit">
-                            Update
-                        </button>
-                    </div>
-                </div>
-            </form>
+            {% include "accounting/reports/_partials/period_form.html" with form=form %}
         </div>
     </div>
 

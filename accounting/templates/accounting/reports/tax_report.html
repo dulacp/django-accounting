@@ -4,6 +4,17 @@
 {% block content %}
     <h1 class="page-header">Tax Report <small>don't spend that money</small></h1>
 
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ form_title }}</h3>
+        </div>
+        <div class="panel-body">
+            {% include "accounting/reports/_partials/period_form.html" with form=form %}
+        </div>
+    </div>
+
+    <hr>
+
     <table class="table">
         <thead>
             <tr>
