@@ -81,12 +81,19 @@ class ProfitsLossCalculator(object):
                 output.amount_excl_tax = D('0')
 
                 for line in sale.lines.all():
-                    output.tax_rate = line.tax_rate
-                    output.line_factor = line.line_price_incl_tax / sale.total_incl_tax
-                    output.portion_line_amount = pay.amount * output.line_factor
-                    output.portion_amount_excl_tax = output.portion_line_amount / (D('1') + output.tax_rate.rate)
+                    tax_rate = line.tax_rate
+                    line_factor = line.line_price_incl_tax / sale.total_incl_tax
+                    portion_line_amount = pay.amount * line_factor
+                    portion_amount_excl_tax = portion_line_amount / (D('1') + tax_rate.rate)
 
-                    output.amount_excl_tax += output.portion_amount_excl_tax
+                    if output.tax_rate is None:
+                        output.tax_rate = tax_rate
+                    elif output.tax_rate.pk != tax_rate.pk:
+                        raise NotImplementedError("the system doesn't support "
+                                                  "yet multiple tax rates "
+                                                  "into a same invoice")
+
+                    output.amount_excl_tax += portion_amount_excl_tax
 
                 yield output
 
