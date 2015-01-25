@@ -21,14 +21,16 @@ class BusinessSettings(models.Model):
 
 
 class FinancialSettings(models.Model):
-    financial_year_end_day = models.PositiveSmallIntegerField(validators=[
-        MinValueValidator(1),
-        MaxValueValidator(31)
-    ])
-    financial_year_end_month = models.PositiveSmallIntegerField(validators=[
-        MinValueValidator(1),
-        MaxValueValidator(12)
-    ])
+    financial_year_end_day = models.PositiveSmallIntegerField(default=31,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(31)
+        ])
+    financial_year_end_month = models.PositiveSmallIntegerField(default=12,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(12)
+        ])
 
     tax_id_number = models.CharField(max_length=150,
                                      blank=True, null=True)
