@@ -2,6 +2,8 @@
 
 > In the beginning God created man, and the costs followed afterwards.
 
+[![Build Status](https://travis-ci.org/dulaccc/django-accounting.svg)](https://travis-ci.org/dulaccc/django-accounting)
+
 Check the associated project [Accountant](https://github.com/dulaccc/Accountant), a concrete integration of the *django-accounting* application.
 
 
