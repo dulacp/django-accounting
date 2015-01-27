@@ -105,8 +105,8 @@ class ProfitAndLossReport(BaseReport):
         self.summaries = {}
         steps_interval = relativedelta(end, start)
 
-        assert(self.group_by_resolution in self.RESOLUTION_CHOICES,
-            "No a resolution choice")
+        assert self.group_by_resolution in self.RESOLUTION_CHOICES,
+               "No a resolution choice"
         if self.group_by_resolution == self.RESOLUTION_MONTHLY:
             for step in range(0, steps_interval.months):
                 key_date = start + relativedelta(months=step)
