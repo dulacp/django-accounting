@@ -4,7 +4,9 @@ Installation script:
 
 To release a new version to PyPi:
 - Ensure the version is correctly set in accounting.__init__.py
-- Run: python setup.py sdist upload
+- Run:
+    `python setup.py sdist`
+    `twine upload dist/*`
 """
 from setuptools import setup, find_packages
 import os
