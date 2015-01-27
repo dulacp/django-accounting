@@ -39,7 +39,6 @@ ACCOUNTING_APPS = (
     'accounting.apps.reports',
 
     # Third party apps that accounting depends on
-    'djangobower',
     'bootstrap3',
 )
 

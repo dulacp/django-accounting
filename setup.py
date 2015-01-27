@@ -29,8 +29,6 @@ setup(name='django-accounting',
       include_package_data=True,
       install_requires=[
           'django>=1.7.0,<1.8',
-          # Bower is used for the assets dependencies
-          'django-bower==5.0.1',
           # Used to render the forms
           'django-bootstrap3==4.11.0',
           # Define beautiful tags
