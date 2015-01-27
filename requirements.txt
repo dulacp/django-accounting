@@ -1,5 +1,5 @@
 ## Testing
-coverage>=3.6,<3.7
+coverage>=3.7,<3.8
 django-dynamic-fixture>=1.7,<1.8
 
 # Need to run against a custom version of django-nose a new version comes

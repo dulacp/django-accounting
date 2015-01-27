@@ -21,6 +21,15 @@ lint:
 test:
 	./runtests.py tests
 
+coverage:
+	coverage run ./runtests.py --with-xunit tests
+	coverage xml -i
+
+# This target is run on Travis.ci. We lint, test and build.
+# We don't call 'install' first as that is run as a separate part
+# of the Travis build process.
+travis: lint coverage
+
 
 ## Install / Upgrade
 
