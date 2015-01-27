@@ -1,25 +1,6 @@
 # These targets are not files
 .PHONY: contribute travis test lint coverage
 
-install:
-	pip install -r requirements.txt
-	python setup.py develop
-
-lint:
-	./lint.sh
-
-test:
-	./runtests.py tests
-
-coverage:
-	coverage run ./runtests.py --with-xunit
-	coverage html -i
-
-# This target is run on Travis.ci. We lint, test and build the sandbox/demo sites as well
-# as testing migrations apply correctly. We don't call 'install' first as that is run
-# as a separate part of the Travis build process.
-travis: lint coverage
-
 clean:
 	# Remove files not in source control
 	find . -type f -name "*.pyc" -delete
@@ -30,3 +11,40 @@ todo:
 	grep --exclude-dir=components -rnH TODO reqs
 	grep --exclude-dir=components -rnH TODO accounting
 	grep --exclude-dir=components -rnH TODO tests
+
+
+## Testing
+
+lint:
+	./lint.sh
+
+test:
+	./runtests.py tests
+
+
+## Install / Upgrade
+
+install:
+	pip install -r requirements.txt
+
+upgrade:
+	pip install --upgrade -r requirements.txt
+
+
+## Deployment
+
+deploy_production:
+	git push --tag origin master
+	git push heroku master
+
+migrate_production:
+	heroku run python manage.py migrate --remote heroku
+
+collectstatic_production:
+	./manage.py collectstatic --noinput
+	aws s3 sync --acl public-read renover/static s3://renover-immo/static/
+
+# shortcuts for deploy to the production
+dp: deploy_production
+dmp: deploy_production migrate_production
+cp: collectstatic_productio
