@@ -12,6 +12,7 @@ mock>=1.0.1,<1.1.0
 spec>=0.11.1,<0.12
 WebTest==2.0.12
 django-webtest>=1.7,<1.8
+coveralls>=0.4,<0.5
 
 ## Misc
 flake8>=2.2.2
