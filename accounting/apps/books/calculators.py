@@ -11,6 +11,27 @@ class SalePaymentLineProcessed(object):
     amount_excl_tax = None
     tax_rate = None
 
+    def __init__(self, sale, payment):
+        self.sale = sale
+        self.payment = payment
+        self.amount_excl_tax = D('0')
+
+    def process(self):
+        for line in self.sale.lines.all():
+            tax_rate = line.tax_rate
+            line_factor = line.line_price_incl_tax / self.sale.total_incl_tax
+            portion_amount = self.payment.amount * line_factor
+            portion_amount_excl_tax = portion_amount / (D('1') + tax_rate.rate)
+
+            if self.tax_rate is None:
+                self.tax_rate = tax_rate
+            elif self.tax_rate.pk != tax_rate.pk:
+                raise NotImplementedError("the system doesn't support "
+                                          "yet multiple tax rates "
+                                          "into a same invoice")
+
+            self.amount_excl_tax += portion_amount_excl_tax
+
 
 class ProfitsLossCalculator(object):
     """
@@ -75,25 +96,8 @@ class ProfitsLossCalculator(object):
                 if self.period.end and pay.date_paid > self.period.end:
                     continue
 
-                output = SalePaymentLineProcessed()
-                output.sale = sale
-                output.payment = pay
-                output.amount_excl_tax = D('0')
-
-                for line in sale.lines.all():
-                    tax_rate = line.tax_rate
-                    line_factor = line.line_price_incl_tax / sale.total_incl_tax
-                    portion_line_amount = pay.amount * line_factor
-                    portion_amount_excl_tax = portion_line_amount / (D('1') + tax_rate.rate)
-
-                    if output.tax_rate is None:
-                        output.tax_rate = tax_rate
-                    elif output.tax_rate.pk != tax_rate.pk:
-                        raise NotImplementedError("the system doesn't support "
-                                                  "yet multiple tax rates "
-                                                  "into a same invoice")
-
-                    output.amount_excl_tax += portion_amount_excl_tax
+                output = SalePaymentLineProcessed(sale, pay)
+                output.process()
 
                 yield output
 
