@@ -1,5 +1,3 @@
-from django.conf import settings
-
 from .utils import organization_manager
 
 

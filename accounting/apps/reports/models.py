@@ -37,17 +37,17 @@ class FinancialSettings(models.Model):
     tax_id_display_name = models.CharField(max_length=150,
                                            blank=True, null=True)
 
-    TAX_PERIOD_MONTHLY =   'monthly'      # 1 month
-    TAX_PERIOD_BIMONTHLY = 'bimonthly'    # 2 months
-    TAX_PERIOD_QUARTER =   'quarter'      # 3 months
-    TAX_PERIOD_HALF =      'half'         # 6 months
-    TAX_PERIOD_YEAR =      'year'         # 12 months
+    TAX_PERIOD_MONTHLY = 'monthly'      # 1 month
+    TAX_PERIOD_BIMONTHLY = 'bimonthly'  # 2 months
+    TAX_PERIOD_QUARTER = 'quarter'      # 3 months
+    TAX_PERIOD_HALF = 'half'            # 6 months
+    TAX_PERIOD_YEAR = 'year'            # 12 months
     TAX_PERIOD_CHOICES = (
-        (TAX_PERIOD_MONTHLY,   "1 month"),
+        (TAX_PERIOD_MONTHLY, "1 month"),
         (TAX_PERIOD_BIMONTHLY, "2 months"),
-        (TAX_PERIOD_QUARTER,   "3 months"),
-        (TAX_PERIOD_HALF,      "6 months"),
-        (TAX_PERIOD_YEAR,      "1 year"),
+        (TAX_PERIOD_QUARTER, "3 months"),
+        (TAX_PERIOD_HALF, "6 months"),
+        (TAX_PERIOD_YEAR, "1 year"),
     )
     tax_period = models.CharField("Tax Period",
                                   max_length=20,
@@ -66,10 +66,10 @@ class FinancialSettings(models.Model):
 class PayRunSettings(models.Model):
     salaries_follow_profits = models.BooleanField(default=False)
 
-    PAYRUN_MONTHLY =   'monthly'      # 1 month
-    # PAYRUN_QUARTER =   'quarter'      # 3 months
+    PAYRUN_MONTHLY = 'monthly'      # 1 month
+    # PAYRUN_QUARTER = 'quarter'      # 3 months
     PAYRUN_CHOICES = (
-        (PAYRUN_MONTHLY,   "monthly"),
+        (PAYRUN_MONTHLY, "monthly"),
     )
     payrun_period = models.CharField("Payrun Period",
                                      max_length=20,

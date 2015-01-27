@@ -3,7 +3,6 @@ from datetime import date
 
 from django.conf import settings
 from django.db import models
-from django.db.models import Sum
 from django.core.urlresolvers import reverse
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.contrib.contenttypes.fields import (
@@ -13,10 +12,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
 from accounting.libs import prices
-from accounting.libs.decorators import memoize
-from accounting.libs.checks import (
-    CheckingModelMixin,
-    CheckingModelOptions)
+from accounting.libs.checks import CheckingModelMixin
 from accounting.libs.templatetags.currency_filters import currency_formatter
 from accounting.libs.templatetags.format_filters import percentage_formatter
 from .managers import (
@@ -246,8 +242,8 @@ class AbstractSale(CheckingModelMixin, models.Model):
         if self.is_fully_paid():
             last_payment = self.payments.all().first()
             formatted_date = last_payment.date_paid.strftime('%B %d, %Y')
-            check.mark_pass(message="Has been paid on the {}".format(
-                                        formatted_date))
+            check.mark_pass(message="Has been paid on the {}"
+                .format(formatted_date))
             return check
 
         if timezone.now().date() > self.date_dued:

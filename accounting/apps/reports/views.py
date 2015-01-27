@@ -33,7 +33,11 @@ class TimePeriodFormMixin(object):
 
         # currrent quarter
         now = timezone.now()
-        start = date(year=now.year, month=(now.month - ((now.month-1) % 3)), day=1)
+        start = date(
+            year=now.year,
+            month=(now.month - ((now.month - 1) % 3)),
+            day=1
+        )
         end = start + relativedelta(months=3)
 
         initial['date_from'] = start
@@ -90,7 +94,7 @@ class GenericSettingsMixin(object):
 
 
 class BusinessSettingsUpdateView(GenericSettingsMixin,
-                                  generic.UpdateView):
+                                 generic.UpdateView):
     template_name = "reports/financial_settings_update.html"
     model = BusinessSettings
     form_class = BusinessSettingsForm
@@ -135,7 +139,11 @@ class ProfitAndLossReportView(generic.TemplateView):
 
         # currrent quarter
         now = timezone.now()
-        start = date(year=now.year, month=(now.month - ((now.month-1) % 3)), day=1)
+        start = date(
+            year=now.year,
+            month=(now.month - ((now.month - 1) % 3)),
+            day=1
+        )
         end = start + relativedelta(months=3)
 
         report = ProfitAndLossReport(orga, start=start, end=end)

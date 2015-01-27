@@ -5,7 +5,6 @@ from dateutil.relativedelta import relativedelta
 
 from accounting.apps.books.models import Invoice, Bill
 from accounting.apps.books.calculators import ProfitsLossCalculator
-from accounting.libs import prices
 from accounting.libs.intervals import TimeInterval
 
 
@@ -74,7 +73,7 @@ class TaxReport(BaseReport):
                 summary.expenses_amount += output.amount_excl_tax
             else:
                 raise ValueError("Unsupported type of sale {}"
-                    .format(sale.__class__))
+                    .format(output.sale.__class__))
 
 
 class ProfitAndLossSummary(object):
@@ -105,8 +104,8 @@ class ProfitAndLossReport(BaseReport):
         self.summaries = {}
         steps_interval = relativedelta(end, start)
 
-        assert self.group_by_resolution in self.RESOLUTION_CHOICES,
-               "No a resolution choice"
+        assert self.group_by_resolution in self.RESOLUTION_CHOICES, \
+            "No a resolution choice"
         if self.group_by_resolution == self.RESOLUTION_MONTHLY:
             for step in range(0, steps_interval.months):
                 key_date = start + relativedelta(months=step)
@@ -154,7 +153,7 @@ class ProfitAndLossReport(BaseReport):
                 summary.expenses_amount += output.amount_excl_tax
             else:
                 raise ValueError("Unsupported type of sale {}"
-                    .format(sale.__class__))
+                    .format(output.sale.__class__))
 
 
 class PayRunSummary(object):
@@ -220,7 +219,10 @@ class InvoiceDetailsReport(BaseReport):
 
     def generate_for_invoices(self, invoice_queryset):
         invoice_queryset = (invoice_queryset
-            .filter(payments__date_paid__range=[self.period.start, self.period.end]))
+            .filter(payments__date_paid__range=[
+                self.period.start,
+                self.period.end
+            ]))
 
         # optimize the query
         invoice_queryset = (invoice_queryset

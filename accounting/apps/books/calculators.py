@@ -1,7 +1,5 @@
 from decimal import Decimal as D
 
-from django.db.models import Sum
-
 from accounting.libs.intervals import TimeInterval
 
 
@@ -50,7 +48,8 @@ class ProfitsLossCalculator(object):
 
     organization = None
 
-    def __init__(self, organization, sum_type=SUM_TYPE_COLLECTED, start=None, end=None):
+    def __init__(self, organization, sum_type=SUM_TYPE_COLLECTED,
+                 start=None, end=None):
         assert sum_type in self.SUM_TYPE_CHOICES, "Not a supported sum type"
         self.organization = organization
         self.period = TimeInterval(start=start, end=end)

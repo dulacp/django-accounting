@@ -1,7 +1,6 @@
 from django.db.models.fields import FieldDoesNotExist
 from django.views import generic
 
-from .models import Organization
 from .utils import organization_manager
 
 
@@ -17,7 +16,7 @@ class RestrictToSelectedOrganizationQuerySetMixin(object):
 
         # build the restriction
         orga = organization_manager.get_selected_organization(self.request)
-        return { field.name: orga.pk }
+        return {field.name: orga.pk}
 
     def get_queryset(self):
         filters = self.get_restriction_filters()
@@ -44,14 +43,14 @@ class RestrictToOrganizationFormRelationsMixin(object):
 
             rel_model = rel.to
             try:
-                rel_field = rel_model._meta.get_field_by_name(self.relation_name)
+                rel_model._meta.get_field_by_name(self.relation_name)
             except FieldDoesNotExist:
                 # next field
                 continue
 
             form_field = form.fields[source]
             form_field.queryset = (form_field.choices.queryset
-                .filter(**{ self.relation_name: organization }))
+                .filter(**{self.relation_name: organization}))
 
 
 class SaleListQuerySetMixin(object):
@@ -66,7 +65,7 @@ class SaleListQuerySetMixin(object):
                 'lines',
                 'lines__tax_rate'))
         try:
-            payments_field = self.model._meta.get_field_by_name('payments')
+            self.model._meta.get_field_by_name('payments')
             queryset = queryset.prefetch_related('payments')
         except FieldDoesNotExist:
             pass
@@ -154,7 +153,8 @@ class PaymentFormMixin(generic.edit.FormMixin):
     payment_form_class = None
 
     def get_context_data(self, **kwargs):
-        assert self.payment_form_class is not None, "No formset class specified"
+        assert self.payment_form_class is not None, \
+            "No formset class specified"
         self.object = self.get_object()
         context = super().get_context_data(**kwargs)
         form = self.get_form(self.payment_form_class)

@@ -1,6 +1,6 @@
 from django import template
 
-from classytags.core import Tag, Options
+from classytags.core import Options
 from classytags.arguments import Argument
 from classytags.helpers import InclusionTag
 
@@ -17,7 +17,7 @@ class Check(InclusionTag):
 
     def get_context(self, context, check):
         context.update({
-                'check': check
-            })
+            'check': check
+        })
 
         return context

@@ -65,7 +65,7 @@ class TimePeriodForm(forms.Form):
                 ]
             }
             self._description = ("Between {} and {}"
-                                    .format(date_from, date_to))
+                .format(date_from, date_to))
         elif date_from and not date_to:
             self._filters = {'date_placed__gte': date_from}
             self._description = "Since {}".format(date_from)

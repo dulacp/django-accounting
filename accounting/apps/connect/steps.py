@@ -1,9 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
-from accounting.apps.books.models import (
-    Organization,
-    TaxRate)
+from accounting.apps.books.models import Organization
 
 
 class StepOptions(object):
@@ -97,7 +95,7 @@ class ConfigureBusinessSettingsStep(BaseStep):
         settings = orga.business_settings
         try:
             settings.full_clean()
-        except ValidationError as inst:
+        except ValidationError:
             return False
         return True
 
@@ -116,7 +114,7 @@ class ConfigureFinancialSettingsStep(BaseStep):
         settings = orga.financial_settings
         try:
             settings.full_clean()
-        except ValidationError as inst:
+        except ValidationError:
             return False
         return True
 
@@ -149,7 +147,7 @@ class ConfigurePayRunSettingsStep(BaseStep):
         settings = orga.payrun_settings
         try:
             settings.full_clean()
-        except ValidationError as inst:
+        except ValidationError:
             return False
         return True
 

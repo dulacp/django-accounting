@@ -15,17 +15,17 @@ class CheckResult(object):
     RESULT_FAILED = 'failed'
     RESULT_PASSED = 'passed'
     RESULT_CHOICES = (
-            (RESULT_NEUTRAL,   "Neutral"),
-            (RESULT_FAILED,    "Failed"),
-            (RESULT_PASSED,    "Passed"),
-        )
+        (RESULT_NEUTRAL, "Neutral"),
+        (RESULT_FAILED, "Failed"),
+        (RESULT_PASSED, "Passed"),
+    )
 
     LEVEL_WARNING = 'warning'
     LEVEL_ERROR = 'error'
     LEVEL_CHOICES = (
-            (LEVEL_WARNING, "Warning"),
-            (LEVEL_ERROR,   "Error"),
-        )
+        (LEVEL_WARNING, "Warning"),
+        (LEVEL_ERROR, "Error"),
+    )
 
     def __init__(self, field, result=None, level=None, message=None):
         self.field = field
@@ -63,10 +63,12 @@ class CheckingModelOptions(object):
     """
     def __init__(self, meta):
         self.fields = getattr(meta, 'fields', ())
-        assert isinstance(self.fields, (list, tuple)), '`fields` must be a list or tuple'
+        assert isinstance(self.fields, (list, tuple)), \
+            '`fields` must be a list or tuple'
 
         self.exclude = getattr(meta, 'exclude', ())
-        assert isinstance(self.exclude, (list, tuple)), '`exclude` must be a list or tuple'
+        assert isinstance(self.exclude, (list, tuple)), \
+            '`exclude` must be a list or tuple'
 
 
 class CheckingModelMixin(object):
@@ -84,7 +86,7 @@ class CheckingModelMixin(object):
         if checking_fields is None:
             checking_fields = self.get_checking_fields()
 
-        if not field_name in checking_fields:
+        if field_name not in checking_fields:
             raise AttributeError("Field '%s' not checkable" % field_name)
 
         field = checking_fields.get(field_name)
