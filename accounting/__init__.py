@@ -43,7 +43,7 @@ ACCOUNTING_APPS = (
 )
 
 
-ACCOUNTING_MIDDLEWARE_CLASSES = (
+ACCOUNTING_TEMPLATE_CONTEXT_PROCESSORS = (
     'accounting.apps.context_processors.metadata',
     'accounting.apps.books.context_processors.organizations',
 )
