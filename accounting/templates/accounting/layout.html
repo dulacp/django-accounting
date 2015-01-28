@@ -1,7 +1,8 @@
-{% extends "base.html" %}
+{% extends "accounting/base.html" %}
 {% load nav bootstrap3 %}
 
 {% block maincontent %}
+    {% block nav %}
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -31,6 +32,7 @@
             </div>
         </div>
     </div>
+    {% endblock nav %}
 
     {% block container %}
     <div class="container-fluid">
