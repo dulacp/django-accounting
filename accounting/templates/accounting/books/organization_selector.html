@@ -32,6 +32,16 @@
                     </div>
                 </div>
                 {% endfor %}
+                <div class="col-md-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Add an organization</h3>
+                        </div>
+                        <div class="panel-body">
+                            <a class="btn btn-default btn-block" role="button" href="{% url 'books:organization-create' %}">New organization</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
