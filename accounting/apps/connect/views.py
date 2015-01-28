@@ -47,8 +47,9 @@ class GettingStartedView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
+        request = self.request
         steps = self.get_steps(self.request)
-        uncompleted_steps = filter(lambda s: not s.completed, steps)
+        uncompleted_steps = filter(lambda s: not s.completed(request), steps)
         try:
             next_step = next(uncompleted_steps)
         except StopIteration:
@@ -62,7 +63,7 @@ class GettingStartedView(generic.TemplateView):
 
     def post(self, request, *args, **kwargs):
         steps = self.get_steps(request)
-        uncompleted_steps = filter(lambda s: not s.completed, steps)
+        uncompleted_steps = filter(lambda s: not s.completed(request), steps)
         if not len(uncompleted_steps):
             return super().post(request, *args, **kwargs)
 

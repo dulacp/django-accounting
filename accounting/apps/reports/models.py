@@ -4,8 +4,12 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 class BusinessSettings(models.Model):
     BUSINESS_TYPE_SOLE_PROPRIETORSHIP = 'sole_proprietorship'
+    BUSINESS_TYPE_PARTNERSHIP = 'partnership'
+    BUSINESS_TYPE_CORPORATION = 'corporation'
     BUSINESS_TYPE_CHOICES = (
         (BUSINESS_TYPE_SOLE_PROPRIETORSHIP, "Sole Proprietorship"),
+        (BUSINESS_TYPE_PARTNERSHIP, "Partnership"),
+        (BUSINESS_TYPE_CORPORATION, "Corporation"),
     )
     business_type = models.CharField(max_length=50,
                                      choices=BUSINESS_TYPE_CHOICES)

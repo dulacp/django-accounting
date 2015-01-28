@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
 from accounting.apps.books.models import Organization
+from accounting.apps.books.utils import organization_manager
 
 
 class StepOptions(object):
@@ -30,13 +31,12 @@ class BaseStep(object):
         self.opts = self._options_class(getattr(self, 'StepOptions', None))
         self.user = user
 
-    @property
-    def completed(self):
+    def completed(self, request):
         if self._completion is None:
-            self._completion = self.check_completion()
+            self._completion = self.check_completion(request)
         return self._completion
 
-    def check_completion(self):
+    def check_completion(self, request):
         """
         Implement the logic of the step
         and returns a boolean
@@ -56,7 +56,7 @@ class CreateOrganizationStep(BaseStep):
     class StepOptions:
         name = "Create an Organization"
 
-    def check_completion(self):
+    def check_completion(self, request):
         count = Organization.objects.all().count()
         return count > 0
 
@@ -72,7 +72,7 @@ class ConfigureTaxRatesStep(BaseStep):
     class StepOptions:
         name = "Configure Tax Rates"
 
-    def check_completion(self):
+    def check_completion(self, request):
         orga = Organization.objects.all().first()
         count = orga.tax_rates.all().count()
         return count > 0
@@ -89,9 +89,8 @@ class ConfigureBusinessSettingsStep(BaseStep):
     class StepOptions:
         name = "Configure Business Settings"
 
-    def check_completion(self):
-        # TODO support multiple organizations checking with substeps
-        orga = Organization.objects.all().first()
+    def check_completion(self, request):
+        orga = organization_manager.get_selected_organization(request)
         settings = orga.business_settings
         try:
             settings.full_clean()
@@ -108,9 +107,8 @@ class ConfigureFinancialSettingsStep(BaseStep):
     class StepOptions:
         name = "Configure Financial Settings"
 
-    def check_completion(self):
-        # TODO support multiple organizations checking with substeps
-        orga = Organization.objects.all().first()
+    def check_completion(self, request):
+        orga = organization_manager.get_selected_organization(request)
         settings = orga.financial_settings
         try:
             settings.full_clean()
@@ -127,7 +125,7 @@ class AddEmployeesStep(BaseStep):
     class StepOptions:
         name = "Add Employees"
 
-    def check_completion(self):
+    def check_completion(self, request):
         orga = Organization.objects.all().first()
         count = orga.employees.all().count()
         return count > 0
@@ -141,9 +139,8 @@ class ConfigurePayRunSettingsStep(BaseStep):
     class StepOptions:
         name = "Configure Pay Run Settings"
 
-    def check_completion(self):
-        # TODO support multiple organizations checking with substeps
-        orga = Organization.objects.all().first()
+    def check_completion(self, request):
+        orga = organization_manager.get_selected_organization(request)
         settings = orga.payrun_settings
         try:
             settings.full_clean()
@@ -160,7 +157,7 @@ class AddFirstClientStep(BaseStep):
     class StepOptions:
         name = "Add the first Client"
 
-    def check_completion(self):
+    def check_completion(self, request):
         orga = Organization.objects.all().first()
         count = orga.clients.all().count()
         return count > 0
@@ -174,7 +171,7 @@ class AddFirstInvoiceStep(BaseStep):
     class StepOptions:
         name = "Add the first Invoice"
 
-    def check_completion(self):
+    def check_completion(self, request):
         orga = Organization.objects.all().first()
         count = orga.invoices.all().count()
         return count > 0
