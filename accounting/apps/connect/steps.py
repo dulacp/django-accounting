@@ -73,7 +73,9 @@ class ConfigureTaxRatesStep(BaseStep):
         name = "Configure Tax Rates"
 
     def check_completion(self, request):
-        orga = Organization.objects.all().first()
+        orga = organization_manager.get_selected_organization(request)
+        if orga is None:
+            return False
         count = orga.tax_rates.all().count()
         return count > 0
 
@@ -91,6 +93,8 @@ class ConfigureBusinessSettingsStep(BaseStep):
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
+        if orga is None:
+            return False
         settings = orga.business_settings
         try:
             settings.full_clean()
@@ -109,6 +113,8 @@ class ConfigureFinancialSettingsStep(BaseStep):
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
+        if orga is None:
+            return False
         settings = orga.financial_settings
         try:
             settings.full_clean()
@@ -126,7 +132,9 @@ class AddEmployeesStep(BaseStep):
         name = "Add Employees"
 
     def check_completion(self, request):
-        orga = Organization.objects.all().first()
+        orga = organization_manager.get_selected_organization(request)
+        if orga is None:
+            return False
         count = orga.employees.all().count()
         return count > 0
 
@@ -141,6 +149,8 @@ class ConfigurePayRunSettingsStep(BaseStep):
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
+        if orga is None:
+            return False
         settings = orga.payrun_settings
         try:
             settings.full_clean()
@@ -158,7 +168,9 @@ class AddFirstClientStep(BaseStep):
         name = "Add the first Client"
 
     def check_completion(self, request):
-        orga = Organization.objects.all().first()
+        orga = organization_manager.get_selected_organization(request)
+        if orga is None:
+            return False
         count = orga.clients.all().count()
         return count > 0
 
@@ -172,7 +184,9 @@ class AddFirstInvoiceStep(BaseStep):
         name = "Add the first Invoice"
 
     def check_completion(self, request):
-        orga = Organization.objects.all().first()
+        orga = organization_manager.get_selected_organization(request)
+        if orga is None:
+            return False
         count = orga.invoices.all().count()
         return count > 0
 
