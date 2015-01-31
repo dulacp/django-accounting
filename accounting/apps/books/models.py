@@ -239,6 +239,10 @@ class AbstractSale(CheckingModelMixin, models.Model):
             check.mark_fail(message="No due date specified")
             return check
 
+        if self.total_excl_tax == D('0'):
+            check.mark_fail(message="The invoice has no value")
+            return check
+
         if self.is_fully_paid():
             last_payment = self.payments.all().first()
             formatted_date = last_payment.date_paid.strftime('%B %d, %Y')

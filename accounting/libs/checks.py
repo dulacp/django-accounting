@@ -175,10 +175,14 @@ class CheckingModelMixin(object):
         checks = self.check_fields()
 
         # special checks
-        additional_checks = self.check()
+        additional_checks = self.check_additionnals()
         checks.extend(additional_checks)
 
         return checks
+
+    def check_additionnals(self):
+        """Additional checks that the user can implement"""
+        return []
 
     def _raw_checking_completion(self):
         """
