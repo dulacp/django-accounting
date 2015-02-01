@@ -13,6 +13,7 @@
                     <li class="list-group-item clearfix">
                         <a href="{{ step.get_action_url }}" class="btn btn-success pull-right">Take care of that</a>
                         <h4>{{ step.opts.name }}</h4>
+                        <p>{{ step.opts.description }}</p>
                     </li>
                     {% else %}
                     <li class="list-group-item clearfix disabled">
@@ -22,6 +23,7 @@
                             </span>
                             {{ step.opts.name }}
                         </h4>
+                        <p>{{ step.opts.description }}</p>
                     </li>
                     {% endif %}
                     {% endfor %}

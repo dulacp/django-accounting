@@ -15,8 +15,12 @@ class StepOptions(object):
     Meta class options for a `BaseStep` subclass
     """
     def __init__(self, meta):
-        self.name = getattr(meta, 'name', ())
-        assert isinstance(self.name, (str)), '`name` must be a string instance'
+        self.name = getattr(meta, 'name', None)
+        assert(isinstance(self.name, (str)),
+            '`name` must be a string instance')
+        self.description = getattr(meta, 'description', "")
+        assert(isinstance(self.description, (str)),
+            '`description` must be a string instance')
 
 
 class BaseStep(object):
@@ -30,6 +34,7 @@ class BaseStep(object):
 
     class StepOptions:
         name = "<Abstract>"
+        description = None
 
     def __init__(self, user):
         super().__init__()
@@ -68,6 +73,8 @@ class CreateOrganizationStep(BaseStep):
 
     class StepOptions:
         name = "Create an Organization"
+        description = "the organization is the foundation of the accounting " \
+                      "system, tell Accountant-x more about it"
 
     def check_completion(self, request):
         count = Organization.objects.all().count()
@@ -84,6 +91,8 @@ class ConfigureTaxRatesStep(BaseStep):
 
     class StepOptions:
         name = "Configure Tax Rates"
+        description = "even if you are not subject to tax collecting rules " \
+                      "you should create a 0% tax entry"
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
@@ -103,6 +112,7 @@ class ConfigureBusinessSettingsStep(BaseStep):
 
     class StepOptions:
         name = "Configure Business Settings"
+        description = "for now there is not much thing, but please create it"
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
@@ -125,6 +135,7 @@ class ConfigureFinancialSettingsStep(BaseStep):
 
     class StepOptions:
         name = "Configure Financial Settings"
+        description = "tell Accountant-x what is your financial rulling rule"
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
@@ -145,6 +156,8 @@ class AddEmployeesStep(BaseStep):
 
     class StepOptions:
         name = "Add Employees"
+        description = "add at least one *employee*, even if you are giving " \
+                      "yourself a salary that follows the profits"
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
@@ -161,6 +174,7 @@ class ConfigurePayRunSettingsStep(BaseStep):
 
     class StepOptions:
         name = "Configure Pay Run Settings"
+        description = "tell to Accountant-x how you distribute salaries"
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
@@ -181,6 +195,7 @@ class AddFirstClientStep(BaseStep):
 
     class StepOptions:
         name = "Add the first Client"
+        description = "close to the first invoice"
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
@@ -197,6 +212,7 @@ class AddFirstInvoiceStep(BaseStep):
 
     class StepOptions:
         name = "Add the first Invoice"
+        description = "finally create it !"
 
     def check_completion(self, request):
         orga = organization_manager.get_selected_organization(request)
