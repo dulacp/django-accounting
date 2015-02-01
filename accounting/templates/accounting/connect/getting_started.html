@@ -9,22 +9,29 @@
             <div class="row">
                 <ol class="list-group check-list">
                     {% for step in steps %}
-                    {% if not step.completed %}
-                    <a class="list-group-item {% ifequal step next_step %}active{% endifequal %}" href="{{ step.get_action_url }}">
-                        {{ step.opts.name }}
-                    </a>
+                    {% if not step.is_completed %}
+                    <li class="list-group-item clearfix">
+                        <a href="{{ step.get_action_url }}" class="btn btn-success pull-right">Take care of that</a>
+                        <h4>{{ step.opts.name }}</h4>
+                    </li>
                     {% else %}
-                    <li class="list-group-item disabled {% ifequal step next_step %}active{% endifequal %}">
-                        <span class="check-item">
-                            <span class="glyphicon glyphicon-ok"></span>
-                        </span>
-                        {{ step.opts.name }}
+                    <li class="list-group-item clearfix disabled">
+                        <h4>
+                            <span class="check-item pull-right">
+                                <span class="glyphicon glyphicon-ok"></span>
+                            </span>
+                            {{ step.opts.name }}
+                        </h4>
                     </li>
                     {% endif %}
                     {% endfor %}
                 </ol>
 
-                <a href="{% url 'books:dashboard' %}" {% if not all_steps_completed %}disabled{% endif %} class="btn btn-success btn-lg btn-block">All Good! Go make invoices</a>
+                {% if not all_steps_completed %}
+                <a href="#" disabled class="btn btn-default btn-lg btn-block">Please complete the above steps for your own sake</a>
+                {% else %}
+                <a href="{% url 'books:dashboard' %}" class="btn btn-success btn-lg btn-block">All Good! Go make some money</a>
+                {% endif %}
             </div>
         </div>
     </div>

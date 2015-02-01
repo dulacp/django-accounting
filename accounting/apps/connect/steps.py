@@ -1,8 +1,13 @@
+import logging
+
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
 from accounting.apps.books.models import Organization
 from accounting.apps.books.utils import organization_manager
+from accounting.apps.reports.models import BusinessSettings
+
+logger = logging.getLogger(__name__)
 
 
 class StepOptions(object):
@@ -34,6 +39,14 @@ class BaseStep(object):
     def completed(self, request):
         if self._completion is None:
             self._completion = self.check_completion(request)
+        return self._completion
+
+    def is_completed(self):
+        """pre computed value, to be called in templates"""
+        if self._completion is None:
+            logger.error("`completed` needs to be run before using "
+                         "this method")
+            return False
         return self._completion
 
     def check_completion(self, request):
@@ -95,9 +108,11 @@ class ConfigureBusinessSettingsStep(BaseStep):
         orga = organization_manager.get_selected_organization(request)
         if orga is None:
             return False
-        settings = orga.business_settings
         try:
+            settings = orga.business_settings
             settings.full_clean()
+        except BusinessSettings.DoesNotExist:
+            return False
         except ValidationError:
             return False
         return True

@@ -1,4 +1,5 @@
 from .utils import organization_manager
+from .models import Organization
 
 
 def organizations(request):
@@ -7,5 +8,6 @@ def organizations(request):
     """
     orga = organization_manager.get_selected_organization(request)
     return {
-        'selected_organization': orga
+        'all_organizations': Organization.objects.all(),
+        'selected_organization': orga,
     }
