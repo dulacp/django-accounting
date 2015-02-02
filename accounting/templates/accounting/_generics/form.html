@@ -3,9 +3,9 @@
 
 {% block content %}
     {% if object.pk %}
-        <h1 class="page-header">Modifier une {{ form|get_form_model_verbose_name }}</h1>
+        <h1 class="page-header">Edit a {{ form|get_form_model_verbose_name }}</h1>
     {% else %}
-        <h1 class="page-header">Créé un {{ form|get_form_model_verbose_name }}</h1>
+        <h1 class="page-header">Create a {{ form|get_form_model_verbose_name }}</h1>
     {% endif %}
 
     <form action="." method="post" class="form">
@@ -31,9 +31,9 @@
         {% buttons %}
             <button type="submit" class="btn btn-success">
                 {% if object.pk %}
-                    {% bootstrap_icon "hand-right" %} Sauvegarder les modifications
+                    {% bootstrap_icon "hand-right" %} Save changes
                 {% else %}
-                    {% bootstrap_icon "thumbs-up" %} Envoyer la création
+                    {% bootstrap_icon "thumbs-up" %} Send creation
                 {% endif %}
             </button>
         {% endbuttons %}
