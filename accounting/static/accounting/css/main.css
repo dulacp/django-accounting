@@ -145,6 +145,19 @@ body {
 
 
 /*
+ * Figure
+ */
+.figure {
+  margin-bottom: 1em;
+  padding: 0.8em 0.5em 1.5em 0.5em;
+  background: white;
+  background: rgba(255, 255, 255, 0.50);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+}
+
+
+/*
  * Panels
  */
 .panel-link {

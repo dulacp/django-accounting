@@ -10,21 +10,29 @@
     </h1>
 
     <div class="row placeholders">
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>{{ organization.turnover_excl_tax|currency|default:"-" }}</h4>
-            <span class="text-muted">Turnover</span>
+        <div class="col-xs-6 col-sm-3">
+            <div class="figure">
+                <h4>{{ organization.turnover_excl_tax|currency|default:"-" }}</h4>
+                <span class="text-muted">Turnover</span>
+            </div>
         </div>
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>{{ organization.profits|currency|default:"-" }}</h4>
-            <span class="text-muted">Profits</span>
+        <div class="col-xs-6 col-sm-3">
+            <div class="figure">
+                <h4>{{ organization.profits|currency|default:"-" }}</h4>
+                <span class="text-muted">Profits</span>
+            </div>
         </div>
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>{{ organization.tax_provisionning|currency|default:0 }}</h4>
-            <span class="text-muted">Tax Provisionning</span>
+        <div class="col-xs-6 col-sm-3">
+            <div class="figure">
+                <h4>{{ organization.tax_provisionning|currency|default:0 }}</h4>
+                <span class="text-muted">Tax Provisionning</span>
+            </div>
         </div>
-        <div class="col-xs-6 col-sm-3 placeholder">
-            <h4>{{ organization.overdue_total|currency|default:0 }}</h4>
-            <span class="text-muted">Due payments</span>
+        <div class="col-xs-6 col-sm-3">
+            <div class="figure">
+                <h4>{{ organization.overdue_total|currency|default:0 }}</h4>
+                <span class="text-muted">Due payments</span>
+            </div>
         </div>
     </div>
 
