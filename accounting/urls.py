@@ -12,6 +12,9 @@ urlpatterns = patterns('',
         namespace="people")),
     url(r'^reports/', include('accounting.apps.reports.urls',
         namespace="reports")),
+
+    # third party
+    url(r'^select2/', include('django_select2.urls')),
 )
 
 if settings.DEBUG:

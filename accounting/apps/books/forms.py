@@ -11,6 +11,7 @@ from .models import (
     Bill,
     BillLine,
     Payment)
+from accounting.apps.people.forms import UserChoices, UserMultipleChoices
 
 
 class RequiredFirstInlineFormSet(BaseInlineFormSet):
@@ -27,11 +28,14 @@ class RequiredFirstInlineFormSet(BaseInlineFormSet):
 
 
 class OrganizationForm(ModelForm):
+    members = UserMultipleChoices(required=False)
+
     class Meta:
         model = Organization
         fields = (
             "display_name",
             "legal_name",
+            "members",
         )
 
 

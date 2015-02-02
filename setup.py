@@ -33,12 +33,17 @@ setup(name='django-accounting',
           'django>=1.7.0,<1.8',
           # Used to render the forms
           'django-bootstrap3==4.11.0',
+          # Used to improve the forms
+          'Django_Select2_Py3>=4.2.1',
           # Define beautiful tags
           'django-classy-tags==0.5.1',
           # Internationalization
           'Babel>=1.0,<1.4',
           # Date utilities
           'python-dateutil>=2.2,<2.3',
+      ],
+      dependency_links=[
+          'http://github.com/applegrew/django-select2@python3#egg=Django_Select2_Py3-4.2.1',
       ],
       # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[

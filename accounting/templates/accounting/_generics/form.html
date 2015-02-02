@@ -2,14 +2,39 @@
 {% load bootstrap3 introspection_filters %}
 
 {% block content %}
-    <h1 class="page-header">Create an {{ form|get_form_model_verbose_name }}</h1>
+    {% if object.pk %}
+        <h1 class="page-header">Modifier une {{ form|get_form_model_verbose_name }}</h1>
+    {% else %}
+        <h1 class="page-header">Créé un {{ form|get_form_model_verbose_name }}</h1>
+    {% endif %}
 
     <form action="." method="post" class="form">
         {% csrf_token %}
-        {% bootstrap_form form %}
+
+        {% if return_url %}
+        <input type="hidden" name="_return_url" value="{{ return_url }}">
+        {% endif %}
+
+        {% bootstrap_form_errors form %}
+
+        {% for field in form %}
+            {% if form|is_select2_field:field %}
+                <div class="form-group">
+                    <label class="control-label control-label-block" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {% bootstrap_field field %}
+                </div>
+            {% else %}
+                {% bootstrap_field field %}
+            {% endif %}
+        {% endfor %}
+
         {% buttons %}
             <button type="submit" class="btn btn-success">
-                {% bootstrap_icon "star" %} Create
+                {% if object.pk %}
+                    {% bootstrap_icon "hand-right" %} Sauvegarder les modifications
+                {% else %}
+                    {% bootstrap_icon "thumbs-up" %} Envoyer la création
+                {% endif %}
             </button>
         {% endbuttons %}
     </form>
