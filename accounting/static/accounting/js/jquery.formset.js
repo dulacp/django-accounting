@@ -164,7 +164,7 @@
                 if (hideAddButton) addButton.hide();
             }
             addButton.click(function() {
-                var formCount = parseInt(totalForms.val()),
+                var formCount = parseInt(totalForms.val() || 0),
                     row = options.formTemplate.clone(true).removeClass('formset-custom-template'),
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this);
                 applyExtraClasses(row, formCount);

@@ -1,5 +1,6 @@
 $(function() {
     $('.formset-form').formset({
+        prefix: 'lines',
         addText: 'add another line',
         deleteText: 'remove line',
         addCssClass: 'btn btn-primary btn-sm',
