@@ -28,7 +28,7 @@
         </div>
     </div>
 
-    <div class="row-fluid">
+    <div class="row">
         <div class="col-xs-12 col-sm-6">
             {% include "books/_partials/invoice_list.html" with invoices=invoices hide_edit=True %}
             <a href="{% url 'books:invoice-create' %}" class="btn btn-primary btn-lg" role="button">
