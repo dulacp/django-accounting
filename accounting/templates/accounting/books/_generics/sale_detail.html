@@ -1,29 +1,41 @@
 {% load currency_filters bootstrap3 form_filters check_filters check_tags %}
 
 <div class="row placeholders">
-    <div class="col-xs-6 col-sm-4 placeholder">
-        <h4>{{ object.total_incl_tax|currency|default:"-" }}</h4>
-        <span class="text-muted">Total (incl. tax)</span>
+    <div class="col-xs-6 col-sm-4">
+        <div class="figure">
+            <h4>{{ object.total_incl_tax|currency|default:"-" }}</h4>
+            <span class="text-muted">Total (incl. tax)</span>
+        </div>
     </div>
-    <div class="col-xs-6 col-sm-4 placeholder">
-        <h4>{{ object.total_excl_tax|currency|default:"-" }}</h4>
-        <span class="text-muted">Total (excl. tax)</span>
+    <div class="col-xs-6 col-sm-4">
+        <div class="figure">
+            <h4>{{ object.total_excl_tax|currency|default:"-" }}</h4>
+            <span class="text-muted">Total (excl. tax)</span>
+        </div>
     </div>
-    <div class="col-xs-6 col-sm-4 placeholder">
-        <h4>{{ object.total_tax|currency }}</h4>
-        <span class="text-muted">Tax</span>
+    <div class="col-xs-6 col-sm-4">
+        <div class="figure">
+            <h4>{{ object.total_tax|currency }}</h4>
+            <span class="text-muted">Tax</span>
+        </div>
     </div>
-    <div class="col-xs-6 col-sm-4 placeholder">
-        <h4>{{ object.date_issued|default:"-" }}</h4>
-        <span class="text-muted">Date issued</span>
+    <div class="col-xs-6 col-sm-4">
+        <div class="figure">
+            <h4>{{ object.date_issued|default:"-" }}</h4>
+            <span class="text-muted">Date issued</span>
+        </div>
     </div>
-    <div class="col-xs-6 col-sm-4 placeholder">
-        <h4>{{ object.total_due_incl_tax|currency|default:"-" }}</h4>
-        <span class="text-muted">Total still due (incl. tax)</span>
+    <div class="col-xs-6 col-sm-4">
+        <div class="figure">
+            <h4>{{ object.total_due_incl_tax|currency|default:"-" }}</h4>
+            <span class="text-muted">Total still due (incl. tax)</span>
+        </div>
     </div>
-    <div class="col-xs-6 col-sm-4 placeholder">
-        <h4>{{ object.date_dued|default:"-" }}</h4>
-        <span class="text-muted">Date dued</span>
+    <div class="col-xs-6 col-sm-4">
+        <div class="figure">
+            <h4>{{ object.date_dued|default:"-" }}</h4>
+            <span class="text-muted">Date dued</span>
+        </div>
     </div>
 </div>
 
