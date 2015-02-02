@@ -38,22 +38,3 @@ install:
 
 upgrade:
 	pip install --upgrade -r requirements.txt
-
-
-## Deployment
-
-deploy_production:
-	git push --tag origin master
-	git push heroku master
-
-migrate_production:
-	heroku run python manage.py migrate --remote heroku
-
-collectstatic_production:
-	./manage.py collectstatic --noinput
-	aws s3 sync --acl public-read renover/static s3://renover-immo/static/
-
-# shortcuts for deploy to the production
-dp: deploy_production
-dmp: deploy_production migrate_production
-cp: collectstatic_productio
