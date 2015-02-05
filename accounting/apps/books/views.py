@@ -44,7 +44,7 @@ class OrganizationSelectorView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        orgas = Organization.objects.all()
+        orgas = self.request.user.organizations.all()
         cumulated_turnovers = (orgas
             .aggregate(sum=Sum('invoices__total_excl_tax'))["sum"])
         cumulated_debts = (orgas
