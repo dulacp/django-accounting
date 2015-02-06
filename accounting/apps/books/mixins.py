@@ -96,8 +96,9 @@ class AbstractSaleCreateUpdateMixin(RestrictToOrganizationFormRelationsMixin,
             context['line_formset'] = (
                 self.formset_class(self.request.POST, instance=self.object))
         else:
+            orga = organization_manager.get_selected_organization(self.request)
             context['line_formset'] = (
-                self.formset_class(instance=self.object))
+                self.formset_class(instance=self.object, organization=orga))
         return context
 
     def get_form(self, form_class):

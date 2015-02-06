@@ -35,6 +35,15 @@ class RequiredFirstInlineFormSet(BaseInlineFormSet):
             first_form.empty_permitted = False
 
 
+class SaleInlineLineFormSet(RequiredFirstInlineFormSet):
+
+    def __init__(self, *args, **kwargs):
+        orga = kwargs.pop('organization')
+        super().__init__(*args, **kwargs)
+        for f in self.forms:
+            f.restrict_to_organization(orga)
+
+
 class ClientForOrganizationChoices(AutoModelSelect2Field):
     queryset = Client.objects.all()
     search_fields = (
@@ -93,7 +102,10 @@ class RestrictLineFormToOrganizationMixin(object):
             else:
                 raise NotImplementedError("The mixin has been applied to a "
                                           "form model that is not supported")
-            self.fields['tax_rate'].queryset = organization.tax_rates.all()
+            self.restrict_to_organization(organization)
+
+    def restrict_to_organization(self, organization):
+        self.fields['tax_rate'].queryset = organization.tax_rates.all()
 
 
 class EstimateForm(ModelForm):
@@ -129,7 +141,7 @@ class EstimateLineForm(RestrictLineFormToOrganizationMixin,
 EstimateLineFormSet = inlineformset_factory(Estimate,
                                             EstimateLine,
                                             form=EstimateLineForm,
-                                            formset=RequiredFirstInlineFormSet,
+                                            formset=SaleInlineLineFormSet,
                                             min_num=1,
                                             extra=0)
 
@@ -167,7 +179,7 @@ class InvoiceLineForm(RestrictLineFormToOrganizationMixin,
 InvoiceLineFormSet = inlineformset_factory(Invoice,
                                            InvoiceLine,
                                            form=InvoiceLineForm,
-                                           formset=RequiredFirstInlineFormSet,
+                                           formset=SaleInlineLineFormSet,
                                            min_num=1,
                                            extra=0)
 
@@ -201,11 +213,14 @@ class BillLineForm(RestrictLineFormToOrganizationMixin,
             "tax_rate",
         )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
 
 BillLineFormSet = inlineformset_factory(Bill,
                                         BillLine,
                                         form=BillLineForm,
-                                        formset=RequiredFirstInlineFormSet,
+                                        formset=SaleInlineLineFormSet,
                                         min_num=1,
                                         extra=0)
 
