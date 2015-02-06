@@ -113,9 +113,8 @@ class TaxRate(models.Model):
 
 
 class AbstractSale(CheckingModelMixin, models.Model):
-    number = models.CharField(max_length=6,
-                              default=1,
-                              db_index=True)
+    number = models.IntegerField(default=1,
+                                 db_index=True)
 
     # Total price needs to be stored with and wihtout taxes
     # because the tax percentage can vary depending on the associated lines
