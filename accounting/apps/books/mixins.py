@@ -92,13 +92,16 @@ class AbstractSaleCreateUpdateMixin(RestrictToOrganizationFormRelationsMixin,
     def get_context_data(self, **kwargs):
         assert self.formset_class is not None, "No formset class specified"
         context = super().get_context_data(**kwargs)
+        orga = organization_manager.get_selected_organization(self.request)
         if self.request.POST:
-            context['line_formset'] = (
-                self.formset_class(self.request.POST, instance=self.object))
+            context['line_formset'] = self.formset_class(
+                self.request.POST,
+                instance=self.object,
+                organization=orga)
         else:
-            orga = organization_manager.get_selected_organization(self.request)
-            context['line_formset'] = (
-                self.formset_class(instance=self.object, organization=orga))
+            context['line_formset'] = self.formset_class(
+                instance=self.object,
+                organization=orga)
         return context
 
     def get_form(self, form_class):
