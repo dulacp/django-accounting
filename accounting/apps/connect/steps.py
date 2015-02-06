@@ -77,7 +77,8 @@ class CreateOrganizationStep(BaseStep):
                       "system, tell Accountant-x more about it"
 
     def check_completion(self, request):
-        count = Organization.objects.all().count()
+        orgas = organization_manager.get_user_organizations(request.user)
+        count = orgas.count()
         return count > 0
 
     def get_action_url(self):
