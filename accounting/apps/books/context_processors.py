@@ -16,8 +16,7 @@ def organizations(request):
         user_organizations = None
     else:
         user = request.user
-        user_organizations = (Organization.objects
-            .filter(Q(members=user) | Q(owner=user)))
+        user_organizations = organization_manager.get_user_organizations(user)
 
     return {
         'user_organizations': user_organizations,

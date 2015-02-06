@@ -46,5 +46,10 @@ ACCOUNTING_TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 
+ACCOUNTING_MIDDLEWARE_CLASSES = (
+    'accounting.apps.books.middlewares.AutoSelectOrganizationMiddleware',
+)
+
+
 def get_apps():
     return ACCOUNTING_APPS
