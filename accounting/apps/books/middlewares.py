@@ -4,6 +4,9 @@ from .utils import organization_manager
 class AutoSelectOrganizationMiddleware(object):
 
     def process_request(self, request):
+        if not request.user or not request.user.is_authenticated():
+            return
+
         orga = organization_manager.get_selected_organization(request)
         if orga is not None:
             return
