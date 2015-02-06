@@ -11,7 +11,15 @@ from .models import (
     Bill,
     BillLine,
     Payment)
-from accounting.apps.people.forms import UserChoices, UserMultipleChoices
+from .utils import organization_manager
+from accounting.apps.people.models import Client
+from accounting.apps.people.forms import (
+    UserChoices,
+    UserMultipleChoices)
+
+from django_select2.fields import (
+    AutoModelSelect2Field,
+    AutoModelSelect2MultipleField)
 
 
 class RequiredFirstInlineFormSet(BaseInlineFormSet):
@@ -25,6 +33,30 @@ class RequiredFirstInlineFormSet(BaseInlineFormSet):
         if len(self.forms) > 0:
             first_form = self.forms[0]
             first_form.empty_permitted = False
+
+
+class ClientForOrganizationChoices(AutoModelSelect2Field):
+    queryset = Client.objects.all()
+    search_fields = (
+        'name__icontains',
+    )
+
+    def get_results(self, request, *args, **kwargs):
+        self.__request = request
+        return super().get_results(request, *args, **kwargs)
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+
+        # build the restriction
+        # NB: we are forced to build the logic here because of the way
+        #     django-select2 fields are made... sadely
+        request = self.__request
+        orga = organization_manager.get_selected_organization(request)
+        del self.__request
+        qs = qs.filter(organization=orga)
+
+        return qs
 
 
 class OrganizationForm(ModelForm):
@@ -65,6 +97,8 @@ class RestrictLineFormToOrganizationMixin(object):
 
 
 class EstimateForm(ModelForm):
+    client = ClientForOrganizationChoices()
+
     class Meta:
         model = Estimate
         fields = (
@@ -101,6 +135,8 @@ EstimateLineFormSet = inlineformset_factory(Estimate,
 
 
 class InvoiceForm(ModelForm):
+    client = ClientForOrganizationChoices()
+
     class Meta:
         model = Invoice
         fields = (
@@ -137,6 +173,8 @@ InvoiceLineFormSet = inlineformset_factory(Invoice,
 
 
 class BillForm(ModelForm):
+    client = ClientForOrganizationChoices()
+
     class Meta:
         model = Bill
         fields = (

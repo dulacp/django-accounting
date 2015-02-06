@@ -7,7 +7,7 @@
     <form action="." method="post" class="form">
         {% csrf_token %}
 
-        {% bootstrap_form form %}
+        {% include "accounting/_partials/form_fields.html" with form=form %}
 
         <h2 class="page-header">Content</h2>
         {{ line_formset.management_form }}

@@ -31,10 +31,8 @@ class RestrictToOrganizationFormRelationsMixin(object):
     """
     relation_name = 'organization'
 
-    def restrict_fields_choices_to_organization(self, form, organization):
-        assert organization is not None, "no organization to restrict to"
-        model = form._meta.model
-        for source in form.fields:
+    def _restrict_fields_choices(self, model, organization, fields):
+        for source in fields:
             field, m, direct, m2m = model._meta.get_field_by_name(source)
             rel = field.rel
             if not rel:
@@ -48,9 +46,14 @@ class RestrictToOrganizationFormRelationsMixin(object):
                 # next field
                 continue
 
-            form_field = form.fields[source]
+            form_field = fields[source]
             form_field.queryset = (form_field.choices.queryset
                 .filter(**{self.relation_name: organization}))
+
+    def restrict_fields_choices_to_organization(self, form, organization):
+        assert organization is not None, "no organization to restrict to"
+        model = form._meta.model
+        self._restrict_fields_choices(model, organization, form.fields)
 
 
 class SaleListQuerySetMixin(object):
