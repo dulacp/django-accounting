@@ -1,3 +1,5 @@
+from django.db.models import Q
+
 from .utils import organization_manager
 from .models import Organization
 
@@ -13,7 +15,9 @@ def organizations(request):
     if not request.user or not request.user.is_authenticated():
         user_organizations = None
     else:
-        user_organizations = request.user.organizations.all()
+        user = request.user
+        user_organizations = (Organization.objects
+            .filter(Q(members=user) | Q(owner=user)))
 
     return {
         'user_organizations': user_organizations,
