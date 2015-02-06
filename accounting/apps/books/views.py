@@ -1,8 +1,9 @@
 import logging
+from decimal import Decimal as D
 
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.db.models import Sum
+from django.db.models import Q, Sum
 from django.http import HttpResponseRedirect
 
 from .mixins import (
@@ -44,11 +45,12 @@ class OrganizationSelectorView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        orgas = self.request.user.organizations.all()
+        user = self.request.user
+        orgas = Organization.objects.filter(Q(members=user) | Q(owner=user))
         cumulated_turnovers = (orgas
-            .aggregate(sum=Sum('invoices__total_excl_tax'))["sum"])
+            .aggregate(sum=Sum('invoices__total_excl_tax'))["sum"]) or D('0')
         cumulated_debts = (orgas
-            .aggregate(sum=Sum('bills__total_excl_tax'))["sum"])
+            .aggregate(sum=Sum('bills__total_excl_tax'))["sum"]) or D('0')
         cumulated_profits = cumulated_turnovers - cumulated_debts
 
         context["organizations_count"] = orgas.count()
