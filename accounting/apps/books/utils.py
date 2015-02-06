@@ -8,7 +8,10 @@ class OrganizationManager(object):
         # To avoid circular imports
         from .models import Organization
 
-        return Organization.objects.filter(Q(members=user) | Q(owner=user))
+        orgas = (Organization.objects
+            .filter(Q(members=user) | Q(owner=user))
+            .distinct())
+        return orgas
 
     def set_selected_organization(self, request, organization):
         key = self.selected_organization_key
