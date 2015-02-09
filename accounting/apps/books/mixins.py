@@ -1,5 +1,7 @@
 from django.db.models.fields import FieldDoesNotExist
 from django.views import generic
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 from .utils import organization_manager
 
@@ -23,6 +25,12 @@ class RestrictToSelectedOrganizationQuerySetMixin(object):
         queryset = super().get_queryset()
         queryset = queryset.filter(**filters)
         return queryset
+
+    def get(self, request, *args, **kwargs):
+        orga = organization_manager.get_selected_organization(request)
+        if orga is None:
+            return HttpResponseRedirect(reverse('books:organization-selector'))
+        return super().get(request, *args, **kwargs)
 
 
 class RestrictToOrganizationFormRelationsMixin(object):
