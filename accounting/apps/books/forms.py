@@ -50,22 +50,12 @@ class ClientForOrganizationChoices(AutoModelSelect2Field):
         'name__icontains',
     )
 
-    def get_results(self, request, *args, **kwargs):
-        self.__request = request
-        return super().get_results(request, *args, **kwargs)
-
-    def get_queryset(self, *args, **kwargs):
-        qs = super().get_queryset(*args, **kwargs)
-
-        # build the restriction
-        # NB: we are forced to build the logic here because of the way
-        #     django-select2 fields are made... sadely
-        request = self.__request
+    def prepare_qs_params(self, request, search_term, search_fields):
+        """restrict to the current selected organization"""
+        params = super().prepare_qs_params(request, search_term, search_fields)
         orga = organization_manager.get_selected_organization(request)
-        del self.__request
-        qs = qs.filter(organization=orga)
-
-        return qs
+        params['and']['organization'] = orga
+        return params
 
 
 class OrganizationForm(ModelForm):
