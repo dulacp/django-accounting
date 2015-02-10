@@ -106,10 +106,6 @@ class EstimateForm(ModelForm):
         fields = (
             "number",
             "client",
-
-            "draft",
-            "sent",
-            "paid",
             "date_issued",
             "date_dued",
         )
@@ -144,10 +140,6 @@ class InvoiceForm(ModelForm):
         fields = (
             "number",
             "client",
-
-            "draft",
-            "sent",
-            "paid",
             "date_issued",
             "date_dued",
         )
@@ -182,10 +174,6 @@ class BillForm(ModelForm):
         fields = (
             "number",
             "client",
-
-            "draft",
-            "sent",
-            "paid",
             "date_issued",
             "date_dued",
         )

@@ -15,13 +15,8 @@ class TotalQuerySetMixin(object):
 
 class InvoiceQuerySetMixin(object):
 
-    def draft(self):
-        return self.filter(draft=True)
-
     def dued(self):
-        return self.filter(date_issued__lte=date.today(),
-                           draft=False,
-                           paid=False)
+        return self.filter(date_issued__lte=date.today())
 
 
 class EstimateQuerySet(TotalQuerySetMixin, models.QuerySet):

@@ -128,9 +128,6 @@ class AbstractSale(CheckingModelMixin, models.Model):
                                          default=D('0'))
 
     # tracking
-    draft = models.BooleanField(default=False)
-    sent = models.BooleanField(default=False)
-    paid = models.BooleanField(default=False)
     date_issued = models.DateField(default=date.today)
     date_dued = models.DateField("Due date",
                                  blank=True, null=True,
