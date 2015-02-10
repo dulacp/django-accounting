@@ -13,13 +13,9 @@ from .models import (
     Payment)
 from .utils import organization_manager
 from accounting.apps.people.models import Client
-from accounting.apps.people.forms import (
-    UserChoices,
-    UserMultipleChoices)
+from accounting.apps.people.forms import UserMultipleChoices
 
-from django_select2.fields import (
-    AutoModelSelect2Field,
-    AutoModelSelect2MultipleField)
+from django_select2.fields import AutoModelSelect2Field
 from datetimewidget.widgets import DateWidget
 
 
@@ -112,11 +108,11 @@ class EstimateForm(ModelForm):
         )
         widgets = {
             'date_issued': DateWidget(
-                attrs={'id':"id_date_issued"},
+                attrs={'id': "id_date_issued"},
                 usel10n=True,
                 bootstrap_version=3),
             'date_dued': DateWidget(
-                attrs={'id':"id_date_dued"},
+                attrs={'id': "id_date_dued"},
                 usel10n=True,
                 bootstrap_version=3),
         }
@@ -156,11 +152,11 @@ class InvoiceForm(ModelForm):
         )
         widgets = {
             'date_issued': DateWidget(
-                attrs={'id':"id_date_issued"},
+                attrs={'id': "id_date_issued"},
                 usel10n=True,
                 bootstrap_version=3),
             'date_dued': DateWidget(
-                attrs={'id':"id_date_dued"},
+                attrs={'id': "id_date_dued"},
                 usel10n=True,
                 bootstrap_version=3),
         }
@@ -200,11 +196,11 @@ class BillForm(ModelForm):
         )
         widgets = {
             'date_issued': DateWidget(
-                attrs={'id':"id_date_issued"},
+                attrs={'id': "id_date_issued"},
                 usel10n=True,
                 bootstrap_version=3),
             'date_dued': DateWidget(
-                attrs={'id':"id_date_dued"},
+                attrs={'id': "id_date_dued"},
                 usel10n=True,
                 bootstrap_version=3),
         }
@@ -245,7 +241,7 @@ class PaymentForm(ModelForm):
         )
         widgets = {
             'date_paid': DateWidget(
-                attrs={'id':"id_date_issued"},
+                attrs={'id': "id_date_paid"},
                 usel10n=True,
                 bootstrap_version=3),
         }

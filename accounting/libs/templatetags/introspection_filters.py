@@ -2,7 +2,9 @@ from django import template
 from django.forms import ModelForm, BaseFormSet
 from django.db.models import Model
 
-from django_select2.fields import AutoModelSelect2Field, AutoModelSelect2MultipleField
+from django_select2.fields import (
+    AutoModelSelect2Field,
+    AutoModelSelect2MultipleField)
 
 
 register = template.Library()

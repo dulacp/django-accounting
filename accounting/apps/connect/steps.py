@@ -3,7 +3,6 @@ import logging
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
-from accounting.apps.books.models import Organization
 from accounting.apps.books.utils import organization_manager
 from accounting.apps.reports.models import BusinessSettings
 

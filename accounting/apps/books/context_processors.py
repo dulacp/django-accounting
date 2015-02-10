@@ -1,7 +1,4 @@
-from django.db.models import Q
-
 from .utils import organization_manager
-from .models import Organization
 
 
 def organizations(request):

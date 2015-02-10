@@ -3,7 +3,7 @@ from decimal import Decimal as D
 
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.db.models import Q, Sum
+from django.db.models import Sum
 from django.http import HttpResponseRedirect
 
 from .mixins import (
