@@ -149,7 +149,7 @@ class OrganizationSelectionView(generic.DetailView):
 
     def get_queryset(self):
         # only current authenticated user organizations
-        return self.request.user.organizations.all()
+        return organization_manager.get_user_organizations(self.request.user)
 
     def post(self, request, *args, **kwargs):
         orga = self.get_object()
