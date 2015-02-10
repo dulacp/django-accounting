@@ -46,7 +46,10 @@ class EstimateNumberGenerator(BaseNumberGenerator):
 
     def next_number(self, organization):
         last = organization.estimates.all().order_by('-number').first()
-        last_number = int(last.number or 0)
+        if last is not None:
+            last_number = int(last.number)
+        else:
+            last_number = 0
         return last_number + 1
 
 
@@ -54,7 +57,10 @@ class InvoiceNumberGenerator(BaseNumberGenerator):
 
     def next_number(self, organization):
         last = organization.invoices.all().order_by('-number').first()
-        last_number = int(last.number or 0)
+        if last is not None:
+            last_number = int(last.number)
+        else:
+            last_number = 0
         return last_number + 1
 
 
@@ -62,5 +68,8 @@ class BillNumberGenerator(BaseNumberGenerator):
 
     def next_number(self, organization):
         last = organization.bills.all().order_by('-number').first()
-        last_number = int(last.number or 0)
+        if last is not None:
+            last_number = int(last.number)
+        else:
+            last_number = 0
         return last_number + 1
