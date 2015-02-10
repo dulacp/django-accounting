@@ -37,6 +37,7 @@ ACCOUNTING_APPS = (
     # Third party apps that accounting depends on
     'bootstrap3',
     'django_select2',
+    'datetimewidget',
 )
 
 

@@ -1,6 +1,11 @@
 {% extends "accounting/layout.html" %}
 {% load static bootstrap3 introspection_filters %}
 
+{% block head %}
+    {{ block.super }}
+    {{ form.media }}
+{% endblock %}
+
 {% block content %}
     <h1 class="page-header">Create an {{ form|get_form_model_verbose_name }}</h1>
 

@@ -20,6 +20,7 @@ from accounting.apps.people.forms import (
 from django_select2.fields import (
     AutoModelSelect2Field,
     AutoModelSelect2MultipleField)
+from datetimewidget.widgets import DateWidget
 
 
 class RequiredFirstInlineFormSet(BaseInlineFormSet):
@@ -109,6 +110,16 @@ class EstimateForm(ModelForm):
             "date_issued",
             "date_dued",
         )
+        widgets = {
+            'date_issued': DateWidget(
+                attrs={'id':"id_date_issued"},
+                usel10n=True,
+                bootstrap_version=3),
+            'date_dued': DateWidget(
+                attrs={'id':"id_date_dued"},
+                usel10n=True,
+                bootstrap_version=3),
+        }
 
 
 class EstimateLineForm(RestrictLineFormToOrganizationMixin,
@@ -143,6 +154,16 @@ class InvoiceForm(ModelForm):
             "date_issued",
             "date_dued",
         )
+        widgets = {
+            'date_issued': DateWidget(
+                attrs={'id':"id_date_issued"},
+                usel10n=True,
+                bootstrap_version=3),
+            'date_dued': DateWidget(
+                attrs={'id':"id_date_dued"},
+                usel10n=True,
+                bootstrap_version=3),
+        }
 
 
 class InvoiceLineForm(RestrictLineFormToOrganizationMixin,
@@ -177,6 +198,16 @@ class BillForm(ModelForm):
             "date_issued",
             "date_dued",
         )
+        widgets = {
+            'date_issued': DateWidget(
+                attrs={'id':"id_date_issued"},
+                usel10n=True,
+                bootstrap_version=3),
+            'date_dued': DateWidget(
+                attrs={'id':"id_date_dued"},
+                usel10n=True,
+                bootstrap_version=3),
+        }
 
 
 class BillLineForm(RestrictLineFormToOrganizationMixin,
@@ -212,3 +243,9 @@ class PaymentForm(ModelForm):
             "detail",
             "date_paid",
         )
+        widgets = {
+            'date_paid': DateWidget(
+                attrs={'id':"id_date_issued"},
+                usel10n=True,
+                bootstrap_version=3),
+        }

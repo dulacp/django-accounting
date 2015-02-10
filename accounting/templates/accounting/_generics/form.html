@@ -1,6 +1,11 @@
 {% extends "accounting/layout.html" %}
 {% load bootstrap3 introspection_filters %}
 
+{% block head %}
+    {{ block.super }}
+    {{ form.media }}
+{% endblock %}
+
 {% block content %}
     {% if object.pk %}
         <h1 class="page-header">Edit a {{ form|get_form_model_verbose_name }}</h1>
