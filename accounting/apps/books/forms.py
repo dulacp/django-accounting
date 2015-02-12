@@ -109,10 +109,12 @@ class EstimateForm(ModelForm):
         widgets = {
             'date_issued': DateWidget(
                 attrs={'id': "id_date_issued"},
+                options={'clearBtn': 'false'},
                 usel10n=True,
                 bootstrap_version=3),
             'date_dued': DateWidget(
                 attrs={'id': "id_date_dued"},
+                options={'clearBtn': 'false'},
                 usel10n=True,
                 bootstrap_version=3),
         }
@@ -153,10 +155,12 @@ class InvoiceForm(ModelForm):
         widgets = {
             'date_issued': DateWidget(
                 attrs={'id': "id_date_issued"},
+                options={'clearBtn': 'false'},
                 usel10n=True,
                 bootstrap_version=3),
             'date_dued': DateWidget(
                 attrs={'id': "id_date_dued"},
+                options={'clearBtn': 'false'},
                 usel10n=True,
                 bootstrap_version=3),
         }
@@ -197,10 +201,12 @@ class BillForm(ModelForm):
         widgets = {
             'date_issued': DateWidget(
                 attrs={'id': "id_date_issued"},
+                options={'clearBtn': 'false'},
                 usel10n=True,
                 bootstrap_version=3),
             'date_dued': DateWidget(
                 attrs={'id': "id_date_dued"},
+                options={'clearBtn': 'false'},
                 usel10n=True,
                 bootstrap_version=3),
         }
@@ -242,6 +248,7 @@ class PaymentForm(ModelForm):
         widgets = {
             'date_paid': DateWidget(
                 attrs={'id': "id_date_paid"},
+                options={'clearBtn': 'false'},
                 usel10n=True,
-                bootstrap_version=3),
+                bootstrap_version=3,),
         }
