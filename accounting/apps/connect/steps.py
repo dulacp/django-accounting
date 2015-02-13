@@ -4,7 +4,10 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
 from accounting.apps.books.utils import organization_manager
-from accounting.apps.reports.models import BusinessSettings
+from accounting.apps.reports.models import (
+    BusinessSettings,
+    FinancialSettings,
+    PayRunSettings)
 
 logger = logging.getLogger(__name__)
 
@@ -141,9 +144,11 @@ class ConfigureFinancialSettingsStep(BaseStep):
         orga = organization_manager.get_selected_organization(request)
         if orga is None:
             return False
-        settings = orga.financial_settings
         try:
+            settings = orga.financial_settings
             settings.full_clean()
+        except FinancialSettings.DoesNotExist:
+            return False
         except ValidationError:
             return False
         return True
@@ -180,9 +185,11 @@ class ConfigurePayRunSettingsStep(BaseStep):
         orga = organization_manager.get_selected_organization(request)
         if orga is None:
             return False
-        settings = orga.payrun_settings
         try:
+            settings = orga.payrun_settings
             settings.full_clean()
+        except PayRunSettings.DoesNotExist:
+            return False
         except ValidationError:
             return False
         return True
