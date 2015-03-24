@@ -111,6 +111,10 @@ class OrganizationListView(generic.ListView):
     model = Organization
     context_object_name = "organizations"
 
+    def get_queryset(self):
+        # only current authenticated user organizations
+        return organization_manager.get_user_organizations(self.request.user)
+
 
 class OrganizationCreateView(generic.CreateView):
     template_name = "books/organization_create_or_update.html"
@@ -130,11 +134,19 @@ class OrganizationUpdateView(generic.UpdateView):
     form_class = OrganizationForm
     success_url = reverse_lazy("books:organization-list")
 
+    def get_queryset(self):
+        # only current authenticated user organizations
+        return organization_manager.get_user_organizations(self.request.user)
+
 
 class OrganizationDetailView(generic.DetailView):
     template_name = "books/organization_detail.html"
     model = Organization
     context_object_name = "organization"
+
+    def get_queryset(self):
+        # only current authenticated user organizations
+        return organization_manager.get_user_organizations(self.request.user)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
