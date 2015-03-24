@@ -23,7 +23,7 @@ setup(name='django-accounting',
       author_email="pierre@dulaccc.me",
       description="Accounting made accessible for small businesses and "
                   "sole proprietorships through a simple Django project",
-      long_description=open(os.path.join(PROJECT_DIR, 'README.md')).read(),
+      long_description=open(os.path.join(PROJECT_DIR, 'README.rst')).read(),
       keywords="Accounting, Django, Money, Cashflow",
       license='MIT',
       platforms=['linux'],
