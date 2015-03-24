@@ -43,3 +43,14 @@ class BillQuerySet(TotalQuerySetMixin,
 
     def debts_incl_tax(self):
         return self._get_total('total_incl_tax')
+
+
+class ExpenseClaimQuerySet(TotalQuerySetMixin,
+                           InvoiceQuerySetMixin,
+                           models.QuerySet):
+
+    def debts_excl_tax(self):
+        return self._get_total('total_excl_tax')
+
+    def debts_incl_tax(self):
+        return self._get_total('total_incl_tax')

@@ -1,0 +1,25 @@
+{% extends "accounting/layout.html" %}
+{% load static %}
+
+{% block head %}
+    {{ block.super }}
+
+    {# NB: because the payment form is a subform it won't output the correct assets, so we explicitly put it there #}
+    <link rel="stylesheet" href="{% static 'css/datetimepicker.css' %}">
+    <script src="{% static 'js/bootstrap-datetimepicker.js' %}"></script>
+
+    {{ form.media }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-header">
+        Expense claim #{{ expense_claim.number }} <small>/ detail</small>
+        <div class="btn-group pull-right">
+            <a href="{% url 'books:expense_claim-edit' expense_claim.pk %}" class="btn btn-default" role="button">Edit</a>
+            <a href="{% url 'books:expense_claim-delete' expense_claim.pk %}" class="btn btn-danger" role="button">Supprimer</a>
+        </div>
+    </h1>
+
+    {% include "books/_generics/sale_detail.html" with object=expense_claim lines=lines payments=expense_claim.payments.all form=form %}
+
+{% endblock content %}

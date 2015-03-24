@@ -1,0 +1,29 @@
+{% load currency_filters status_filters %}
+
+<table class="table table-striped">
+    <thead>
+        <tr class="row">
+            <th>#</th>
+            <th>Paid by employee</th>
+            <th>On</th>
+            <th class="col-sm-2">Total</th>
+            <th class="text-right col-sm-4">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale in sales %}
+        <tr class="row {{ sale|status_to_css_classname }}">
+            <td>{{ sale.number }}</td>
+            <td>{{ sale.employee }}</td>
+            <td>{{ sale.date_issued }}</td>
+            <td class="col-sm-2">{{ sale.total_excl_tax|currency }}</td>
+            <td class="text-right col-sm-4">
+                <a href="{{ sale.get_detail_url }}" class="btn btn-success btn-sm" role="button">View</a>
+                {% if not hide_edit %}
+                <a href="{{ sale.get_edit_url }}" class="btn btn-default btn-sm" role="button">Edit</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

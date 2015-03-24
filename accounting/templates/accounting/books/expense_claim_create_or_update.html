@@ -1,0 +1,70 @@
+{% extends "accounting/layout.html" %}
+{% load static bootstrap3 introspection_filters %}
+
+{% block head %}
+    {{ block.super }}
+    {{ form.media }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="page-header">Create a {{ form|get_form_model_verbose_name }}</h1>
+
+    <form action="." method="post" class="form">
+        {% csrf_token %}
+
+        {% include "accounting/_partials/form_fields.html" with form=form %}
+
+        <h2 class="page-header">Content</h2>
+        {{ line_formset.management_form }}
+        {{ line_formset.non_field_errors }}
+        <table class="table table-striped table-bordered">
+            <thead>
+                <th>#</th>
+                <th>Label</th>
+                <th>Description</th>
+                <th>Unit (excl. tax)</th>
+                <th>Qt.</th>
+                <th>Tax rate</th>
+                <th>Total</th>
+            </thead>
+            <tbody>
+            {% for line_form in line_formset %}
+                <tr class="formset-form">
+                    <td class="col-md-0 counter">
+                        {{ forloop.counter }}
+                        {{ line_form.id }}
+                    </td>
+                    <td class="col-md-2">
+                        {% bootstrap_field line_form.label show_label=False %}
+                    </td>
+                    <td class="col-md-4">
+                        {% bootstrap_field line_form.description show_label=False %}
+                    </td>
+                    <td class="col-md-2">
+                        {% bootstrap_field line_form.unit_price_excl_tax show_label=False %}
+                    </td>
+                    <td class="col-md-1">
+                        {% bootstrap_field line_form.quantity show_label=False %}
+                    </td>
+                    <td class="col-md-1">
+                        {% bootstrap_field line_form.tax_rate show_label=False %}
+                    </td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% buttons layout='vertical' %}
+            <button type="submit" class="btn btn-success">
+                {% bootstrap_icon "star" %} Create
+            </button>
+        {% endbuttons %}
+    </form>
+{% endblock content %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'accounting/js/jquery.formset.js' %}"></script>
+    <script src="{% static 'accounting/js/books/invoice_or_bill_create.js' %}"></script>
+{% endblock %}

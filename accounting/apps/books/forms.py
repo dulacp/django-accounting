@@ -10,9 +10,11 @@ from .models import (
     InvoiceLine,
     Bill,
     BillLine,
+    ExpenseClaim,
+    ExpenseClaimLine,
     Payment)
 from .utils import organization_manager
-from accounting.apps.people.models import Client
+from accounting.apps.people.models import Client, Employee
 from accounting.apps.people.forms import UserMultipleChoices
 
 from django_select2.fields import AutoModelSelect2Field
@@ -55,6 +57,22 @@ class ClientForOrganizationChoices(AutoModelSelect2Field):
         return params
 
 
+class EmployeeForOrganizationChoices(AutoModelSelect2Field):
+    queryset = Employee.objects.all()
+    search_fields = (
+        'first_name__icontains',
+        'last_name__icontains',
+        'email__icontains',
+    )
+
+    def prepare_qs_params(self, request, search_term, search_fields):
+        """restrict to the current selected organization"""
+        params = super().prepare_qs_params(request, search_term, search_fields)
+        orga = organization_manager.get_selected_organization(request)
+        params['and']['organization'] = orga
+        return params
+
+
 class OrganizationForm(ModelForm):
     members = UserMultipleChoices(required=False)
 
@@ -86,6 +104,8 @@ class RestrictLineFormToOrganizationMixin(object):
                 organization = instance.invoice.organization
             elif isinstance(instance, BillLine):
                 organization = instance.bill.organization
+            elif isinstance(instance, ExpenseClaimLine):
+                organization = instance.expense_claim.organization
             else:
                 raise NotImplementedError("The mixin has been applied to a "
                                           "form model that is not supported")
@@ -234,6 +254,55 @@ BillLineFormSet = inlineformset_factory(Bill,
                                         formset=SaleInlineLineFormSet,
                                         min_num=1,
                                         extra=0)
+
+
+class ExpenseClaimForm(ModelForm):
+    employee = EmployeeForOrganizationChoices()
+
+    class Meta:
+        model = ExpenseClaim
+        fields = (
+            "number",
+            "employee",
+            "date_issued",
+            "date_dued",
+        )
+        widgets = {
+            'date_issued': DateWidget(
+                attrs={'id': "id_date_issued"},
+                options={'clearBtn': 'false'},
+                usel10n=True,
+                bootstrap_version=3),
+            'date_dued': DateWidget(
+                attrs={'id': "id_date_dued"},
+                options={'clearBtn': 'false'},
+                usel10n=True,
+                bootstrap_version=3),
+        }
+
+
+class ExpenseClaimLineForm(RestrictLineFormToOrganizationMixin,
+                           ModelForm):
+    class Meta:
+        model = ExpenseClaimLine
+        fields = (
+            "label",
+            "description",
+            "unit_price_excl_tax",
+            "quantity",
+            "tax_rate",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+
+ExpenseClaimLineFormSet = inlineformset_factory(ExpenseClaim,
+                                                ExpenseClaimLine,
+                                                form=ExpenseClaimLineForm,
+                                                formset=SaleInlineLineFormSet,
+                                                min_num=1,
+                                                extra=0)
 
 
 class PaymentForm(ModelForm):

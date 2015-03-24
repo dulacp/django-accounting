@@ -18,7 +18,8 @@ from accounting.libs.templatetags.format_filters import percentage_formatter
 from .managers import (
     EstimateQuerySet,
     InvoiceQuerySet,
-    BillQuerySet)
+    BillQuerySet,
+    ExpenseClaimQuerySet)
 
 
 class Organization(models.Model):
@@ -396,6 +397,42 @@ class Bill(AbstractSale):
 class BillLine(AbstractSaleLine):
     bill = models.ForeignKey('books.Bill',
                              related_name="lines")
+    tax_rate = models.ForeignKey('books.TaxRate')
+
+    class Meta:
+        pass
+
+
+class ExpenseClaim(AbstractSale):
+    organization = models.ForeignKey('books.Organization',
+                                     related_name="expense_claims",
+                                     verbose_name="From Organization")
+    employee = models.ForeignKey('people.Employee',
+                                 verbose_name="Paid by employee")
+    payments = GenericRelation('books.Payment')
+
+    objects = ExpenseClaimQuerySet.as_manager()
+
+    class Meta:
+        unique_together = (("number", "organization"),)
+        ordering = ('-number',)
+
+    def get_detail_url(self):
+        return reverse('books:expense_claim-detail', args=[self.pk])
+
+    def get_edit_url(self):
+        return reverse('books:expense_claim-edit', args=[self.pk])
+
+    def from_client(self):
+        return self.employee
+
+    def to_client(self):
+        return self.organization
+
+
+class ExpenseClaimLine(AbstractSaleLine):
+    expense_claim = models.ForeignKey('books.ExpenseClaim',
+                                      related_name="lines")
     tax_rate = models.ForeignKey('books.TaxRate')
 
     class Meta:

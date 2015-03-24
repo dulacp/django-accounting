@@ -47,10 +47,12 @@
                     {% url 'books:estimate-list' as books_estimate_list_url %}
                     {% url 'books:invoice-list' as books_invoice_list_url %}
                     {% url 'books:bill-list' as books_bill_list_url %}
+                    {% url 'books:expense_claim-list' as books_exepense_claim_list_url %}
                     {% url 'books:tax_rate-list' as books_tax_rate_list_url %}
                     <li class="{% active request books_estimate_list_url exact_match=True %}"><a href="{{ books_estimate_list_url }}">Estimates</a></li>
                     <li class="{% active request books_invoice_list_url exact_match=True %}"><a href="{{ books_invoice_list_url }}">Invoices</a></li>
                     <li class="{% active request books_bill_list_url exact_match=True %}"><a href="{{ books_bill_list_url }}">Bills</a></li>
+                    <li class="{% active request books_exepense_claim_list_url exact_match=True %}"><a href="{{ books_exepense_claim_list_url }}">Expense claims</a></li>
                     <li class="{% active request books_tax_rate_list_url exact_match=True %}"><a href="{{ books_tax_rate_list_url }}">Tax Rates</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">

@@ -1,0 +1,12 @@
+{% extends "accounting/layout.html" %}
+{% load currency_filters %}
+
+{% block content %}
+    <h1 class="page-header">Expense claims <small>which belong to you</small></h1>
+
+    {% include "books/_partials/expense_claim_list.html" with sales=expense_claims detailed=True %}
+
+    <a href="{% url 'books:expense_claim-create' %}" class="btn btn-primary btn-lg" role="button">
+        Add an Expense claim
+    </a>
+{% endblock content %}

@@ -19,6 +19,7 @@ from .models import (
     Estimate,
     Invoice,
     Bill,
+    ExpenseClaim,
     Payment)
 from .forms import (
     OrganizationForm,
@@ -29,12 +30,15 @@ from .forms import (
     InvoiceLineFormSet,
     BillForm,
     BillLineFormSet,
+    ExpenseClaimForm,
+    ExpenseClaimLineFormSet,
     PaymentForm)
 from .utils import (
     organization_manager,
     EstimateNumberGenerator,
     InvoiceNumberGenerator,
-    BillNumberGenerator)
+    BillNumberGenerator,
+    ExpenseClaimNumberGenerator)
 
 logger = logging.getLogger(__name__)
 
@@ -385,3 +389,63 @@ class BillDetailView(PaymentFormMixin,
 
     def get_success_url(self):
         return reverse('books:bill-detail', args=[self.object.pk])
+
+
+class ExpenseClaimListView(RestrictToSelectedOrganizationQuerySetMixin,
+                           SaleListQuerySetMixin,
+                           generic.ListView):
+    template_name = "books/expense_claim_list.html"
+    model = ExpenseClaim
+    context_object_name = "expense_claims"
+
+
+class ExpenseClaimCreateView(AutoSetSelectedOrganizationMixin,
+                             AbstractSaleCreateUpdateMixin,
+                             generic.CreateView):
+    template_name = "books/expense_claim_create_or_update.html"
+    model = ExpenseClaim
+    form_class = ExpenseClaimForm
+    formset_class = ExpenseClaimLineFormSet
+    success_url = reverse_lazy("books:expense_claim-list")
+
+    def get_form(self, form_class):
+        form = super().get_form(form_class)
+        orga = organization_manager.get_selected_organization(self.request)
+        self.restrict_fields_choices_to_organization(form, orga)
+        return form
+
+    def get_initial(self):
+        initial = super().get_initial()
+
+        orga = organization_manager.get_selected_organization(self.request)
+        initial['number'] = ExpenseClaimNumberGenerator().next_number(orga)
+
+        return initial
+
+
+class ExpenseClaimUpdateView(AutoSetSelectedOrganizationMixin,
+                             AbstractSaleCreateUpdateMixin,
+                             generic.UpdateView):
+    template_name = "books/expense_claim_create_or_update.html"
+    model = ExpenseClaim
+    form_class = ExpenseClaimForm
+    formset_class = ExpenseClaimLineFormSet
+    success_url = reverse_lazy("books:expense_claim-list")
+
+
+class ExpenseClaimDeleteView(generic.DeleteView):
+    template_name = "_generics/delete_entity.html"
+    model = ExpenseClaim
+    success_url = reverse_lazy('books:expense_claim-list')
+
+
+class ExpenseClaimDetailView(PaymentFormMixin,
+                             AbstractSaleDetailMixin,
+                             generic.DetailView):
+    template_name = "books/expense_claim_detail.html"
+    model = ExpenseClaim
+    context_object_name = "expense_claim"
+    payment_form_class = PaymentForm
+
+    def get_success_url(self):
+        return reverse('books:expense_claim-detail', args=[self.object.pk])

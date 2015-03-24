@@ -73,3 +73,14 @@ class BillNumberGenerator(BaseNumberGenerator):
         else:
             last_number = 0
         return last_number + 1
+
+
+class ExpenseClaimNumberGenerator(BaseNumberGenerator):
+
+    def next_number(self, organization):
+        last = organization.expense_claims.all().order_by('-number').first()
+        if last is not None:
+            last_number = int(last.number)
+        else:
+            last_number = 0
+        return last_number + 1

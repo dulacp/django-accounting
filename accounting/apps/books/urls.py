@@ -93,6 +93,23 @@ urlpatterns = patterns('',
         views.BillDetailView.as_view(),
         name="bill-detail"),
 
+    # ExpenseClaims
+    url(r'^expense-claim/$',
+        views.ExpenseClaimListView.as_view(),
+        name="expense_claim-list"),
+    url(r'^expense-claim/create/$',
+        views.ExpenseClaimCreateView.as_view(),
+        name="expense_claim-create"),
+    url(r'^expense-claim/(?P<pk>\d+)/edit/$',
+        views.ExpenseClaimUpdateView.as_view(),
+        name="expense_claim-edit"),
+    url(r'^expense-claim/(?P<pk>\d+)/delete/$',
+        views.ExpenseClaimDeleteView.as_view(),
+        name="expense_claim-delete"),
+    url(r'^expense-claim/(?P<pk>\d+)/detail/$',
+        views.ExpenseClaimDetailView.as_view(),
+        name="expense_claim-detail"),
+
     # Payments
     url(r'^payment/(?P<pk>\d+)/edit/$',
         views.PaymentUpdateView.as_view(),
