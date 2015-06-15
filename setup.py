@@ -43,9 +43,8 @@ setup(name='django-accounting',
           'Babel>=1.0,<1.4',
           # Date utilities
           'python-dateutil>=2.2,<2.3',
-      ],
-      dependency_links=[
-          'http://github.com/applegrew/django-select2@python3#egg=Django_Select2_Py3-4.2.1',
+          # Select2
+          'django-select2>=4.3,<4.4',
       ],
       # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
