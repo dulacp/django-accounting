@@ -70,16 +70,23 @@ class SaleListQuerySetMixin(object):
         queryset = super().get_queryset()
         queryset = (queryset
             .select_related(
-                'client',
                 'organization')
             .prefetch_related(
                 'lines',
                 'lines__tax_rate'))
+
         try:
-            self.model._meta.get_field_by_name('payments')
+            self.model._meta.get_field_by_name('client')  # to raise the exception
+            queryset = queryset.select_related('client')
+        except FieldDoesNotExist:
+            pass
+
+        try:
+            self.model._meta.get_field_by_name('payments')  # to raise the exception
             queryset = queryset.prefetch_related('payments')
         except FieldDoesNotExist:
             pass
+
         return queryset
 
 
