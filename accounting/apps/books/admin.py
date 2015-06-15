@@ -66,6 +66,22 @@ class BillAdmin(admin.ModelAdmin):
     )
 
 
+class ExpenseClaimLineInline(admin.TabularInline):
+    model = models.ExpenseClaimLine
+    extra = 1
+
+
+@admin.register(models.ExpenseClaim)
+class ExpenseClaimAdmin(admin.ModelAdmin):
+    inlines = (
+        ExpenseClaimLineInline,
+        PaymentInline,
+    )
+    readonly = (
+        'total_incl_tax', 'total_excl_tax',
+    )
+
+
 @admin.register(models.Payment)
 class PaymentAdmin(admin.ModelAdmin):
     pass
