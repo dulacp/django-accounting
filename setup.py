@@ -30,7 +30,7 @@ setup(name='django-accounting',
       packages=find_packages(exclude=["tests*"]),
       include_package_data=True,
       install_requires=[
-          'django>=1.7.0,<1.8',
+          'django>=1.8.0,<1.9',
           # Used to render the forms
           'django-bootstrap3==4.11.0',
           # Used to improve the forms
