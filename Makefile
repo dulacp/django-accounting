@@ -12,6 +12,12 @@ todo:
 	grep --exclude-dir=components -rnH TODO accounting
 	grep --exclude-dir=components -rnH TODO tests
 
+publish:
+	git push --tag origin master
+	rm -rf dist/*
+	python setup.py sdist
+	twine upload dist/*
+
 
 ## Testing
 
