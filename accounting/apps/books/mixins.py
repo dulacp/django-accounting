@@ -146,10 +146,14 @@ class AbstractSaleDetailMixin(object):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = (queryset
-            .select_related(
-                'client',
-                'organization'))
+        queryset = queryset.select_related('organization')
+
+        try:
+            self.model._meta.get_field_by_name('client')  # to raise the exception
+            queryset = queryset.select_related('client')
+        except FieldDoesNotExist:
+            pass
+
         return queryset
 
     def get_object(self):
