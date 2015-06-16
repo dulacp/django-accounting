@@ -242,7 +242,7 @@ class EstimateCreateView(AutoSetSelectedOrganizationMixin,
     formset_class = EstimateLineFormSet
     success_url = reverse_lazy("books:estimate-list")
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
         form = super().get_form(form_class)
         orga = organization_manager.get_selected_organization(self.request)
         self.restrict_fields_choices_to_organization(form, orga)
@@ -300,7 +300,7 @@ class InvoiceCreateView(AutoSetSelectedOrganizationMixin,
     formset_class = InvoiceLineFormSet
     success_url = reverse_lazy("books:invoice-list")
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
         form = super().get_form(form_class)
         orga = organization_manager.get_selected_organization(self.request)
         self.restrict_fields_choices_to_organization(form, orga)
@@ -360,7 +360,7 @@ class BillCreateView(AutoSetSelectedOrganizationMixin,
     formset_class = BillLineFormSet
     success_url = reverse_lazy("books:bill-list")
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
         form = super().get_form(form_class)
         orga = organization_manager.get_selected_organization(self.request)
         self.restrict_fields_choices_to_organization(form, orga)
@@ -420,7 +420,7 @@ class ExpenseClaimCreateView(AutoSetSelectedOrganizationMixin,
     formset_class = ExpenseClaimLineFormSet
     success_url = reverse_lazy("books:expense_claim-list")
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
         form = super().get_form(form_class)
         orga = organization_manager.get_selected_organization(self.request)
         self.restrict_fields_choices_to_organization(form, orga)
