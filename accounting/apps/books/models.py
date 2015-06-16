@@ -212,7 +212,8 @@ class AbstractSale(CheckingModelMixin, models.Model):
         return payroll
 
     def _check_total(self, check, total, computed_total):
-        if total != computed_total:
+        two_places = D(10) ** -2
+        if total.quantize(two_places) != computed_total.quantize(two_places):
             check.mark_fail(level=check.LEVEL_ERROR,
                             message="The computed amount isn't correct, it "
                                     "should be {}, please edit and save the "
