@@ -21,6 +21,7 @@ from .managers import (
     BillQuerySet,
     ExpenseClaimQuerySet)
 
+TWO_PLACES = D(10) ** -2
 
 class Organization(models.Model):
     display_name = models.CharField(max_length=150,
@@ -194,11 +195,11 @@ class AbstractSale(CheckingModelMixin, models.Model):
         return due
 
     def is_fully_paid(self):
-        return self.total_paid >= self.total_incl_tax
+        return self.total_paid.quantize(TWO_PLACES) >= self.total_incl_tax.quantize(TWO_PLACES)
 
     def is_partially_paid(self):
-        paid = self.total_paid
-        return paid and paid > 0 and paid < self.total_incl_tax
+        paid = self.total_paid.quantize(TWO_PLACES)
+        return paid and paid > 0 and paid < self.total_incl_tax.quantize(TWO_PLACES)
 
     @property
     def payroll_taxes(self):
@@ -212,8 +213,7 @@ class AbstractSale(CheckingModelMixin, models.Model):
         return payroll
 
     def _check_total(self, check, total, computed_total):
-        two_places = D(10) ** -2
-        if total.quantize(two_places) != computed_total.quantize(two_places):
+        if total.quantize(TWO_PLACES) != computed_total.quantize(TWO_PLACES):
             check.mark_fail(level=check.LEVEL_ERROR,
                             message="The computed amount isn't correct, it "
                                     "should be {}, please edit and save the "
