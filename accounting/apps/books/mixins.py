@@ -119,7 +119,7 @@ class AbstractSaleCreateUpdateMixin(RestrictToOrganizationFormRelationsMixin,
                 organization=orga)
         return context
 
-    def get_form(self, form_class):
+    def get_form(self, form_class=None):
         """Restrict the form relations to the current organization"""
         form = super().get_form(form_class)
         orga = organization_manager.get_selected_organization(self.request)
