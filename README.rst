@@ -64,8 +64,8 @@ Reports
 Contact
 -------
 
-| `Pierre Dulac <http://github.com/dulaccc>`__
-| [@dulaccc](https://twitter.com/dulaccc)
+| `Pierre Dulac <http://github.com/dulaccc>`_
+| `@dulaccc <https://twitter.com/dulaccc>`_
 
 License
 -------
