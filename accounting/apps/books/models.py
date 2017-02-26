@@ -23,6 +23,7 @@ from .managers import (
 
 TWO_PLACES = D(10) ** -2
 
+
 class Organization(models.Model):
     display_name = models.CharField(max_length=150,
         help_text="Name that you communicate")
@@ -195,11 +196,14 @@ class AbstractSale(CheckingModelMixin, models.Model):
         return due
 
     def is_fully_paid(self):
-        return self.total_paid.quantize(TWO_PLACES) >= self.total_incl_tax.quantize(TWO_PLACES)
+        paid = self.total_paid.quantize(TWO_PLACES)
+        total = self.total_incl_tax.quantize(TWO_PLACES)
+        return paid >= total
 
     def is_partially_paid(self):
         paid = self.total_paid.quantize(TWO_PLACES)
-        return paid and paid > 0 and paid < self.total_incl_tax.quantize(TWO_PLACES)
+        total = self.total_incl_tax.quantize(TWO_PLACES)
+        return paid and paid > 0 and paid < total
 
     @property
     def payroll_taxes(self):

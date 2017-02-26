@@ -20,6 +20,7 @@ class QueryParameters(Tag):
         q.update(kwa)
         return q.urlencode()
 
+
 register.tag(QueryParameters)
 
 
@@ -48,5 +49,6 @@ class GetParameters(Tag):
                 del getvars[field]
 
         return getvars.urlencode()
+
 
 register.tag(GetParameters)

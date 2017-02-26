@@ -76,13 +76,15 @@ class SaleListQuerySetMixin(object):
                 'lines__tax_rate'))
 
         try:
-            self.model._meta.get_field_by_name('client')  # to raise the exception
+            # to raise the exception
+            self.model._meta.get_field_by_name('client')
             queryset = queryset.select_related('client')
         except FieldDoesNotExist:
             pass
 
         try:
-            self.model._meta.get_field_by_name('payments')  # to raise the exception
+            # to raise the exception
+            self.model._meta.get_field_by_name('payments')
             queryset = queryset.prefetch_related('payments')
         except FieldDoesNotExist:
             pass
@@ -149,7 +151,8 @@ class AbstractSaleDetailMixin(object):
         queryset = queryset.select_related('organization')
 
         try:
-            self.model._meta.get_field_by_name('client')  # to raise the exception
+            # to raise the exception
+            self.model._meta.get_field_by_name('client')
             queryset = queryset.select_related('client')
         except FieldDoesNotExist:
             pass

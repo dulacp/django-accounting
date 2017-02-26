@@ -24,8 +24,8 @@ def is_disabled(field):
 def is_readonly(field):
     if isinstance(field, BoundField):
         field = field.field
-    return ('readonly' in field.widget.attrs
-        and field.widget.attrs.get('readonly') is True)
+    return ('readonly' in field.widget.attrs and
+        field.widget.attrs.get('readonly') is True)
 
 
 @register.filter

@@ -49,7 +49,10 @@ class GettingStartedView(generic.TemplateView):
 
         request = self.request
         steps = self.get_steps(self.request)
-        uncomplete_filter = lambda s: not s.completed(request)
+
+        def uncomplete_filter(s):
+            return not s.completed(request)
+
         uncompleted_steps = list(filter(uncomplete_filter, steps))
         try:
             next_step = next(s for s in uncompleted_steps)

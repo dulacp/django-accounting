@@ -18,11 +18,11 @@ class StepOptions(object):
     """
     def __init__(self, meta):
         self.name = getattr(meta, 'name', None)
-        assert(isinstance(self.name, (str)),
-            '`name` must be a string instance')
+        assert isinstance(self.name, str), \
+            '`name` must be a string instance'
         self.description = getattr(meta, 'description', "")
-        assert(isinstance(self.description, (str)),
-            '`description` must be a string instance')
+        assert isinstance(self.description, str), \
+            '`description` must be a string instance'
 
 
 class BaseStep(object):

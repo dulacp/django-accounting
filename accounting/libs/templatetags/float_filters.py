@@ -8,4 +8,5 @@ register = Library()
 def do_float_dot(value, decimal_pos=4):
     return format(value or 0, ".", decimal_pos)
 
+
 do_float_dot.is_safe = True
