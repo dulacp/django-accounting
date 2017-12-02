@@ -14,7 +14,7 @@ python:
     - '3.4'
 
 install:
-    - pip install -e . -r requirements.txt --download-cache $HOME/.pip-cache
+    - pip install -e . -r requirements.txt
 
 script:
     - make travis
