@@ -6,7 +6,7 @@ django-accounting
 |Build Status| |Coverage Status|
 
 Check the associated project
-`Accountant <https://github.com/dulaccc/Accountant>`__, a concrete
+`Accountant <https://github.com/dulacp/Accountant>`__, a concrete
 integration of the *django-accounting* application that you can deploy
 with one click to Heroku.
 
@@ -64,8 +64,8 @@ Reports
 Contact
 -------
 
-| `Pierre Dulac <http://github.com/dulaccc>`_
-| `@dulaccc <https://twitter.com/dulaccc>`_
+| `Pierre Dulac <http://github.com/dulacp>`_
+| `@_dulacp <https://twitter.com/_dulacp>`_
 
 License
 -------
@@ -73,7 +73,7 @@ License
 Accounting is available under the MIT license. See the LICENSE file for
 more info.
 
-.. |Build Status| image:: https://travis-ci.org/dulaccc/django-accounting.svg
-   :target: https://travis-ci.org/dulaccc/django-accounting
-.. |Coverage Status| image:: https://coveralls.io/repos/dulaccc/django-accounting/badge.svg
-   :target: https://coveralls.io/r/dulaccc/django-accounting
+.. |Build Status| image:: https://travis-ci.org/dulacp/django-accounting.svg
+   :target: https://travis-ci.org/dulacp/django-accounting
+.. |Coverage Status| image:: https://coveralls.io/repos/dulacp/django-accounting/badge.svg
+   :target: https://coveralls.io/r/dulacp/django-accounting

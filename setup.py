@@ -18,9 +18,9 @@ PROJECT_DIR = os.path.dirname(__file__)
 
 setup(name='django-accounting',
       version=get_version().replace(' ', '-'),
-      url='https://github.com/dulaccc/django-accounting',
+      url='https://github.com/dulacp/django-accounting',
       author="Pierre Dulac",
-      author_email="pierre@dulaccc.me",
+      author_email="dulacpi@gmail.com",
       description="Accounting made accessible for small businesses and "
                   "sole proprietorships through a simple Django project",
       long_description=open(os.path.join(PROJECT_DIR, 'README.rst')).read(),
