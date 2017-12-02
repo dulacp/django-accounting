@@ -3,7 +3,7 @@ import os
 # Use 'final' as the 4th element to indicate
 # a full release
 
-VERSION = (0, 2, 9)
+VERSION = (0, 2, 10)
 
 
 def get_short_version():
